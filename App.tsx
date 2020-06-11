@@ -1,19 +1,21 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+  NavigationState,
+} from "@react-navigation/native";
 import {
   createBottomTabNavigator,
   BottomTabBarProps,
 } from "@react-navigation/bottom-tabs";
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import {
   BottomNavigation,
   BottomNavigationTab,
   Icon,
   Divider,
 } from "@ui-kitten/components";
+import analytics from "@react-native-firebase/analytics";
 import { ThemeProvider } from "./src/context/ThemeContext";
 import { ConfigProvider } from "./src/context/AppConfigContext";
 import { AuthProvider, useAuth } from "./src/context/AuthContext";
@@ -121,14 +123,55 @@ const Router = () => {
   );
 };
 
-export default () => (
-  <NavigationContainer>
-    <ThemeProvider>
-      <ConfigProvider>
-        <AuthProvider>
-          <Router />
-        </AuthProvider>
-      </ConfigProvider>
-    </ThemeProvider>
-  </NavigationContainer>
-);
+// Gets the current screen from navigation state
+const getActiveRouteName = (state?: NavigationState): any => {
+  const route = state?.routes[state.index];
+
+  if (route?.state) {
+    // Dive into nested navigators
+    return getActiveRouteName(route.state as any);
+  }
+
+  return route?.name;
+};
+
+export default () => {
+  const routeNameRef = React.useRef();
+  const navigationRef = React.useRef<NavigationContainerRef>(null);
+
+  React.useEffect(() => {
+    if (!navigationRef.current) return;
+    const state = navigationRef.current.getRootState();
+
+    // Save the initial route name
+    routeNameRef.current = getActiveRouteName(state);
+  }, []);
+
+  return (
+    <NavigationContainer
+      ref={navigationRef}
+      onStateChange={(state) => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = getActiveRouteName(state);
+
+        console.log("currentRouteName", currentRouteName);
+
+        if (previousRouteName !== currentRouteName) {
+          console.log("log");
+          analytics().setCurrentScreen(currentRouteName, currentRouteName);
+        }
+
+        // Save the current route name for later comparison
+        routeNameRef.current = currentRouteName;
+      }}
+    >
+      <ThemeProvider>
+        <ConfigProvider>
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
+        </ConfigProvider>
+      </ThemeProvider>
+    </NavigationContainer>
+  );
+};

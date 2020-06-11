@@ -39,6 +39,7 @@ export const LoginScreen = () => {
   };
 
   const handleImportWallet = () => {
+    throw new Error("Test Crashlytics");
     // TODO redirect to the import wallet flow
   };
 

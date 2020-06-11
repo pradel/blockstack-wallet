@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+// Crashlytics
+apply plugin: 'io.fabric'
 
 import com.android.build.OutputFile
 
@@ -204,4 +206,12 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
+// Crashlytics
+crashlytics {
+  enableNdk true
+}
+
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+// Firebase
+apply plugin: 'com.google.gms.google-services'
