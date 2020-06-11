@@ -46,5 +46,5 @@ jobs:
       - name: Injecting secrets
         run: |
           echo $GOOGLE_SERVICES | base64 --decode > android/app/google-services.json
-          env:
-            GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+        env:
+          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
