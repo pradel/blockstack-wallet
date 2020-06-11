@@ -54,4 +54,4 @@ jobs:
       - name: Bundle and Upload to PlayStore
         run: |
           cd android
-          bundle exec fastlane beta
+          bundle exec fastlane deploy
