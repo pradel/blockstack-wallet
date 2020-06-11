@@ -18,12 +18,12 @@ cat "tmp.txt" > "./android/app/build.gradle"
 # cleanup
 rm tmp.txt
 
-# # git commit
-# git add "./app.json"
-# git add "./ios/myproject/Info.plist"
-# git add "./android/app/build.gradle"
-# git commit -m "feat(mobile): release app version v${2}"
+# git commit
+git add "./app.json"
+git add "./ios/myproject/Info.plist"
+git add "./android/app/build.gradle"
+git commit -m "feat(mobile): release app version v${2}"
 
-# # create git tag for the previous release commit
-# git tag "v${2}" HEAD
-# git push --tags
+# create git tag for the previous release commit
+git tag "v${2}" HEAD
+git push --tags
