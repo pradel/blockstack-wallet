@@ -26,4 +26,3 @@ git commit -m "feat(mobile): release app version v${2}"
 
 # create git tag for the previous release commit
 git tag "v${2}" HEAD
-git push --tags
