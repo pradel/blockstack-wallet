@@ -67,3 +67,9 @@ jobs:
         with:
           name: blockstack-wallet-apk
           path: android/app/build/outputs/apk/app-release.apk
+
+      - name: Upload production aab
+        uses: actions/upload-artifact@v2
+        with:
+          name: blockstack-wallet-aab
+          path: android/app/build/outputs/bundle/release/app.aab
