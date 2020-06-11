@@ -82,3 +82,6 @@ web-build/
 
 # Firebase
 android/app/google-services.json
+
+# Project
+.env
