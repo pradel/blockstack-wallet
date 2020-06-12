@@ -57,22 +57,13 @@ jobs:
         run: |
           cd android
           bundle exec fastlane deploy
-          cd ..
-          ls -l android/app/build/outputs/bundle/release/
-          ls -l android/app/build/outputs/apk/
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - name: Upload production apk
-        uses: actions/upload-artifact@v2
-        with:
-          name: blockstack-wallet-apk
-          path: android/app/build/outputs/apk/app-release.apk
-
       - name: Upload production aab
         uses: actions/upload-artifact@v2
         with:
           name: blockstack-wallet-aab
-          path: android/app/build/outputs/bundle/release/app.aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
