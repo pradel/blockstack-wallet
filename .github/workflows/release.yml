@@ -58,7 +58,7 @@ jobs:
           cd android
           bundle exec fastlane deploy
           cd ..
-          ls -l android/app/build/outputs/apk/
+          ls -l android/app/build/outputs/apk/release/
           ls -l android/app/build/outputs/bundle/release/
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
