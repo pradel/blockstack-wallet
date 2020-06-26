@@ -1,4 +1,4 @@
-package com.leopradel.blockstackapp;
+package com.blockstackwallet;
 
 import android.os.Bundle;
 

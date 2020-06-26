@@ -1,4 +1,5 @@
 import React from "react";
+import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createBottomTabNavigator,
@@ -127,6 +128,7 @@ export default () => (
       <ConfigProvider>
         <AuthProvider>
           <Router />
+          <StatusBar style="auto" />
         </AuthProvider>
       </ConfigProvider>
     </ThemeProvider>

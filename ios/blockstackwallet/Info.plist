@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>my-project</string>
+	<string>blockstackwallet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -37,42 +37,23 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Allow my-project to access your calendar</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow my-project to use the camera</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Allow my-project experiences to access your contacts</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow my-project to use your location</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow my-project to use your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow my-project to use your location</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow my-project to access your microphone</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Allow my-project to access your device's accelerometer</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give my-project periences permission to save photos</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give my-project periences permission to access your photos</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>Allow my-project to access your reminders</string>
+	<string></string>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  <key>UIStatusBarStyle</key>
+  <string>UIStatusBarStyleDefault</string>
 </dict>
 </plist>
