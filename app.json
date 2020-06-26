@@ -1,27 +1,11 @@
 {
+  "name": "blockstack-wallet",
+  "displayName": "blockstack-wallet",
   "expo": {
     "name": "blockstack-wallet",
     "slug": "blockstack-wallet",
     "platforms": ["ios", "android"],
     "version": "0.0.1",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.leopradel.blockstackapp"
-    },
-    "android": {
-      "package": "com.leopradel.blockstackapp"
-    },
-    "entryPoint": "node_modules/expo/AppEntry.js"
+    "assetBundlePatterns": ["**/*"]
   }
 }

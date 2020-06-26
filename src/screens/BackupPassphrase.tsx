@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import {
   Icon,
   Layout,
@@ -7,11 +7,11 @@ import {
   TopNavigationAction,
   Divider,
   Text,
-} from "@ui-kitten/components";
-import { useNavigation } from "@react-navigation/native";
-import * as LocalAuthentication from "expo-local-authentication";
-import * as SecureStore from "expo-secure-store";
-import { getStorageKeyPk } from "../utils";
+} from '@ui-kitten/components';
+import { useNavigation } from '@react-navigation/native';
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
+import { getStorageKeyPk } from '../utils';
 
 export const BackupPassphrase = () => {
   const navigation = useNavigation();
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 64,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  text: { textAlign: "center" },
+  text: { textAlign: 'center' },
 });

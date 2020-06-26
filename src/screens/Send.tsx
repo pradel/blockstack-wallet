@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, TouchableHighlight } from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, TouchableHighlight } from 'react-native';
 import {
   Icon,
   Layout,
@@ -9,18 +9,18 @@ import {
   Text,
   Button,
   Input,
-} from "@ui-kitten/components";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import Clipboard from "@react-native-community/clipboard";
-import { RootStackParamList } from "../types/router";
-import { validateStacksAddress } from "../utils";
+} from '@ui-kitten/components';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Clipboard from '@react-native-community/clipboard';
+import { RootStackParamList } from '../types/router';
+import { validateStacksAddress } from '../utils';
 
-type SendNavigationProp = StackNavigationProp<RootStackParamList, "Send">;
+type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
 
 export const SendScreen = () => {
   const navigation = useNavigation<SendNavigationProp>();
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
 
   // TODO Scan qr code and go to next step
 
@@ -30,7 +30,7 @@ export const SendScreen = () => {
   };
 
   const handleConfirm = () => {
-    navigation.navigate("SendAmount", { address });
+    navigation.navigate('SendAmount', { address });
   };
 
   const isAddressValid = address && validateStacksAddress(address);
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   inputContainer: {
     padding: 16,
