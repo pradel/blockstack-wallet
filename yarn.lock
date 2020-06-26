@@ -3834,10 +3834,10 @@ expo-linking@~1.0.3:
     qs "^6.5.0"
     url-parse "^1.4.4"
 
-expo-local-authentication@9.1.1:
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/expo-local-authentication/-/expo-local-authentication-9.1.1.tgz#70058829268f6f652b40fc69cc075f0310b4eff2"
-  integrity sha512-VMk6PTzIdGFBTDWUcB7JgoTV0bOm6bQ9LXeEsT4Wb0y9Uou3IjZKmcVLsMDa3wje7K5B7bs2DZ5acmhB+/AIIA==
+expo-local-authentication@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/expo-local-authentication/-/expo-local-authentication-9.0.0.tgz#2e60f2a93424be93506bede11be7d2914503820b"
+  integrity sha512-ciRRpmDCHG/RMbyaQso4xjHGAfOvr3KsJdUz4Jx2wDPPTN3qwan2Rjgs87Ngpr7T8lBt6DaMCydhRItlF3FOcA==
   dependencies:
     invariant "^2.2.4"
 
