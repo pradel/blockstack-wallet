@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, Share, Alert } from "react-native";
+import React from 'react';
+import { StyleSheet, Share, Alert } from 'react-native';
 import {
   Icon,
   Layout,
@@ -8,14 +8,14 @@ import {
   Divider,
   Text,
   Button,
-} from "@ui-kitten/components";
-import { useNavigation } from "@react-navigation/native";
-import QRCode from "react-native-qrcode-svg";
-import { useAuth } from "../context/AuthContext";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types/router";
+} from '@ui-kitten/components';
+import { useNavigation } from '@react-navigation/native';
+import QRCode from 'react-native-qrcode-svg';
+import { useAuth } from '../context/AuthContext';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/router';
 
-type ReceiveNavigationProp = StackNavigationProp<RootStackParamList, "Receive">;
+type ReceiveNavigationProp = StackNavigationProp<RootStackParamList, 'Receive'>;
 
 export const ReceiveScreen = () => {
   const navigation = useNavigation<ReceiveNavigationProp>();
@@ -67,15 +67,15 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   qrCodeContainer: {
     marginTop: 64,
-    alignItems: "center",
+    alignItems: 'center',
   },
   text: {
     marginTop: 32,
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonsContainer: {
     paddingLeft: 16,

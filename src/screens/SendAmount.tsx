@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, TouchableHighlight } from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, TouchableHighlight } from 'react-native';
 import {
   Icon,
   Layout,
@@ -9,21 +9,21 @@ import {
   Text,
   Button,
   Input,
-} from "@ui-kitten/components";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types/router";
+} from '@ui-kitten/components';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/router';
 
 type SendAmountNavigationProp = StackNavigationProp<
   RootStackParamList,
-  "SendAmount"
+  'SendAmount'
 >;
-type SendAmountScreenRouteProp = RouteProp<RootStackParamList, "SendAmount">;
+type SendAmountScreenRouteProp = RouteProp<RootStackParamList, 'SendAmount'>;
 
 export const SendAmountScreen = () => {
   const navigation = useNavigation<SendAmountNavigationProp>();
   const route = useRoute<SendAmountScreenRouteProp>();
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
 
   // TODO display available balance near by the button
   // TODO next button active only if amount lower than balance
@@ -31,7 +31,7 @@ export const SendAmountScreen = () => {
   // TODO adjust fees
 
   const handleConfirm = () => {
-    navigation.navigate("SendConfirm", {
+    navigation.navigate('SendConfirm', {
       address: route.params.address,
       amount,
     });
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   inputContainer: {
     padding: 16,

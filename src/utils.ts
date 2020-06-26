@@ -1,9 +1,9 @@
-import { Platform } from "react-native";
-import * as Application from "expo-application";
-import * as Random from "expo-random";
-import { ec as EC } from "elliptic";
-import { createStacksPrivateKey } from "@blockstack/stacks-transactions";
-import { c32addressDecode } from "c32check";
+import { Platform } from 'react-native';
+import * as Application from 'expo-application';
+import * as Random from 'expo-random';
+import { ec as EC } from 'elliptic';
+import { createStacksPrivateKey } from '@blockstack/stacks-transactions';
+import { c32addressDecode } from 'c32check';
 
 export const fetcher = (...args: any) =>
   // @ts-ignore
@@ -13,11 +13,11 @@ export const fetcher = (...args: any) =>
  * @description Generate a random private key
  */
 export const makeRandomPrivKey = async () => {
-  const ec = new EC("secp256k1");
+  const ec = new EC('secp256k1');
   const randomBytes = await Random.getRandomBytesAsync(32);
   const options = { entropy: randomBytes };
   const keyPair = ec.genKeyPair(options);
-  const privateKey = keyPair.getPrivate().toString("hex", 32);
+  const privateKey = keyPair.getPrivate().toString('hex', 32);
   return createStacksPrivateKey(privateKey);
 };
 
@@ -25,9 +25,9 @@ export const makeRandomPrivKey = async () => {
  * @description Return the secure storage key used to store the private key.
  */
 export const getStorageKeyPk = () => {
-  const key = "blockstack-private-key";
+  const key = 'blockstack-private-key';
   // On android we use the android id added to the key as it is unique per app installation
-  if (Platform.OS === "android") {
+  if (Platform.OS === 'android') {
     return `${key}-${Application.androidId}`;
   }
   return key;

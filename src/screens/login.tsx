@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Layout, Text, Button } from "@ui-kitten/components";
-import * as LocalAuthentication from "expo-local-authentication";
-import * as SecureStore from "expo-secure-store";
-import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Layout, Text, Button } from '@ui-kitten/components';
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
 import {
   getAddressFromPrivateKey,
   TransactionVersion,
-} from "@blockstack/stacks-transactions";
-import { getStorageKeyPk } from "../utils";
-import { useAuth } from "../context/AuthContext";
-import { useAppConfig } from "../context/AppConfigContext";
+} from '@blockstack/stacks-transactions';
+import { getStorageKeyPk } from '../utils';
+import { useAuth } from '../context/AuthContext';
+import { useAppConfig } from '../context/AppConfigContext';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
@@ -35,7 +35,7 @@ export const LoginScreen = () => {
   }, []);
 
   const handleCreateNewWallet = () => {
-    navigation.navigate("CreateWallet");
+    navigation.navigate('CreateWallet');
   };
 
   const handleImportWallet = () => {
@@ -75,7 +75,7 @@ export const LoginScreen = () => {
         )}
         <Button
           style={styles.button}
-          appearance={haveWallet ? "ghost" : "filled"}
+          appearance={haveWallet ? 'ghost' : 'filled'}
           onPress={handleCreateNewWallet}
         >
           Create a new wallet
@@ -93,12 +93,12 @@ export const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "space-between" },
+  container: { flex: 1, justifyContent: 'space-between' },
   logoContainer: {
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 64,
-    alignItems: "center",
+    alignItems: 'center',
   },
   buttonsContainer: {
     paddingLeft: 16,
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   button: {
-    width: "100%",
+    width: '100%',
   },
 });

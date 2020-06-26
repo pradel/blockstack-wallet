@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect, useMemo } from "react";
-import { Alert } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
+import React, { createContext, useState, useEffect, useMemo } from 'react';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 interface AppConfig {
   requireBiometricOpenApp: boolean;
@@ -19,7 +19,7 @@ interface AppConfigProviderProps {
   children: React.ReactNode;
 }
 
-const appConfigKey = "@appConfig";
+const appConfigKey = '@appConfig';
 
 const defaultConfig: AppConfig = {
   requireBiometricOpenApp: true,

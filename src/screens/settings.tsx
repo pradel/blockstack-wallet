@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Layout,
   Text,
@@ -6,10 +6,10 @@ import {
   Icon,
   TopNavigation,
   Divider,
-} from "@ui-kitten/components";
-import { ScrollView, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useTheme } from "../context/ThemeContext";
+} from '@ui-kitten/components';
+import { ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../context/ThemeContext';
 
 export const SettingsScreen = () => {
   const navigation = useNavigation();
@@ -31,7 +31,7 @@ export const SettingsScreen = () => {
             <Icon {...props} name="chevron-right-outline" />
           )}
           style={styles.listItem}
-          onPress={() => navigation.navigate("Fingerprint")}
+          onPress={() => navigation.navigate('Fingerprint')}
         />
         <Divider />
         <ListItem
@@ -40,7 +40,7 @@ export const SettingsScreen = () => {
             <Icon {...props} name="chevron-right-outline" />
           )}
           style={styles.listItem}
-          onPress={() => navigation.navigate("BackupPassphrase")}
+          onPress={() => navigation.navigate('BackupPassphrase')}
         />
         <Divider />
 
@@ -49,10 +49,10 @@ export const SettingsScreen = () => {
         </Text>
         <Divider />
         <ListItem
-          title={theme.theme === "light" ? "Dark mode" : "Light mode"}
+          title={theme.theme === 'light' ? 'Dark mode' : 'Light mode'}
           accessoryRight={(props) => (
             <Icon
-              name={theme.theme === "light" ? "moon-outline" : "sun-outline"}
+              name={theme.theme === 'light' ? 'moon-outline' : 'sun-outline'}
               {...props}
               style={{
                 // @ts-ignore
@@ -119,7 +119,7 @@ export const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   listHeader: {
     paddingHorizontal: 16,

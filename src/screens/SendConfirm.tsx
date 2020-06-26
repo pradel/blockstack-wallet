@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, Alert } from "react-native";
+import React from 'react';
+import { StyleSheet, Alert } from 'react-native';
 import {
   Icon,
   Layout,
@@ -8,27 +8,27 @@ import {
   Divider,
   Text,
   Button,
-} from "@ui-kitten/components";
-import * as LocalAuthentication from "expo-local-authentication";
-import * as SecureStore from "expo-secure-store";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+} from '@ui-kitten/components';
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   makeSTXTokenTransfer,
   StacksTestnet,
   broadcastTransaction,
   StacksTransaction,
-} from "@blockstack/stacks-transactions";
-import Big from "bn.js";
-import { RootStackParamList } from "../types/router";
-import { getStorageKeyPk, stacksToMicro } from "../utils";
-import { useAppConfig } from "../context/AppConfigContext";
+} from '@blockstack/stacks-transactions';
+import Big from 'bn.js';
+import { RootStackParamList } from '../types/router';
+import { getStorageKeyPk, stacksToMicro } from '../utils';
+import { useAppConfig } from '../context/AppConfigContext';
 
 type SendConfirmNavigationProp = StackNavigationProp<
   RootStackParamList,
-  "SendConfirm"
+  'SendConfirm'
 >;
-type SendConfirmScreenRouteProp = RouteProp<RootStackParamList, "SendConfirm">;
+type SendConfirmScreenRouteProp = RouteProp<RootStackParamList, 'SendConfirm'>;
 
 export const SendConfirmScreen = () => {
   const navigation = useNavigation<SendConfirmNavigationProp>();
@@ -55,7 +55,7 @@ export const SendConfirmScreen = () => {
           senderKey: privateKeyHex,
           network,
           // TODO allow custom memo message
-          memo: "test memo",
+          memo: 'test memo',
         });
       } catch (error) {
         Alert.alert(`Failed to create transaction. ${error.message}`);
@@ -69,7 +69,7 @@ export const SendConfirmScreen = () => {
         return;
       }
 
-      navigation.navigate("Main");
+      navigation.navigate('Main');
     }
   };
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   inputContainer: {
     padding: 16,
