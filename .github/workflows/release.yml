@@ -53,7 +53,7 @@ jobs:
           ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
           GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
 
-      - name: Bundle and Upload to PlayStore
+      - name: Bundle
         run: |
           cd android
           bundle exec fastlane deploy
