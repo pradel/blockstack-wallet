@@ -128,7 +128,7 @@ export default () => (
       <ConfigProvider>
         <AuthProvider>
           <Router />
-          <StatusBar style="auto" />
+          <StatusBar style="dark" />
         </AuthProvider>
       </ConfigProvider>
     </ThemeProvider>
