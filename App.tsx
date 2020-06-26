@@ -1,14 +1,11 @@
 import React from "react";
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createBottomTabNavigator,
   BottomTabBarProps,
 } from "@react-navigation/bottom-tabs";
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import {
   BottomNavigation,
   BottomNavigationTab,
