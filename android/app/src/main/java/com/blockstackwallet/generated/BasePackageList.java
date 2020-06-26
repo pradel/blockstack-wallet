@@ -1,4 +1,4 @@
-package com.leopradel.blockstackapp.generated;
+package com.blockstackapp.generated;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +21,8 @@ public class BasePackageList {
         new expo.modules.random.RandomPackage(),
         new expo.modules.securestore.SecureStorePackage(),
         new expo.modules.splashscreen.SplashScreenPackage(),
-        new expo.modules.sqlite.SQLitePackage()
+        new expo.modules.sqlite.SQLitePackage(),
+        new expo.modules.updates.UpdatesPackage()
     );
   }
 }

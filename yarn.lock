@@ -3885,6 +3885,14 @@ expo-status-bar@1.0.2:
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.0.2.tgz#2441a77c56be31597898337b0d086981f2adefd8"
   integrity sha512-5313u744GcLzCadxIPXyTkYw77++UXv1dXCuhYDxDbtsEf93iMra7WSvzyE8a7mRQLIIPRuGnBOdrL/V1C7EOQ==
 
+expo-updates@0.2.10:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.2.10.tgz#40c520f98c45f5bdd9049e189417048b76c1b361"
+  integrity sha512-n+EnsG7j0XwAMxa/RQ3S8eFjjETn75mQ0oZvzj2PIPwxU87y9fZiVaWcY0l9xbDVNU5nqDprJeNwWjNlKRIhuA==
+  dependencies:
+    fbemitter "^2.1.1"
+    uuid "^3.4.0"
+
 expo@38.0.3:
   version "38.0.3"
   resolved "https://registry.yarnpkg.com/expo/-/expo-38.0.3.tgz#7ed781c14866d18e368cdc42bc5c103fb6576e71"
