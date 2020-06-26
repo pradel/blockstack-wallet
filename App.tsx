@@ -1,6 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import {
   createBottomTabNavigator,
   BottomTabBarProps,
@@ -12,6 +15,7 @@ import {
   Icon,
   Divider,
 } from '@ui-kitten/components';
+import analytics from '@react-native-firebase/analytics';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { ConfigProvider } from './src/context/AppConfigContext';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
@@ -119,16 +123,37 @@ const Router = () => {
   );
 };
 
-export default () => (
-  <NavigationContainer>
-    <ThemeProvider>
-      <ConfigProvider>
-        <AuthProvider>
-          <Router />
-          {/* TODO based on theme */}
-          <StatusBar style="dark" />
-        </AuthProvider>
-      </ConfigProvider>
-    </ThemeProvider>
-  </NavigationContainer>
-);
+export default () => {
+  const routeNameRef = React.useRef<string>();
+  const navigationRef = React.useRef<NavigationContainerRef>(null);
+
+  return (
+    <NavigationContainer
+      ref={navigationRef}
+      onStateChange={() => {
+        if (!navigationRef.current) return;
+
+        const previousRouteName = routeNameRef.current;
+        const currentRoute = navigationRef.current.getCurrentRoute()!;
+        const currentRouteName = currentRoute.name;
+
+        if (previousRouteName !== currentRouteName) {
+          analytics().setCurrentScreen(currentRouteName, currentRouteName);
+        }
+
+        // Save the current route name for later comparison
+        routeNameRef.current = currentRouteName;
+      }}
+    >
+      <ThemeProvider>
+        <ConfigProvider>
+          <AuthProvider>
+            <Router />
+            {/* TODO based on theme */}
+            <StatusBar style="dark" />
+          </AuthProvider>
+        </ConfigProvider>
+      </ThemeProvider>
+    </NavigationContainer>
+  );
+};
