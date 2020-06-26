@@ -1,4 +1,4 @@
-package com.blockstackapp.generated;
+package com.blockstackwallet.generated;
 
 import java.util.Arrays;
 import java.util.List;
