@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
 import {
   Layout,
   Text,
@@ -9,12 +9,12 @@ import {
   Icon,
   ButtonGroup,
   Button,
-} from "@ui-kitten/components";
-import { useNavigation } from "@react-navigation/native";
-import useSWR from "swr";
-import { format } from "date-fns";
-import { fetcher, microToStacks } from "../utils";
-import { useAuth } from "../context/AuthContext";
+} from '@ui-kitten/components';
+import { useNavigation } from '@react-navigation/native';
+import useSWR from 'swr';
+import { format } from 'date-fns';
+import { fetcher, microToStacks } from '../utils';
+import { useAuth } from '../context/AuthContext';
 
 interface BalanceResponse {
   stx: {
@@ -68,11 +68,11 @@ export const DashboardScreen = () => {
   // TODO infinite scrolling
 
   // TODO price eur if available
-  const fiatPrice = "1.89";
+  const fiatPrice = '1.89';
 
   const balanceString = balanceData
     ? microToStacks(balanceData.stx.balance)
-    : "...";
+    : '...';
 
   return (
     <Layout style={styles.container}>
@@ -84,8 +84,8 @@ export const DashboardScreen = () => {
           appearance="outline"
           status="basic"
         >
-          <Button onPress={() => navigation.navigate("Send")}>Send</Button>
-          <Button onPress={() => navigation.navigate("Receive")}>
+          <Button onPress={() => navigation.navigate('Send')}>Send</Button>
+          <Button onPress={() => navigation.navigate('Receive')}>
             Receive
           </Button>
         </ButtonGroup>
@@ -103,7 +103,7 @@ export const DashboardScreen = () => {
             renderItem={({
               item,
             }: {
-              item: TransactionsResponse["results"][0];
+              item: TransactionsResponse['results'][0];
             }) => {
               const isIncomingTx =
                 item.token_transfer.recipient_address === auth.address;
@@ -111,8 +111,8 @@ export const DashboardScreen = () => {
               return (
                 <ListItem
                   style={styles.listItem}
-                  title={isIncomingTx ? "Received STX" : "Sent STX"}
-                  description={format(item.burn_block_time * 1000, "dd MMMM ")}
+                  title={isIncomingTx ? 'Received STX' : 'Sent STX'}
+                  description={format(item.burn_block_time * 1000, 'dd MMMM ')}
                   accessoryLeft={(props) => (
                     <Icon
                       {...props}
@@ -123,7 +123,7 @@ export const DashboardScreen = () => {
                         height: 18,
                         width: 18,
                         transform: [
-                          { rotate: isIncomingTx ? "180deg" : "0deg" },
+                          { rotate: isIncomingTx ? '180deg' : '0deg' },
                         ],
                       }}
                     />
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   balanceContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingTop: 64,
     paddingBottom: 64,
   },

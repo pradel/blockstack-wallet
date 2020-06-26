@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Alert, View } from "react-native";
-import { Layout, Text, Button } from "@ui-kitten/components";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Alert, View } from 'react-native';
+import { Layout, Text, Button } from '@ui-kitten/components';
 import {
   StacksPrivateKey,
   getAddressFromPrivateKey,
   TransactionVersion,
-} from "@blockstack/stacks-transactions";
-import * as SecureStore from "expo-secure-store";
-import * as LocalAuthentication from "expo-local-authentication";
-import { useAuth } from "../context/AuthContext";
-import { makeRandomPrivKey, getStorageKeyPk } from "../utils";
+} from '@blockstack/stacks-transactions';
+import * as SecureStore from 'expo-secure-store';
+import * as LocalAuthentication from 'expo-local-authentication';
+import { useAuth } from '../context/AuthContext';
+import { makeRandomPrivKey, getStorageKeyPk } from '../utils';
 
 // TODO display mnemonic 24-word phrase
 
@@ -37,7 +37,7 @@ export const CreateWalletScreen = () => {
     const authenticateResult = await LocalAuthentication.authenticateAsync();
 
     if (authenticateResult.success) {
-      const privateKeyHex = privateKey.data.toString("hex");
+      const privateKeyHex = privateKey.data.toString('hex');
       try {
         // We store the hex key in the device secure storage
         await SecureStore.setItemAsync(getStorageKeyPk(), privateKeyHex);
@@ -62,7 +62,7 @@ export const CreateWalletScreen = () => {
       <View style={styles.textContainer}>
         {privateKey && (
           <Text style={styles.text} category="s1">
-            {privateKey.data.toString("hex")}
+            {privateKey.data.toString('hex')}
           </Text>
         )}
       </View>
@@ -84,14 +84,14 @@ export const CreateWalletScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "space-between" },
+  container: { flex: 1, justifyContent: 'space-between' },
   textContainer: {
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 64,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  text: { textAlign: "center" },
+  text: { textAlign: 'center' },
   buttonsContainer: {
     paddingLeft: 16,
     paddingRight: 16,
@@ -99,6 +99,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   button: {
-    width: "100%",
+    width: '100%',
   },
 });

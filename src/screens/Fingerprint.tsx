@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import {
   Icon,
   Layout,
@@ -8,9 +8,9 @@ import {
   Divider,
   Toggle,
   ListItem,
-} from "@ui-kitten/components";
-import { useNavigation } from "@react-navigation/native";
-import { useAppConfig } from "../context/AppConfigContext";
+} from '@ui-kitten/components';
+import { useNavigation } from '@react-navigation/native';
+import { useAppConfig } from '../context/AppConfigContext';
 
 export const Fingerprint = () => {
   const navigation = useNavigation();

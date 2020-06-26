@@ -1,13 +1,13 @@
-import React, { createContext, useState } from "react";
-import * as eva from "@eva-design/eva";
-import { IconRegistry, ApplicationProvider } from "@ui-kitten/components";
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { default as customTheme } from "../../custom-theme.json";
+import React, { createContext, useState } from 'react';
+import * as eva from '@eva-design/eva';
+import { IconRegistry, ApplicationProvider } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { default as customTheme } from '../../custom-theme.json';
 
 const ThemeContext = createContext<{
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
   toggleTheme: () => void;
-}>({ theme: "light", toggleTheme: () => {} });
+}>({ theme: 'light', toggleTheme: () => {} });
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -15,10 +15,10 @@ interface ThemeProviderProps {
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   // TODO fetch theme from local storage
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const toggleTheme = () => {
-    const nextTheme = theme === "light" ? "dark" : "light";
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
     // TODO save to local storage
     setTheme(nextTheme);
   };
