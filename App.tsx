@@ -128,6 +128,7 @@ export default () => (
       <ConfigProvider>
         <AuthProvider>
           <Router />
+          {/* TODO based on theme */}
           <StatusBar style="dark" />
         </AuthProvider>
       </ConfigProvider>
