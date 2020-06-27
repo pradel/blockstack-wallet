@@ -1,10 +1,8 @@
+import './src/globals';
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 
 import App from './App';
-
-// Polyfills
-global.Buffer = global.Buffer || require('buffer').Buffer;
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in the Expo client or in a native build,

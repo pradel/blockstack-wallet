@@ -1,51 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Alert, View } from 'react-native';
-import { Layout, Text, Button } from '@ui-kitten/components';
-import {
-  StacksPrivateKey,
-  getAddressFromPrivateKey,
-  TransactionVersion,
-} from '@blockstack/stacks-transactions';
+import Constants from 'expo-constants';
+import { Layout, Text, Button, Spinner } from '@ui-kitten/components';
+import { ChainID } from '@blockstack/stacks-transactions';
+import { deriveStxAddressChain } from '@blockstack/keychain';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { BIP32Interface } from 'bitcoinjs-lib';
 import { useAuth } from '../context/AuthContext';
-import { makeRandomPrivKey, getStorageKeyPk } from '../utils';
+import { getStorageKeyPk, generateMnemonicRootKeychain } from '../utils';
 
 // TODO display mnemonic 24-word phrase
 
 export const CreateWalletScreen = () => {
   const auth = useAuth();
-  const [privateKey, setPrivateKey] = useState<StacksPrivateKey>();
+  const [mnemonic, setMnemonic] = useState<{
+    rootNode: BIP32Interface;
+    plaintextMnemonic: string;
+  }>();
 
   useEffect(() => {
     // when the screen is mounted we generate a new private key
-    const generatePrivateKey = async () => {
+    const generateMnemonic = async () => {
       try {
-        const privateKey = await makeRandomPrivKey();
-        setPrivateKey(privateKey);
+        const newMnemonic = await generateMnemonicRootKeychain();
+        setMnemonic(newMnemonic);
       } catch (error) {
         // TODO display error in snackbar
       }
     };
 
-    generatePrivateKey();
+    generateMnemonic();
   }, []);
 
   const handleCreateNewWallet = async () => {
-    if (!privateKey) return;
+    if (!mnemonic) return;
 
     const authenticateResult = await LocalAuthentication.authenticateAsync();
 
     if (authenticateResult.success) {
-      const privateKeyHex = privateKey.data.toString('hex');
       try {
         // We store the hex key in the device secure storage
-        await SecureStore.setItemAsync(getStorageKeyPk(), privateKeyHex);
-        const address = getAddressFromPrivateKey(
-          privateKeyHex,
-          TransactionVersion.Testnet
+        await SecureStore.setItemAsync(
+          getStorageKeyPk(),
+          mnemonic.plaintextMnemonic
         );
-        auth.signIn(address);
+        const result = deriveStxAddressChain(ChainID.Testnet)(
+          mnemonic.rootNode
+        );
+        auth.signIn(result.address);
       } catch (error) {
         // TODO report error to Sentry
         Alert.alert(error.message);
@@ -57,12 +60,20 @@ export const CreateWalletScreen = () => {
     // TODO redirect to the import wallet flow
   };
 
+  if (!mnemonic) {
+    return (
+      <Layout style={styles.containerFull}>
+        <Spinner size="large" />
+      </Layout>
+    );
+  }
+
   return (
     <Layout style={styles.container}>
       <View style={styles.textContainer}>
-        {privateKey && (
+        {mnemonic && (
           <Text style={styles.text} category="s1">
-            {privateKey.data.toString('hex')}
+            {mnemonic.plaintextMnemonic}
           </Text>
         )}
       </View>
@@ -84,7 +95,17 @@ export const CreateWalletScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'space-between' },
+  containerFull: {
+    marginTop: Constants.statusBarHeight,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  container: {
+    marginTop: Constants.statusBarHeight,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   textContainer: {
     paddingLeft: 16,
     paddingRight: 16,

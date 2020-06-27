@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Alert } from 'react-native';
+import Constants from 'expo-constants';
 import {
   Icon,
   Layout,
@@ -18,10 +19,16 @@ import {
   StacksTestnet,
   broadcastTransaction,
   StacksTransaction,
+  ChainID,
 } from '@blockstack/stacks-transactions';
+import { deriveStxAddressChain } from '@blockstack/keychain';
 import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
-import { getStorageKeyPk, stacksToMicro } from '../utils';
+import {
+  getStorageKeyPk,
+  stacksToMicro,
+  getRootKeychainFromMnemonic,
+} from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
 
 type SendConfirmNavigationProp = StackNavigationProp<
@@ -43,16 +50,19 @@ export const SendConfirmScreen = () => {
       if (!authenticateResult.success) return;
     }
 
-    const privateKeyHex = await SecureStore.getItemAsync(getStorageKeyPk());
-    if (privateKeyHex) {
+    const mnemonic = await SecureStore.getItemAsync(getStorageKeyPk());
+    if (mnemonic) {
       const network = new StacksTestnet();
+
+      const rootNode = await getRootKeychainFromMnemonic(mnemonic);
+      const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
 
       let transaction: StacksTransaction;
       try {
         transaction = await makeSTXTokenTransfer({
           recipient: route.params.address,
           amount: new Big(stacksToMicro(route.params.amount)),
-          senderKey: privateKeyHex,
+          senderKey: result.privateKey,
           network,
           // TODO allow custom memo message
           memo: 'test memo',
@@ -102,6 +112,7 @@ export const SendConfirmScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
   },
   contentContainer: {

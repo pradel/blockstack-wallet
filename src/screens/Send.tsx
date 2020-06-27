@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableHighlight } from 'react-native';
+import Constants from 'expo-constants';
 import {
   Icon,
   Layout,
@@ -80,6 +81,7 @@ export const SendScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
   },
   contentContainer: {

@@ -1,24 +1,32 @@
 import { Platform } from 'react-native';
 import * as Application from 'expo-application';
 import * as Random from 'expo-random';
-import { ec as EC } from 'elliptic';
-import { createStacksPrivateKey } from '@blockstack/stacks-transactions';
 import { c32addressDecode } from 'c32check';
+import { entropyToMnemonic, mnemonicToSeed } from 'bip39';
+import { bip32 } from 'bitcoinjs-lib';
 
 export const fetcher = (...args: any) =>
   // @ts-ignore
   fetch(...args).then((res: any) => res.json());
 
 /**
- * @description Generate a random private key
+ * @description Generate a random mnemonic phrase
  */
-export const makeRandomPrivKey = async () => {
-  const ec = new EC('secp256k1');
+export const generateMnemonicRootKeychain = async () => {
   const randomBytes = await Random.getRandomBytesAsync(32);
-  const options = { entropy: randomBytes };
-  const keyPair = ec.genKeyPair(options);
-  const privateKey = keyPair.getPrivate().toString('hex', 32);
-  return createStacksPrivateKey(privateKey);
+  const plaintextMnemonic = entropyToMnemonic(randomBytes as any);
+  const seedBuffer = await mnemonicToSeed(plaintextMnemonic);
+  const rootNode = bip32.fromSeed(seedBuffer);
+  return {
+    rootNode,
+    plaintextMnemonic,
+  };
+};
+
+export const getRootKeychainFromMnemonic = async (mnemonic: string) => {
+  const seedBuffer = await mnemonicToSeed(mnemonic);
+  const rootNode = bip32.fromSeed(seedBuffer);
+  return rootNode;
 };
 
 /**

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 import {
   Icon,
   Layout,
@@ -15,10 +16,10 @@ import { getStorageKeyPk } from '../utils';
 
 export const BackupPassphrase = () => {
   const navigation = useNavigation();
-  const [privateKey, setPrivateKey] = useState<string>();
+  const [mnemonic, setMnemonic] = useState<string>();
 
   useEffect(() => {
-    const loadPrivateKey = async () => {
+    const loadMnemonic = async () => {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
 
       if (!authenticateResult.success) {
@@ -26,13 +27,13 @@ export const BackupPassphrase = () => {
         return;
       }
 
-      const privateKeyHex = await SecureStore.getItemAsync(getStorageKeyPk());
-      if (privateKeyHex) {
-        setPrivateKey(privateKeyHex);
+      const mnemonicStorage = await SecureStore.getItemAsync(getStorageKeyPk());
+      if (mnemonicStorage) {
+        setMnemonic(mnemonicStorage);
       }
     };
 
-    loadPrivateKey();
+    loadMnemonic();
   }, []);
 
   return (
@@ -51,7 +52,7 @@ export const BackupPassphrase = () => {
 
       <Layout style={styles.textContainer}>
         <Text style={styles.text} category="s1">
-          {privateKey}
+          {mnemonic}
         </Text>
       </Layout>
     </Layout>
@@ -60,6 +61,7 @@ export const BackupPassphrase = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
   },
   textContainer: {

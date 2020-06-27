@@ -24,6 +24,7 @@
     "*.{js,ts,tsx,json,md}": "prettier --write"
   },
   "dependencies": {
+    "@blockstack/keychain": "0.6.0",
     "@blockstack/stacks-transactions": "0.4.6",
     "@eva-design/eva": "2.0.0",
     "@react-native-community/async-storage": "1.11.0",
@@ -37,6 +38,8 @@
     "@react-navigation/stack": "5.6.2",
     "@ui-kitten/components": "5.0.0",
     "@ui-kitten/eva-icons": "5.0.0",
+    "assert": "2.0.0",
+    "blockstack": "21.1.0",
     "bn.js": "5.1.2",
     "buffer": "5.6.0",
     "crypto-browserify": "3.12.0",

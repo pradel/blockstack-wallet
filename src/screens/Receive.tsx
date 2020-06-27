@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Share, Alert } from 'react-native';
+import Constants from 'expo-constants';
 import {
   Icon,
   Layout,
@@ -63,6 +64,7 @@ export const ReceiveScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
   },
   contentContainer: {

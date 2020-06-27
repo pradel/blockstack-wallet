@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 import {
   Layout,
   Text,
@@ -145,6 +146,7 @@ export const DashboardScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
   },
   balanceContainer: {

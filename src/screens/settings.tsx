@@ -1,4 +1,5 @@
 import React from 'react';
+import Constants from 'expo-constants';
 import {
   Layout,
   Text,
@@ -118,6 +119,7 @@ export const SettingsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
     flexDirection: 'column',
   },
