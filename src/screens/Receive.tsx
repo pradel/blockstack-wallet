@@ -30,6 +30,20 @@ export const ReceiveScreen = () => {
     }
   };
 
+  const handleRequestStx = async () => {
+    const data = await fetch(
+      `https://sidecar.staging.blockstack.xyz/sidecar/v1/faucets/stx?address=${auth.address}`,
+      {
+        method: 'POST',
+      }
+    );
+    if (data.ok) {
+      alert("You'll receive your testing Stacks Token (STX) momentarily.");
+    } else {
+      alert(`Request failed with status ${data.status}`);
+    }
+  };
+
   return (
     <Layout style={styles.container}>
       <TopNavigation
@@ -52,6 +66,11 @@ export const ReceiveScreen = () => {
           <Text style={styles.text} onPress={handleShare}>
             {auth.address}
           </Text>
+        </Layout>
+
+        {/* TODO display only on testnet */}
+        <Layout style={styles.buttonsContainer}>
+          <Button onPress={handleRequestStx}>Get STX from faucet</Button>
         </Layout>
 
         <Layout style={styles.buttonsContainer}>
