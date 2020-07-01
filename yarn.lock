@@ -1303,10 +1303,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blockstack/keychain@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/keychain/-/keychain-0.6.0.tgz#89789aba940beed34f43974bb914328f63133ca8"
-  integrity sha512-/teFtwr8n/y5UCYqR4H1H3M1tEMfugZg3Ru2SiFTvp05URfEgpbe4PUnuzug+Jt2RN1bK5uk1JcKj2vFzkXlMw==
+"@blockstack/keychain@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@blockstack/keychain/-/keychain-0.6.1.tgz#f2e1907109341ad7d23f025f9d9891cfaae37b8e"
+  integrity sha512-KVr9iUHFQqGZ7NBv+rOtZD3nkqddcRwCBIilOtfM0tbAOiTEc7s9vkqbnrjrtpDUXTj09MNsOECgmVZ78jIWyQ==
   dependencies:
     "@blockstack/stacks-transactions" "^0.4.6"
     bip39 "^3.0.2"

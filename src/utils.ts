@@ -3,7 +3,14 @@ import * as Application from 'expo-application';
 import * as Random from 'expo-random';
 import { c32addressDecode } from 'c32check';
 import { entropyToMnemonic, mnemonicToSeed } from 'bip39';
-import { bip32 } from 'bitcoinjs-lib';
+import { bip32, BIP32Interface, ECPair } from 'bitcoinjs-lib';
+import { ecPairToHexString } from 'blockstack';
+import {
+  getAddressFromPrivateKey,
+  TransactionVersion,
+  ChainID,
+} from '@blockstack/stacks-transactions';
+import { getDerivationPath } from '@blockstack/keychain';
 
 export const fetcher = (...args: any) =>
   // @ts-ignore
@@ -28,6 +35,25 @@ export const getRootKeychainFromMnemonic = async (mnemonic: string) => {
   const rootNode = bip32.fromSeed(seedBuffer);
   return rootNode;
 };
+
+// Remove this once https://github.com/blockstack/ux/issues/468 is fixed
+export function deriveStxAddressChain(chain: ChainID) {
+  return (rootNode: BIP32Interface) => {
+    const childKey = rootNode.derivePath(getDerivationPath(chain));
+    if (!childKey.privateKey) {
+      throw new Error(
+        'Unable to derive private key from `rootNode`, bip32 master keychain'
+      );
+    }
+    const ecPair = ECPair.fromPrivateKey(childKey.privateKey);
+    const privateKey = ecPairToHexString(ecPair);
+    return {
+      childKey,
+      address: getAddressFromPrivateKey(privateKey, TransactionVersion.Testnet),
+      privateKey,
+    };
+  };
+}
 
 /**
  * @description Return the secure storage key used to store the private key.

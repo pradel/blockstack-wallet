@@ -24,7 +24,7 @@
     "*.{js,ts,tsx,json,md}": "prettier --write"
   },
   "dependencies": {
-    "@blockstack/keychain": "0.6.0",
+    "@blockstack/keychain": "0.6.1",
     "@blockstack/stacks-transactions": "0.4.6",
     "@eva-design/eva": "2.0.0",
     "@react-native-community/async-storage": "1.11.0",
