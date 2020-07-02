@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Icon,
@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { getStorageKeyPk } from '../utils';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export const BackupPassphrase = () => {
   const navigation = useNavigation();
@@ -20,12 +21,12 @@ export const BackupPassphrase = () => {
 
   useEffect(() => {
     const loadMnemonic = async () => {
-      const authenticateResult = await LocalAuthentication.authenticateAsync();
+      // const authenticateResult = await LocalAuthentication.authenticateAsync();
 
-      if (!authenticateResult.success) {
-        navigation.goBack();
-        return;
-      }
+      // if (!authenticateResult.success) {
+      //   navigation.goBack();
+      //   return;
+      // }
 
       const mnemonicStorage = await SecureStore.getItemAsync(getStorageKeyPk());
       if (mnemonicStorage) {
@@ -35,6 +36,15 @@ export const BackupPassphrase = () => {
 
     loadMnemonic();
   }, []);
+
+  const renderWord = (index: number, word: string) => (
+    <Text key={index} category="h3">
+      {index + 1} - {word}
+    </Text>
+  );
+
+  const array1 = mnemonic ? mnemonic.split(' ').slice(0, 12) : undefined;
+  const array2 = mnemonic ? mnemonic.split(' ').slice(12, 24) : undefined;
 
   return (
     <Layout style={styles.container}>
@@ -50,11 +60,16 @@ export const BackupPassphrase = () => {
       />
       <Divider />
 
-      <Layout style={styles.textContainer}>
-        <Text style={styles.text} category="s1">
-          {mnemonic}
-        </Text>
-      </Layout>
+      <ScrollView>
+        <Layout style={styles.columnContainer}>
+          <View style={styles.column}>
+            {array1?.map((word, index) => renderWord(index, word))}
+          </View>
+          <View style={styles.column}>
+            {array2?.map((word, index) => renderWord(index + 12, word))}
+          </View>
+        </Layout>
+      </ScrollView>
     </Layout>
   );
 };
@@ -64,11 +79,15 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
     flex: 1,
   },
-  textContainer: {
+  columnContainer: {
+    display: 'flex',
+    flexDirection: 'row',
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 64,
-    alignItems: 'center',
+    paddingTop: 16,
   },
-  text: { textAlign: 'center' },
+  column: {
+    flex: 1,
+    width: '50%',
+  },
 });
