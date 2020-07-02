@@ -68,12 +68,11 @@ export const ReceiveScreen = () => {
           </Text>
         </Layout>
 
-        {/* TODO display only on testnet */}
         <Layout style={styles.buttonsContainer}>
-          <Button onPress={handleRequestStx}>Get STX from faucet</Button>
-        </Layout>
-
-        <Layout style={styles.buttonsContainer}>
+          {/* TODO display only on testnet */}
+          <Button style={styles.buttonFaucet} onPress={handleRequestStx}>
+            Get STX from faucet
+          </Button>
           <Button onPress={handleShare}>Share</Button>
         </Layout>
       </Layout>
@@ -103,5 +102,8 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 16,
     paddingBottom: 16,
+  },
+  buttonFaucet: {
+    marginBottom: 16,
   },
 });
