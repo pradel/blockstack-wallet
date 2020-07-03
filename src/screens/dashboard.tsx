@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Layout,
@@ -11,11 +11,24 @@ import {
   Button,
 } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
 import useSWR from 'swr';
 import { format } from 'date-fns';
 import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-types';
 import { fetcher, microToStacks } from '../utils';
 import { useAuth } from '../context/AuthContext';
+import { ReceiveScreen, ReceiveScreenHeader } from './Receive';
+
+type Value = string | number | boolean;
+
+function useAnimatedValue<T extends Value>(value: T) {
+  return React.useMemo<Animated.Value<T>>(() => {
+    return new Animated.Value(value);
+  }, []);
+}
+
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 interface BalanceResponse {
   stx: {
@@ -42,12 +55,24 @@ export const DashboardScreen = () => {
     `https://sidecar.staging.blockstack.xyz/sidecar/v1/address/${auth.address}/transactions`,
     fetcher
   );
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const opacity = useAnimatedValue(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await Promise.all([balanceMutate(), transactionMutate()]);
     setIsRefreshing(false);
+  };
+
+  const handleReceive = () => {
+    setIsBottomSheetOpen(true);
+    bottomSheetRef.current?.snapTo(400);
+  };
+
+  const handleCloseReceive = () => {
+    bottomSheetRef.current?.snapTo(1);
   };
 
   // TODO handle error (display snackbar?)
@@ -76,7 +101,7 @@ export const DashboardScreen = () => {
               accessoryLeft={(props) => (
                 <Icon {...props} name="diagonal-arrow-left-down-outline" />
               )}
-              onPress={() => navigation.navigate('Receive')}
+              onPress={handleReceive}
             />
             <Text style={styles.actionsText} category="p2">
               Receive
@@ -100,7 +125,7 @@ export const DashboardScreen = () => {
               accessoryLeft={(props) => (
                 <Icon {...props} name="camera-outline" />
               )}
-              onPress={() => navigation.navigate('Receive')}
+              onPress={handleReceive}
             />
             <Text style={styles.actionsText} category="p2">
               Scan
@@ -157,6 +182,34 @@ export const DashboardScreen = () => {
           />
         )}
       </Layout>
+
+      {/* TODO needs to be on top of bottom navigation  */}
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={[400, 1, 0]}
+        initialSnap={1}
+        renderHeader={() => (
+          <ReceiveScreenHeader onClose={handleCloseReceive} />
+        )}
+        renderContent={() => <ReceiveScreen />}
+        callbackNode={opacity}
+        onCloseEnd={() => setIsBottomSheetOpen(false)}
+      />
+      {isBottomSheetOpen && (
+        <AnimatedTouchable
+          onPress={handleCloseReceive}
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            alignItems: 'center',
+            opacity: Animated.sub(0.4, Animated.multiply(opacity, 0.4)),
+            backgroundColor: 'black',
+          }}
+        />
+      )}
     </Layout>
   );
 };
