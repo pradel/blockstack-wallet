@@ -6,8 +6,6 @@ import {
   Layout,
   TopNavigation,
   TopNavigationAction,
-  Divider,
-  Text,
   Button,
   Spinner,
 } from '@ui-kitten/components';
