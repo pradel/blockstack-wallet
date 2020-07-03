@@ -148,32 +148,64 @@ export const DashboardScreen = () => {
               item: TransactionResults['results'][0];
             }) => {
               const isIncomingTx =
+                item.tx_type === 'token_transfer' &&
                 item.token_transfer.recipient_address === auth.address;
 
               return (
                 <ListItem
                   style={styles.listItem}
-                  title={isIncomingTx ? 'Received STX' : 'Sent STX'}
-                  description={format(item.burn_block_time * 1000, 'dd MMMM ')}
+                  title={
+                    item.tx_type === 'token_transfer'
+                      ? isIncomingTx
+                        ? 'Received STX'
+                        : 'Sent STX'
+                      : item.tx_type === 'smart_contract'
+                      ? item.smart_contract.contract_id.split('.')[1]
+                      : item.tx_type === 'contract_call'
+                      ? item.contract_call.contract_id.split('.')[1]
+                      : 'Unknown'
+                  }
+                  description={
+                    item.burn_block_time
+                      ? format(item.burn_block_time * 1000, 'dd MMMM ')
+                      : undefined
+                  }
                   accessoryLeft={(props) => (
                     <Icon
                       {...props}
-                      name="diagonal-arrow-right-up"
-                      style={{
-                        // @ts-ignore
-                        ...(props?.style ?? {}),
-                        height: 18,
-                        width: 18,
-                        transform: [
-                          { rotate: isIncomingTx ? '180deg' : '0deg' },
-                        ],
-                      }}
+                      name={
+                        item.tx_type === 'token_transfer'
+                          ? 'diagonal-arrow-right-up'
+                          : item.tx_type === 'smart_contract'
+                          ? 'upload'
+                          : item.tx_type === 'contract_call'
+                          ? 'code'
+                          : 'question-mark'
+                      }
+                      style={[
+                        props?.style,
+                        {
+                          height: 18,
+                          width: 18,
+                          transform:
+                            item.tx_type === 'token_transfer'
+                              ? [{ rotate: isIncomingTx ? '180deg' : '0deg' }]
+                              : [],
+                        },
+                      ]}
                     />
                   )}
                   accessoryRight={() => (
                     <Text style={styles.listItemRightText} appearance="hint">
-                      {isIncomingTx ? '+' : '-'}
-                      {microToStacks(item.token_transfer.amount)} STX
+                      {item.tx_type === 'token_transfer'
+                        ? `${isIncomingTx ? '+' : '-'}${microToStacks(
+                            item.token_transfer.amount
+                          )} STX`
+                        : item.tx_type === 'smart_contract'
+                        ? `-${microToStacks(item.fee_rate)} STX`
+                        : item.tx_type === 'contract_call'
+                        ? `-${microToStacks(item.fee_rate)} STX`
+                        : ''}
                     </Text>
                   )}
                 />
