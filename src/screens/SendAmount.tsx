@@ -68,7 +68,7 @@ export const SendAmountScreen = () => {
         </Layout>
 
         <Layout style={styles.buttonsContainer}>
-          <Button onPress={handleConfirm} disabled={!amount}>
+          <Button size="large" onPress={handleConfirm} disabled={!amount}>
             Next
           </Button>
         </Layout>

@@ -70,7 +70,11 @@ export const SendScreen = () => {
         </Layout>
 
         <Layout style={styles.buttonsContainer}>
-          <Button onPress={handleConfirm} disabled={!isAddressValid}>
+          <Button
+            size="large"
+            onPress={handleConfirm}
+            disabled={!isAddressValid}
+          >
             Next
           </Button>
         </Layout>

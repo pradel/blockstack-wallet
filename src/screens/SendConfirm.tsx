@@ -103,7 +103,9 @@ export const SendConfirmScreen = () => {
         </Layout>
 
         <Layout style={styles.buttonsContainer}>
-          <Button onPress={handleConfirm}>Confirm</Button>
+          <Button size="large" onPress={handleConfirm}>
+            Confirm
+          </Button>
         </Layout>
       </Layout>
     </Layout>
