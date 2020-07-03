@@ -50,7 +50,6 @@ export const SendAmountScreen = () => {
           />
         )}
       />
-      <Divider />
 
       <Layout style={styles.contentContainer}>
         <Layout />

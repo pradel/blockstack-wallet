@@ -95,7 +95,6 @@ export const SendConfirmScreen = () => {
           />
         )}
       />
-      <Divider />
 
       <Layout style={styles.contentContainer}>
         <Layout />
