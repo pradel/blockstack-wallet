@@ -68,6 +68,7 @@ export const LoginScreen = () => {
       <View style={styles.buttonsContainer}>
         {haveWallet && (
           <Button
+            size="large"
             style={styles.button}
             onPress={handleAuthenticateWithBiometrics}
           >
@@ -75,6 +76,7 @@ export const LoginScreen = () => {
           </Button>
         )}
         <Button
+          size="large"
           style={styles.button}
           appearance={haveWallet ? 'ghost' : 'filled'}
           onPress={handleCreateNewWallet}
@@ -82,6 +84,7 @@ export const LoginScreen = () => {
           Create a new wallet
         </Button>
         <Button
+          size="large"
           style={styles.button}
           appearance="ghost"
           onPress={handleImportWallet}
@@ -113,5 +116,6 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
+    marginBottom: 8,
   },
 });
