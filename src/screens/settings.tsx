@@ -19,7 +19,6 @@ export const SettingsScreen = () => {
   return (
     <Layout style={styles.container} level="2">
       <TopNavigation title="Settings" alignment="center" />
-      <Divider />
 
       <ScrollView>
         <Text category="h6" style={styles.listHeader}>
