@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Icon,
@@ -9,6 +9,7 @@ import {
   Divider,
   Text,
   Button,
+  Spinner,
 } from '@ui-kitten/components';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -41,14 +42,19 @@ export const SendConfirmScreen = () => {
   const navigation = useNavigation<SendConfirmNavigationProp>();
   const route = useRoute<SendConfirmScreenRouteProp>();
   const appConfig = useAppConfig();
+  const [loading, setLoading] = useState(false);
 
   // TODO show transaction details for confirmation
 
   const handleConfirm = async () => {
+    setLoading(false);
+
     if (appConfig.appConfig.requireBiometricTransaction) {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
       if (!authenticateResult.success) return;
     }
+
+    setLoading(true);
 
     const mnemonic = await SecureStore.getItemAsync(getStorageKeyPk());
     if (mnemonic) {
@@ -69,6 +75,7 @@ export const SendConfirmScreen = () => {
         });
       } catch (error) {
         Alert.alert(`Failed to create transaction. ${error.message}`);
+        setLoading(false);
         return;
       }
 
@@ -76,6 +83,7 @@ export const SendConfirmScreen = () => {
         await broadcastTransaction(transaction, network);
       } catch (error) {
         Alert.alert(`Failed to broadcast transaction. ${error.message}`);
+        setLoading(false);
         return;
       }
 
@@ -100,8 +108,21 @@ export const SendConfirmScreen = () => {
         <Layout />
 
         <Layout style={styles.buttonsContainer}>
-          <Button size="large" onPress={handleConfirm}>
-            Confirm
+          <Button
+            size="large"
+            onPress={handleConfirm}
+            accessoryLeft={(props) =>
+              loading ? (
+                <View style={[props?.style, styles.indicator]}>
+                  <Spinner />
+                </View>
+              ) : (
+                (null as any)
+              )
+            }
+            disabled={loading}
+          >
+            {!loading ? 'Confirm' : ''}
           </Button>
         </Layout>
       </Layout>
@@ -120,5 +141,9 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  indicator: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
