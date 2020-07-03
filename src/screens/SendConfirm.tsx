@@ -86,7 +86,7 @@ export const SendConfirmScreen = () => {
   return (
     <Layout style={styles.container}>
       <TopNavigation
-        title="Send STX"
+        title="Confirm details"
         alignment="center"
         accessoryLeft={() => (
           <TopNavigationAction
@@ -98,9 +98,7 @@ export const SendConfirmScreen = () => {
       <Divider />
 
       <Layout style={styles.contentContainer}>
-        <Layout style={styles.inputContainer}>
-          <Text category="h1">Confirm details</Text>
-        </Layout>
+        <Layout />
 
         <Layout style={styles.buttonsContainer}>
           <Button size="large" onPress={handleConfirm}>
@@ -120,9 +118,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'space-between',
-  },
-  inputContainer: {
-    padding: 16,
   },
   buttonsContainer: {
     padding: 16,

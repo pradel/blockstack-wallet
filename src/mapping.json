@@ -25,6 +25,16 @@
           }
         }
       }
+    },
+    "TopNavigation": {
+      "appearances": {
+        "default": {
+          "mapping": {
+            "titleFontSize": 24,
+            "titleFontWeight": "700"
+          }
+        }
+      }
     }
   }
 }

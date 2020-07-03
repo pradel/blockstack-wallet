@@ -41,7 +41,7 @@ export const SendAmountScreen = () => {
   return (
     <Layout style={styles.container}>
       <TopNavigation
-        title="Send STX"
+        title="Enter Amount"
         alignment="center"
         accessoryLeft={() => (
           <TopNavigationAction
@@ -53,14 +53,13 @@ export const SendAmountScreen = () => {
       <Divider />
 
       <Layout style={styles.contentContainer}>
-        <Layout style={styles.inputContainer}>
-          <Text category="h1">Enter Amount</Text>
-        </Layout>
+        <Layout />
 
         <Layout style={styles.inputContainer}>
           <Input
             placeholder="Amount"
             size="large"
+            autoFocus={true}
             value={amount}
             keyboardType="number-pad"
             onChangeText={(nextValue) => setAmount(nextValue)}

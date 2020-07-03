@@ -1317,6 +1317,11 @@
     prettier "^2.0.5"
     triplesec "^3.0.27"
 
+"@blockstack/stacks-blockchain-sidecar-types@0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-sidecar-types/-/stacks-blockchain-sidecar-types-0.0.18.tgz#8bb1a7e9a7a2a756dab17c94168f6a7f1f923b43"
+  integrity sha512-NsO588N3KH+5/yj99dPj1rh4v5HSeXqORVpfKGdt0fzn5g8hCaszlgLBxwI1266VToZlaEZLGc9SCnK13I0zSQ==
+
 "@blockstack/stacks-transactions@0.4.6", "@blockstack/stacks-transactions@^0.4.6":
   version "0.4.6"
   resolved "https://registry.yarnpkg.com/@blockstack/stacks-transactions/-/stacks-transactions-0.4.6.tgz#b774250fbaadbadf42313a82fbd628b1728cd6ed"

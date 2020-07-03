@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Layout,
@@ -8,12 +8,12 @@ import {
   List,
   ListItem,
   Icon,
-  ButtonGroup,
   Button,
 } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import useSWR from 'swr';
 import { format } from 'date-fns';
+import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-types';
 import { fetcher, microToStacks } from '../utils';
 import { useAuth } from '../context/AuthContext';
 
@@ -21,20 +21,6 @@ interface BalanceResponse {
   stx: {
     balance: string;
   };
-}
-
-interface TransactionsResponse {
-  results: {
-    // tx_status: "success";
-    // tx_type: "token_transfer";
-    sender_address: string;
-    burn_block_time: number;
-    token_transfer: {
-      amount: string;
-      recipient_address: string;
-      // memo: string;
-    };
-  }[];
 }
 
 export const DashboardScreen = () => {
@@ -52,7 +38,7 @@ export const DashboardScreen = () => {
     data: transactionsData,
     error: transactionsError,
     mutate: transactionMutate,
-  } = useSWR<TransactionsResponse>(
+  } = useSWR<TransactionResults>(
     `https://sidecar.staging.blockstack.xyz/sidecar/v1/address/${auth.address}/transactions`,
     fetcher
   );
@@ -77,21 +63,51 @@ export const DashboardScreen = () => {
 
   return (
     <Layout style={styles.container}>
-      <Layout style={styles.balanceContainer}>
-        <Text category="h2">{balanceString} STX</Text>
+      <Layout style={styles.balanceContainer} level="2">
+        <Text style={styles.balanceTextCrypto} category="h2">
+          {balanceString} STX
+        </Text>
         <Text appearance="hint">~{fiatPrice} EUR</Text>
-        <ButtonGroup
-          style={styles.buttonGroup}
-          appearance="outline"
-          status="basic"
-        >
-          <Button onPress={() => navigation.navigate('Send')}>Send</Button>
-          <Button onPress={() => navigation.navigate('Receive')}>
-            Receive
-          </Button>
-        </ButtonGroup>
+
+        <View style={styles.actionsContainer}>
+          <View style={styles.actionsButtonContainer}>
+            <Button
+              style={styles.actionButton}
+              accessoryLeft={(props) => (
+                <Icon {...props} name="diagonal-arrow-left-down-outline" />
+              )}
+              onPress={() => navigation.navigate('Receive')}
+            />
+            <Text style={styles.actionsText} category="p2">
+              Receive
+            </Text>
+          </View>
+          <View style={styles.actionsButtonContainer}>
+            <Button
+              style={styles.actionButton}
+              accessoryLeft={(props) => (
+                <Icon {...props} name="diagonal-arrow-right-up-outline" />
+              )}
+              onPress={() => navigation.navigate('Send')}
+            />
+            <Text style={styles.actionsText} category="p2">
+              Send
+            </Text>
+          </View>
+          <View style={styles.actionsButtonContainer}>
+            <Button
+              style={styles.actionButton}
+              accessoryLeft={(props) => (
+                <Icon {...props} name="camera-outline" />
+              )}
+              onPress={() => navigation.navigate('Receive')}
+            />
+            <Text style={styles.actionsText} category="p2">
+              Scan
+            </Text>
+          </View>
+        </View>
       </Layout>
-      <Divider />
 
       <Layout style={styles.transactionsContainer}>
         {transactionsData && (
@@ -104,7 +120,7 @@ export const DashboardScreen = () => {
             renderItem={({
               item,
             }: {
-              item: TransactionsResponse['results'][0];
+              item: TransactionResults['results'][0];
             }) => {
               const isIncomingTx =
                 item.token_transfer.recipient_address === auth.address;
@@ -117,7 +133,7 @@ export const DashboardScreen = () => {
                   accessoryLeft={(props) => (
                     <Icon
                       {...props}
-                      name="paper-plane-outline"
+                      name="diagonal-arrow-right-up"
                       style={{
                         // @ts-ignore
                         ...(props?.style ?? {}),
@@ -131,6 +147,7 @@ export const DashboardScreen = () => {
                   )}
                   accessoryRight={() => (
                     <Text style={styles.listItemRightText} appearance="hint">
+                      {isIncomingTx ? '+' : '-'}
                       {microToStacks(item.token_transfer.amount)} STX
                     </Text>
                   )}
@@ -152,11 +169,28 @@ const styles = StyleSheet.create({
   balanceContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 64,
-    paddingBottom: 64,
+    paddingTop: 48,
+    paddingBottom: 48,
   },
-  buttonGroup: {
+  balanceTextCrypto: {
+    fontWeight: '700',
+  },
+  actionsContainer: {
     marginTop: 32,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  actionsButtonContainer: {
+    marginHorizontal: 24,
+  },
+  actionButton: {
+    height: 50,
+    width: 50,
+    borderRadius: 18,
+  },
+  actionsText: {
+    marginTop: 8,
+    textAlign: 'center',
   },
   transactionsContainer: {
     flex: 1,
@@ -170,5 +204,6 @@ const styles = StyleSheet.create({
   },
   listItemRightText: {
     marginRight: 8,
+    // fontWeight: '700',
   },
 });

@@ -39,31 +39,29 @@ export const SendScreen = () => {
   return (
     <Layout style={styles.container}>
       <TopNavigation
-        title="Send STX"
+        title="Recipient address"
         alignment="center"
         accessoryLeft={() => (
           <TopNavigationAction
-            icon={(props) => <Icon {...props} name="arrow-back" />}
+            icon={(props) => <Icon {...props} name="arrow-ios-back-outline" />}
             onPress={() => navigation.goBack()}
           />
         )}
       />
-      <Divider />
 
       <Layout style={styles.contentContainer}>
-        <Layout style={styles.inputContainer}>
-          <Text category="h1">Recipient address</Text>
-        </Layout>
+        <Layout />
 
         <Layout style={styles.inputContainer}>
           <Input
             placeholder="Address"
             size="large"
+            autoFocus={true}
             value={address}
             onChangeText={(nextValue) => setAddress(nextValue)}
             accessoryRight={() => (
               <TouchableHighlight onPress={handlePaste}>
-                <Text>Paste</Text>
+                <Text style={styles.inputTextAction}>Paste</Text>
               </TouchableHighlight>
             )}
           />
@@ -94,6 +92,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     padding: 16,
+  },
+  inputTextAction: {
+    fontWeight: '700',
   },
   buttonsContainer: {
     padding: 16,
