@@ -25,7 +25,6 @@ import { SettingsScreen } from './src/screens/settings';
 import { CreateWalletScreen } from './src/screens/CreateWallet';
 import { BackupPassphrase } from './src/screens/BackupPassphrase';
 import { Fingerprint } from './src/screens/Fingerprint';
-import { ReceiveScreen } from './src/screens/Receive';
 import { SendScreen } from './src/screens/Send';
 import { SendAmountScreen } from './src/screens/SendAmount';
 import { RootStackParamList } from './src/types/router';
@@ -39,11 +38,9 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
     onSelect={(index) => navigation.navigate(state.routeNames[index])}
     appearance="noIndicator"
   >
+    <BottomNavigationTab icon={(props) => <Icon {...props} name="home" />} />
     <BottomNavigationTab
-      icon={(props) => <Icon {...props} name="home-outline" />}
-    />
-    <BottomNavigationTab
-      icon={(props) => <Icon {...props} name="settings-outline" />}
+      icon={(props) => <Icon {...props} name="settings" />}
     />
   </BottomNavigation>
 );
@@ -102,11 +99,6 @@ const Router = () => {
       <RootStack.Screen
         name="SendConfirm"
         component={SendConfirmScreen}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="Receive"
-        component={ReceiveScreen}
         options={{ headerShown: false }}
       />
       <RootStack.Screen

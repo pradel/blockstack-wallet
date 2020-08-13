@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableHighlight } from 'react-native';
+import Constants from 'expo-constants';
 import {
   Icon,
   Layout,
@@ -40,7 +41,7 @@ export const SendAmountScreen = () => {
   return (
     <Layout style={styles.container}>
       <TopNavigation
-        title="Send STX"
+        title="Enter Amount"
         alignment="center"
         accessoryLeft={() => (
           <TopNavigationAction
@@ -49,17 +50,15 @@ export const SendAmountScreen = () => {
           />
         )}
       />
-      <Divider />
 
       <Layout style={styles.contentContainer}>
-        <Layout style={styles.inputContainer}>
-          <Text category="h1">Enter Amount</Text>
-        </Layout>
+        <Layout />
 
         <Layout style={styles.inputContainer}>
           <Input
             placeholder="Amount"
             size="large"
+            autoFocus={true}
             value={amount}
             keyboardType="number-pad"
             onChangeText={(nextValue) => setAmount(nextValue)}
@@ -67,7 +66,7 @@ export const SendAmountScreen = () => {
         </Layout>
 
         <Layout style={styles.buttonsContainer}>
-          <Button onPress={handleConfirm} disabled={!amount}>
+          <Button size="large" onPress={handleConfirm} disabled={!amount}>
             Next
           </Button>
         </Layout>
@@ -78,6 +77,7 @@ export const SendAmountScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
   },
   contentContainer: {

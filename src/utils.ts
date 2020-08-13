@@ -1,25 +1,59 @@
 import { Platform } from 'react-native';
 import * as Application from 'expo-application';
 import * as Random from 'expo-random';
-import { ec as EC } from 'elliptic';
-import { createStacksPrivateKey } from '@blockstack/stacks-transactions';
 import { c32addressDecode } from 'c32check';
+import { entropyToMnemonic, mnemonicToSeed } from 'bip39';
+import { bip32, BIP32Interface, ECPair } from 'bitcoinjs-lib';
+import { ecPairToHexString } from 'blockstack';
+import {
+  getAddressFromPrivateKey,
+  TransactionVersion,
+  ChainID,
+} from '@blockstack/stacks-transactions';
+import { getDerivationPath } from '@blockstack/keychain';
 
 export const fetcher = (...args: any) =>
   // @ts-ignore
   fetch(...args).then((res: any) => res.json());
 
 /**
- * @description Generate a random private key
+ * @description Generate a random mnemonic phrase
  */
-export const makeRandomPrivKey = async () => {
-  const ec = new EC('secp256k1');
+export const generateMnemonicRootKeychain = async () => {
   const randomBytes = await Random.getRandomBytesAsync(32);
-  const options = { entropy: randomBytes };
-  const keyPair = ec.genKeyPair(options);
-  const privateKey = keyPair.getPrivate().toString('hex', 32);
-  return createStacksPrivateKey(privateKey);
+  const plaintextMnemonic = entropyToMnemonic(randomBytes as any);
+  const seedBuffer = await mnemonicToSeed(plaintextMnemonic);
+  const rootNode = bip32.fromSeed(seedBuffer);
+  return {
+    rootNode,
+    plaintextMnemonic,
+  };
 };
+
+export const getRootKeychainFromMnemonic = async (mnemonic: string) => {
+  const seedBuffer = await mnemonicToSeed(mnemonic);
+  const rootNode = bip32.fromSeed(seedBuffer);
+  return rootNode;
+};
+
+// Remove this once https://github.com/blockstack/ux/issues/468 is fixed
+export function deriveStxAddressChain(chain: ChainID) {
+  return (rootNode: BIP32Interface) => {
+    const childKey = rootNode.derivePath(getDerivationPath(chain));
+    if (!childKey.privateKey) {
+      throw new Error(
+        'Unable to derive private key from `rootNode`, bip32 master keychain'
+      );
+    }
+    const ecPair = ECPair.fromPrivateKey(childKey.privateKey);
+    const privateKey = ecPairToHexString(ecPair);
+    return {
+      childKey,
+      address: getAddressFromPrivateKey(privateKey, TransactionVersion.Testnet),
+      privateKey,
+    };
+  };
+}
 
 /**
  * @description Return the secure storage key used to store the private key.

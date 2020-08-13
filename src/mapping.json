@@ -1,0 +1,40 @@
+{
+  "components": {
+    "Button": {
+      "meta": {},
+      "appearances": {
+        "filled": {
+          "variantGroups": {
+            "size": {
+              "tiny": {
+                "borderRadius": 18
+              },
+              "small": {
+                "borderRadius": 18
+              },
+              "medium": {
+                "borderRadius": 18
+              },
+              "large": {
+                "borderRadius": 18
+              },
+              "giant": {
+                "borderRadius": 18
+              }
+            }
+          }
+        }
+      }
+    },
+    "TopNavigation": {
+      "appearances": {
+        "default": {
+          "mapping": {
+            "titleFontSize": 24,
+            "titleFontWeight": "700"
+          }
+        }
+      }
+    }
+  }
+}

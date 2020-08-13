@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 import {
   Icon,
   Layout,
   TopNavigation,
   TopNavigationAction,
-  Divider,
   Text,
 } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
@@ -15,10 +15,10 @@ import { getStorageKeyPk } from '../utils';
 
 export const BackupPassphrase = () => {
   const navigation = useNavigation();
-  const [privateKey, setPrivateKey] = useState<string>();
+  const [mnemonic, setMnemonic] = useState<string>();
 
   useEffect(() => {
-    const loadPrivateKey = async () => {
+    const loadMnemonic = async () => {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
 
       if (!authenticateResult.success) {
@@ -26,13 +26,13 @@ export const BackupPassphrase = () => {
         return;
       }
 
-      const privateKeyHex = await SecureStore.getItemAsync(getStorageKeyPk());
-      if (privateKeyHex) {
-        setPrivateKey(privateKeyHex);
+      const mnemonicStorage = await SecureStore.getItemAsync(getStorageKeyPk());
+      if (mnemonicStorage) {
+        setMnemonic(mnemonicStorage);
       }
     };
 
-    loadPrivateKey();
+    loadMnemonic();
   }, []);
 
   return (
@@ -47,11 +47,19 @@ export const BackupPassphrase = () => {
           />
         )}
       />
-      <Divider />
+
+      <Layout style={styles.wordContainer}>
+        {mnemonic?.split(' ').map((word, index) => (
+          <Layout key={index} level="3" style={styles.wordItemContainer}>
+            <Text category="h6">{word}</Text>
+          </Layout>
+        ))}
+      </Layout>
 
       <Layout style={styles.textContainer}>
-        <Text style={styles.text} category="s1">
-          {privateKey}
+        <Text>
+          These words are the keys to access your blockstack wallet. Keep it in
+          a safe place and do not share it with anyone.
         </Text>
       </Layout>
     </Layout>
@@ -60,13 +68,26 @@ export const BackupPassphrase = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
   },
   textContainer: {
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 64,
-    alignItems: 'center',
+    paddingTop: 16,
   },
-  text: { textAlign: 'center' },
+  wordContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 16,
+  },
+  wordItemContainer: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    marginVertical: 8,
+    marginRight: 8,
+  },
 });
