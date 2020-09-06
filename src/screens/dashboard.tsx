@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image, Dimensions } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Layout,
@@ -17,6 +17,7 @@ import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-t
 import { fetcher, microToStacks } from '../utils';
 import { useAuth } from '../context/AuthContext';
 import { ReceiveScreen } from './Receive';
+import zeroTransactionsImage from '../../assets/undraw_void.png';
 
 interface BalanceResponse {
   stx: {
@@ -116,6 +117,17 @@ export const DashboardScreen = () => {
       </Layout>
 
       <Layout style={styles.transactionsContainer}>
+        {transactionsData && transactionsData.results.length === 0 ? (
+          <View style={styles.transactionsImageContainer}>
+            <Image
+              source={zeroTransactionsImage}
+              style={styles.transactionsImage}
+              resizeMode="contain"
+            />
+            <Text appearance="hint">No transactions..</Text>
+          </View>
+        ) : null}
+
         {transactionsData && (
           <List
             style={styles.transactionsList}
@@ -237,6 +249,14 @@ const styles = StyleSheet.create({
   },
   transactionsContainer: {
     flex: 1,
+  },
+  transactionsImageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  transactionsImage: {
+    height: 140,
+    width: '100%',
   },
   transactionsList: {
     flex: 1,
