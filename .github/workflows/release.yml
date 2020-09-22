@@ -1,15 +1,15 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - 'v*'
-# Only uncomment for debugging purposes
 # on:
 #   push:
-#     branches: [master]
-#   pull_request:
-#     branches: [master]
+#     tags:
+#       - 'v*'
+# Only uncomment for debugging purposes
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   build-android:
