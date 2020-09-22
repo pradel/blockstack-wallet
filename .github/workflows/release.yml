@@ -1,15 +1,15 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - 'v*'
-# Only uncomment for debugging purposes
 # on:
 #   push:
-#     branches: [master]
-#   pull_request:
-#     branches: [master]
+#     tags:
+#       - 'v*'
+# Only uncomment for debugging purposes
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
   build-android:
@@ -46,10 +46,8 @@ jobs:
       - name: Injecting secrets
         run: |
           echo $ANDROID_KEYSTORE | base64 --decode > android/app/app.keystore
-          echo $GOOGLE_SERVICES | base64 --decode > android/app/google-services.json
         env:
           ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
 
       - name: Bundle
         run: |
