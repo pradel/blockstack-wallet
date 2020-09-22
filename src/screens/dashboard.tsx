@@ -29,7 +29,7 @@ export const DashboardScreen = () => {
   const auth = useAuth();
   const {
     data: balanceData,
-    error: balanceError,
+    // error: balanceError,
     mutate: balanceMutate,
   } = useSWR<BalanceResponse>(
     `https://sidecar.staging.blockstack.xyz/sidecar/v1/address/${auth.address}/balances`,
@@ -37,7 +37,7 @@ export const DashboardScreen = () => {
   );
   const {
     data: transactionsData,
-    error: transactionsError,
+    // error: transactionsError,
     mutate: transactionMutate,
   } = useSWR<TransactionResults>(
     `https://sidecar.staging.blockstack.xyz/sidecar/v1/address/${auth.address}/transactions`,

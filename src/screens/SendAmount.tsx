@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Icon,
   Layout,
   TopNavigation,
   TopNavigationAction,
-  Divider,
-  Text,
   Button,
   Input,
 } from '@ui-kitten/components';

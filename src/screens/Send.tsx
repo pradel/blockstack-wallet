@@ -6,7 +6,6 @@ import {
   Layout,
   TopNavigation,
   TopNavigationAction,
-  Divider,
   Text,
   Button,
   Input,

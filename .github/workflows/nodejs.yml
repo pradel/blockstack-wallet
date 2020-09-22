@@ -37,3 +37,8 @@ jobs:
         run: yarn tsc --noEmit
         env:
           CI: true
+
+      - name: Lint
+        run: yarn lint
+        env:
+          CI: true

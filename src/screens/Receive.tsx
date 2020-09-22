@@ -41,19 +41,19 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
     }
   };
 
-  const handleRequestStx = async () => {
-    const data = await fetch(
-      `https://sidecar.staging.blockstack.xyz/sidecar/v1/faucets/stx?address=${auth.address}`,
-      {
-        method: 'POST',
-      }
-    );
-    if (data.ok) {
-      alert("You'll receive your testing Stacks Token (STX) momentarily.");
-    } else {
-      alert(`Request failed with status ${data.status}`);
-    }
-  };
+  // const handleRequestStx = async () => {
+  //   const data = await fetch(
+  //     `https://sidecar.staging.blockstack.xyz/sidecar/v1/faucets/stx?address=${auth.address}`,
+  //     {
+  //       method: 'POST',
+  //     }
+  //   );
+  //   if (data.ok) {
+  //     alert("You'll receive your testing Stacks Token (STX) momentarily.");
+  //   } else {
+  //     alert(`Request failed with status ${data.status}`);
+  //   }
+  // };
 
   // TODO needs to be on top of bottom navigation
 
