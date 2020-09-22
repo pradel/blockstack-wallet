@@ -64,20 +64,26 @@ export const ConfigProvider = ({ children }: AppConfigProviderProps) => {
   const appConfigContext = useMemo(
     () => ({
       setRequireBiometricOpenApp: async (requireBiometricOpenApp: boolean) => {
-        if (!appConfig) return;
+        if (!appConfig) {
+          return;
+        }
         setNewConfig({ ...appConfig, requireBiometricOpenApp });
       },
       setRequireBiometricTransaction: async (
         requireBiometricTransaction: boolean
       ) => {
-        if (!appConfig) return;
+        if (!appConfig) {
+          return;
+        }
         setNewConfig({ ...appConfig, requireBiometricTransaction });
       },
     }),
     [appConfig]
   );
 
-  if (!appConfig) return null;
+  if (!appConfig) {
+    return null;
+  }
 
   return (
     <AppConfigContext.Provider

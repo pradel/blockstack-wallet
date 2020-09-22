@@ -34,7 +34,9 @@ export const CreateWalletScreen = () => {
   }, []);
 
   const handleCreateNewWallet = async () => {
-    if (!mnemonic) return;
+    if (!mnemonic) {
+      return;
+    }
 
     const authenticateResult = await LocalAuthentication.authenticateAsync();
 

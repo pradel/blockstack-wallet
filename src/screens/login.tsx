@@ -48,7 +48,9 @@ export const LoginScreen = () => {
   const handleAuthenticateWithBiometrics = async () => {
     if (appConfig.appConfig.requireBiometricOpenApp) {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
-      if (!authenticateResult.success) return;
+      if (!authenticateResult.success) {
+        return;
+      }
     }
 
     const mnemonic = await SecureStore.getItemAsync(getStorageKeyPk());

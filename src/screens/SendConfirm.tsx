@@ -49,7 +49,9 @@ export const SendConfirmScreen = () => {
 
     if (appConfig.appConfig.requireBiometricTransaction) {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
-      if (!authenticateResult.success) return;
+      if (!authenticateResult.success) {
+        return;
+      }
     }
 
     setLoading(true);
