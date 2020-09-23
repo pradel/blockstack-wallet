@@ -1,4 +1,6 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import * as eva from '@eva-design/eva';
 import { IconRegistry, ApplicationProvider } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
@@ -14,15 +16,41 @@ interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  // TODO fetch theme from local storage
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+const appThemeKey = '@appTheme';
 
-  const toggleTheme = () => {
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+  const [theme, setTheme] = useState<'light' | 'dark'>();
+
+  useEffect(() => {
+    const loadThemeFromStorage = async () => {
+      try {
+        const value = await AsyncStorage.getItem(appThemeKey);
+        if (value !== null && (value === 'light' || value === 'dark')) {
+          setTheme(value);
+        } else {
+          setTheme('light');
+        }
+      } catch (error) {
+        Alert.alert(`Failed to load theme. ${error.message}`);
+      }
+    };
+
+    loadThemeFromStorage();
+  }, []);
+
+  const toggleTheme = async () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
-    // TODO save to local storage
     setTheme(nextTheme);
+    try {
+      await AsyncStorage.setItem(appThemeKey, nextTheme);
+    } catch (error) {
+      Alert.alert(`Failed to save theme. ${error.message}`);
+    }
   };
+
+  if (!theme) {
+    return null;
+  }
 
   return (
     <React.Fragment>
