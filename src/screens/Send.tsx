@@ -24,8 +24,6 @@ export const SendScreen = () => {
   const route = useRoute<SendRouteProp>();
   const [address, setAddress] = useState(route.params?.address ?? '');
 
-  // TODO Button to Scan qr code
-
   const handlePaste = async () => {
     const text = await Clipboard.getString();
     setAddress(text);
