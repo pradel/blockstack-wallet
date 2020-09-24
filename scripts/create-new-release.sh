@@ -5,24 +5,25 @@ else
     exit 1
 fi
 
+# Get the current package.json version so it can be replaced
+CURRENT_PACKAGE_VERSION=$(jq -r ".version" package.json)
+
 # Replace old version with new version
+# package.json
+sed "s|${CURRENT_PACKAGE_VERSION}|${2}|g" "./package.json" > "tmp.txt"
+cat "tmp.txt" > "./package.json"
 # expo
-sed "s|${1}|${2}|g" "./app.json" > "tmp.txt"
+sed "s|${CURRENT_PACKAGE_VERSION}|${2}|g" "./app.json" > "tmp.txt"
 cat "tmp.txt" > "./app.json"
-# ios
-sed "s|${1}|${2}|g" "./ios/myproject/Info.plist" > "tmp.txt"
-cat "tmp.txt" > "./ios/myproject/Info.plist"
-# android
-sed "s|${1}|${2}|g" "./android/app/build.gradle" > "tmp.txt"
-cat "tmp.txt" > "./android/app/build.gradle"
 # cleanup
 rm tmp.txt
 
-# git commit
-git add "./app.json"
-git add "./ios/myproject/Info.plist"
-git add "./android/app/build.gradle"
-git commit -m "feat(mobile): release app version v${2}"
+# Fastlane task to update the apps version
+bundle exec fastlane bump
 
-# create git tag for the previous release commit
-git tag "v${2}" HEAD
+# # git commit
+# git add .
+# git commit -m "feat(mobile): release app version v${2}"
+
+# # create git tag for the previous release commit
+# git tag "v${2}" HEAD
