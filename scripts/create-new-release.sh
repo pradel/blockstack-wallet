@@ -1,4 +1,4 @@
-if [[ ${2} =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+if [[ ${1} =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
     versionShort=${BASH_REMATCH[0]}
 else
     echo "Something is wrong with the new version"
@@ -7,18 +7,15 @@ fi
 
 # Get the current package.json version so it can be replaced
 CURRENT_PACKAGE_VERSION=$(jq -r ".version" package.json)
+NEW_VERSION=${1}
 
 # Replace old version with new version
 # package.json
-sed "s|${CURRENT_PACKAGE_VERSION}|${2}|g" "./package.json" > "tmp.txt"
-cat "tmp.txt" > "./package.json"
+jq --arg version ${NEW_VERSION} '.version = $version' package.json > "tmp.txt" && mv "tmp.txt" package.json
 # expo
-sed "s|${CURRENT_PACKAGE_VERSION}|${2}|g" "./app.json" > "tmp.txt"
-cat "tmp.txt" > "./app.json"
-# cleanup
-rm tmp.txt
-
+jq --arg version ${NEW_VERSION} '.expo.version = $version' app.json > "tmp.txt" && mv "tmp.txt" app.json
 # Fastlane task to update the apps version
+cd fastlane
 bundle exec fastlane bump
 
 # # git commit
