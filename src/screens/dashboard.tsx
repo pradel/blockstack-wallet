@@ -57,6 +57,10 @@ export const DashboardScreen = () => {
     setIsBottomSheetOpen(true);
   };
 
+  const handleScan = () => {
+    navigation.navigate('SendScanAddress');
+  };
+
   // TODO handle error (display snackbar?)
 
   // TODO infinite scrolling
@@ -107,7 +111,7 @@ export const DashboardScreen = () => {
               accessoryLeft={(props) => (
                 <Icon {...props} name="camera-outline" />
               )}
-              onPress={handleReceive}
+              onPress={handleScan}
             />
             <Text style={styles.actionsText} category="p2">
               Scan

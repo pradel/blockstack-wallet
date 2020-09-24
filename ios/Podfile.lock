@@ -5,6 +5,12 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXApplication (2.3.0):
     - UMCore
+  - EXBarCodeScanner (9.0.0):
+    - UMCore
+    - UMImageLoaderInterface
+    - UMPermissionsInterface
+    - ZXingObjC/OneD
+    - ZXingObjC/PDF417
   - EXConstants (9.2.0):
     - UMConstantsInterface
     - UMCore
@@ -371,10 +377,16 @@ PODS:
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
+  - ZXingObjC/Core (3.6.5)
+  - ZXingObjC/OneD (3.6.5):
+    - ZXingObjC/Core
+  - ZXingObjC/PDF417 (3.6.5):
+    - ZXingObjC/Core
 
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXApplication (from `../node_modules/expo-application/ios`)
+  - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
@@ -470,12 +482,15 @@ SPEC REPOS:
     - FlipperKit
     - OpenSSL-Universal
     - YogaKit
+    - ZXingObjC
 
 EXTERNAL SOURCES:
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   EXApplication:
     :path: "../node_modules/expo-application/ios"
+  EXBarCodeScanner:
+    :path: "../node_modules/expo-barcode-scanner/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
   EXErrorRecovery:
@@ -601,6 +616,7 @@ SPEC CHECKSUMS:
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   EXApplication: c346c5ab7d1a4607f1863e93490b79fe838148b1
+  EXBarCodeScanner: 1a76d3dc0dae2799af6012e3e4966100e4221a94
   EXConstants: f486f6b4a36b86e47ab258d4d2b7b2699786fdce
   EXErrorRecovery: 16696fe023fb46a32c3b09033abc361cfcf150a7
   EXFileSystem: afe9b1fd937d30270bf5108ba44e2f4a1d1ad694
@@ -669,6 +685,7 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 6cad5929dbc0a5b986ad4d77caac497d4de730a7
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+  ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
 PODFILE CHECKSUM: 48c7783795db2d23e2175cd2625ab158bdea191f
 
