@@ -40,7 +40,7 @@ jobs:
 
       - name: Install Fastlane
         run: |
-          cd android
+          cd fastlane
           bundle install
 
       - name: Injecting secrets
@@ -51,8 +51,7 @@ jobs:
 
       - name: Bundle
         run: |
-          cd android
-          bundle exec fastlane deploy
+          bundle exec fastlane android build_production
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
