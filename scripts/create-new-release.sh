@@ -26,7 +26,7 @@ git add "./app.json"
 git add "./android/app/build.gradle"
 git add "./ios/blockstackwallet.xcodeproj/project.pbxproj"
 git add "./ios/blockstackwallet/Info.plist"
-git commit -m "feat(mobile): release app version v${NEW_VERSION}"
+git commit -m "v${NEW_VERSION}"
 
 # create git tag for the previous release commit
 git tag "v${NEW_VERSION}" HEAD
