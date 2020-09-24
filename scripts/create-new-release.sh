@@ -20,7 +20,11 @@ cd fastlane
 bundle exec fastlane bump
 
 # git commit
-git add .
+git add "./package.json"
+git add "./app.json"
+git add "./android/app/build.gradle"
+git add "./ios/blockstackwallet.xcodeproj/project.pbxproj"
+git add "./ios/blockstackwallet.xcodeproj/Info.plist"
 git commit -m "feat(mobile): release app version v${2}"
 
 # create git tag for the previous release commit
