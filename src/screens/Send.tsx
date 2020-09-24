@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Icon,
@@ -15,6 +15,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
 import { validateStacksAddress } from '../utils';
+import { HeroQrCode } from '../images/HeroQrCode';
 
 type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
 type SendRouteProp = RouteProp<RootStackParamList, 'Send'>;
@@ -24,9 +25,20 @@ export const SendScreen = () => {
   const route = useRoute<SendRouteProp>();
   const [address, setAddress] = useState(route.params?.address ?? '');
 
+  // Listen to the navigation param so if we can on this screen it will fill the input
+  useEffect(() => {
+    if (route.params?.address) {
+      setAddress(route.params.address);
+    }
+  }, [route.params?.address]);
+
   const handlePaste = async () => {
     const text = await Clipboard.getString();
     setAddress(text);
+  };
+
+  const handleScan = () => {
+    navigation.navigate('SendScanAddress');
   };
 
   const handleConfirm = () => {
@@ -71,6 +83,15 @@ export const SendScreen = () => {
         </Layout>
 
         <Layout style={styles.buttonsContainer}>
+          <View style={{ alignItems: 'center' }}>
+            <Button
+              style={styles.qrCodeButton}
+              size="large"
+              appearance="ghost"
+              accessoryLeft={HeroQrCode as any}
+              onPress={handleScan}
+            />
+          </View>
           <Button
             size="large"
             onPress={handleConfirm}
@@ -101,5 +122,10 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  qrCodeButton: {
+    marginBottom: 16,
+    width: 48,
+    height: 48,
   },
 });
