@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Icon,
@@ -7,8 +7,6 @@ import {
   TopNavigation,
   TopNavigationAction,
   Text,
-  Button,
-  Input,
 } from '@ui-kitten/components';
 import { BarCodeScanner, BarCodeScannedCallback } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
