@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Icon,
@@ -10,23 +10,35 @@ import {
   Button,
   Input,
 } from '@ui-kitten/components';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
 import { validateStacksAddress } from '../utils';
+import { HeroQrCode } from '../images/HeroQrCode';
 
 type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
+type SendRouteProp = RouteProp<RootStackParamList, 'Send'>;
 
 export const SendScreen = () => {
   const navigation = useNavigation<SendNavigationProp>();
-  const [address, setAddress] = useState('');
+  const route = useRoute<SendRouteProp>();
+  const [address, setAddress] = useState(route.params?.address ?? '');
 
-  // TODO Scan qr code and go to next step
+  // Listen to the navigation param so if we can on this screen it will fill the input
+  useEffect(() => {
+    if (route.params?.address) {
+      setAddress(route.params.address);
+    }
+  }, [route.params?.address]);
 
   const handlePaste = async () => {
     const text = await Clipboard.getString();
     setAddress(text);
+  };
+
+  const handleScan = () => {
+    navigation.navigate('SendScanAddress');
   };
 
   const handleConfirm = () => {
@@ -58,6 +70,10 @@ export const SendScreen = () => {
             autoFocus={true}
             value={address}
             onChangeText={(nextValue) => setAddress(nextValue)}
+            status={address && !isAddressValid ? 'danger' : undefined}
+            caption={
+              address && !isAddressValid ? 'Invalid STX address' : undefined
+            }
             accessoryRight={() => (
               <TouchableHighlight onPress={handlePaste}>
                 <Text style={styles.inputTextAction}>Paste</Text>
@@ -67,6 +83,15 @@ export const SendScreen = () => {
         </Layout>
 
         <Layout style={styles.buttonsContainer}>
+          <View style={{ alignItems: 'center' }}>
+            <Button
+              style={styles.qrCodeButton}
+              size="large"
+              appearance="ghost"
+              accessoryLeft={HeroQrCode as any}
+              onPress={handleScan}
+            />
+          </View>
           <Button
             size="large"
             onPress={handleConfirm}
@@ -97,5 +122,10 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  qrCodeButton: {
+    marginBottom: 16,
+    width: 48,
+    height: 48,
   },
 });

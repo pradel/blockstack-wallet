@@ -21,6 +21,7 @@ import { SendScreen } from './screens/Send';
 import { SendAmountScreen } from './screens/SendAmount';
 import { RootStackParamList } from './types/router';
 import { SendConfirmScreen } from './screens/SendConfirm';
+import { SendScanAddress } from './screens/SendScanAddress';
 
 const Tab = createBottomTabNavigator();
 
@@ -76,6 +77,11 @@ export const Router = () => {
       <RootStack.Screen
         name="Main"
         component={MainStackScreen}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name="SendScanAddress"
+        component={SendScanAddress}
         options={{ headerShown: false }}
       />
       <RootStack.Screen

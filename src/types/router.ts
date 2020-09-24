@@ -1,6 +1,7 @@
 export type RootStackParamList = {
   Main: undefined;
-  Send: undefined;
+  SendScanAddress: undefined;
+  Send?: { address?: string };
   SendAmount: { address: string };
   SendConfirm: { address: string; amount: string };
   Receive: undefined;
