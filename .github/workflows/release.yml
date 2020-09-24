@@ -40,21 +40,19 @@ jobs:
 
       - name: Install Fastlane
         run: |
-          cd android
+          cd fastlane
           bundle install
 
       - name: Injecting secrets
         run: |
           echo $ANDROID_KEYSTORE | base64 --decode > android/app/app.keystore
-          echo $GOOGLE_SERVICES | base64 --decode > android/app/google-services.json
         env:
           ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-          GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
 
       - name: Bundle
         run: |
-          cd android
-          bundle exec fastlane deploy
+          cd fastlane
+          bundle exec fastlane android build_production
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}

@@ -34,6 +34,11 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Typecheck
-        run: yarn tsc
+        run: yarn tsc --noEmit
+        env:
+          CI: true
+
+      - name: Lint
+        run: yarn lint
         env:
           CI: true

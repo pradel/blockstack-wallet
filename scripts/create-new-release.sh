@@ -1,28 +1,32 @@
-if [[ ${2} =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+NEW_VERSION=${1}
+
+if [[ ${NEW_VERSION} =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
     versionShort=${BASH_REMATCH[0]}
 else
     echo "Something is wrong with the new version"
     exit 1
 fi
 
+# Get the current package.json version so it can be replaced
+CURRENT_PACKAGE_VERSION=$(jq -r ".version" package.json)
+
 # Replace old version with new version
+# package.json
+jq --arg version ${NEW_VERSION} '.version = $version' package.json > "tmp.txt" && mv "tmp.txt" package.json
 # expo
-sed "s|${1}|${2}|g" "./app.json" > "tmp.txt"
-cat "tmp.txt" > "./app.json"
-# ios
-sed "s|${1}|${2}|g" "./ios/myproject/Info.plist" > "tmp.txt"
-cat "tmp.txt" > "./ios/myproject/Info.plist"
-# android
-sed "s|${1}|${2}|g" "./android/app/build.gradle" > "tmp.txt"
-cat "tmp.txt" > "./android/app/build.gradle"
-# cleanup
-rm tmp.txt
+jq --arg version ${NEW_VERSION} '.expo.version = $version' app.json > "tmp.txt" && mv "tmp.txt" app.json
+# Fastlane task to update the apps version
+cd fastlane
+bundle exec fastlane bump
+cd ..
 
 # git commit
+git add "./package.json"
 git add "./app.json"
-git add "./ios/myproject/Info.plist"
 git add "./android/app/build.gradle"
-git commit -m "feat(mobile): release app version v${2}"
+git add "./ios/blockstackwallet.xcodeproj/project.pbxproj"
+git add "./ios/blockstackwallet/Info.plist"
+git commit -m "v${NEW_VERSION}"
 
 # create git tag for the previous release commit
-git tag "v${2}" HEAD
+git tag "v${NEW_VERSION}" HEAD
