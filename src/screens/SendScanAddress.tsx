@@ -36,13 +36,6 @@ export const SendScanAddress = () => {
     navigation.navigate('Send', { address: data });
   };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-
   return (
     <Layout style={styles.container}>
       <TopNavigation
@@ -57,10 +50,16 @@ export const SendScanAddress = () => {
       />
 
       <Layout style={styles.contentContainer}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? () => null : handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
+        {hasPermission === null ? (
+          <Text>Requesting for camera permission</Text>
+        ) : null}
+        {hasPermission === false ? <Text>No access to camera</Text> : null}
+        {hasPermission === true ? (
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? () => null : handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+          />
+        ) : null}
       </Layout>
     </Layout>
   );
