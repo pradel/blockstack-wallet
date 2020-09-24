@@ -18,13 +18,14 @@ jq --arg version ${NEW_VERSION} '.expo.version = $version' app.json > "tmp.txt" 
 # Fastlane task to update the apps version
 cd fastlane
 bundle exec fastlane bump
+cd ..
 
 # git commit
 git add "./package.json"
 git add "./app.json"
 git add "./android/app/build.gradle"
 git add "./ios/blockstackwallet.xcodeproj/project.pbxproj"
-git add "./ios/blockstackwallet.xcodeproj/Info.plist"
+git add "./ios/blockstackwallet/Info.plist"
 git commit -m "feat(mobile): release app version v${2}"
 
 # create git tag for the previous release commit
