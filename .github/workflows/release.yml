@@ -51,6 +51,7 @@ jobs:
 
       - name: Bundle
         run: |
+          cd fastlane
           bundle exec fastlane android build_production
         env:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
