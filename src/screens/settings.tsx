@@ -100,13 +100,12 @@ export const SettingsScreen = () => {
           title="Version"
           style={styles.listItem}
           accessoryRight={() => (
-            // TODO make version dynamic on the release version
             <Text
               style={styles.listItemRightText}
               category="s2"
               appearance="hint"
             >
-              0.0.1
+              {Constants.nativeAppVersion!}
             </Text>
           )}
         />
