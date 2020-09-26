@@ -43,7 +43,7 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
 
   // const handleRequestStx = async () => {
   //   const data = await fetch(
-  //     `https://sidecar.staging.blockstack.xyz/sidecar/v1/faucets/stx?address=${auth.address}`,
+  //     `${config.blockstackApiUrl}/extended/v1/faucets/stx?address=${auth.address}`,
   //     {
   //       method: 'POST',
   //     }

@@ -18,6 +18,7 @@ import { fetcher, microToStacks } from '../utils';
 import { useAuth } from '../context/AuthContext';
 import { ReceiveScreen } from './Receive';
 import { UndrawVoid } from '../images/UndrawVoid';
+import { config } from '../config';
 
 interface BalanceResponse {
   stx: {
@@ -33,7 +34,7 @@ export const DashboardScreen = () => {
     // error: balanceError,
     mutate: balanceMutate,
   } = useSWR<BalanceResponse>(
-    `https://sidecar.staging.blockstack.xyz/sidecar/v1/address/${auth.address}/balances`,
+    `${config.blockstackApiUrl}/extended/v1/address/${auth.address}/balances`,
     fetcher
   );
   const {
@@ -41,7 +42,7 @@ export const DashboardScreen = () => {
     // error: transactionsError,
     mutate: transactionMutate,
   } = useSWR<TransactionResults>(
-    `https://sidecar.staging.blockstack.xyz/sidecar/v1/address/${auth.address}/transactions`,
+    `${config.blockstackApiUrl}/extended/v1/address/${auth.address}/transactions`,
     fetcher
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
