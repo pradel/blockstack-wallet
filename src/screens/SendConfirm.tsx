@@ -20,14 +20,13 @@ import {
   StacksTransaction,
   ChainID,
 } from '@blockstack/stacks-transactions';
-import { deriveStxAddressChain } from '@blockstack/keychain';
+import {
+  deriveStxAddressChain,
+  deriveRootKeychainFromMnemonic,
+} from '@blockstack/keychain';
 import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
-import {
-  getStorageKeyPk,
-  stacksToMicro,
-  getRootKeychainFromMnemonic,
-} from '../utils';
+import { getStorageKeyPk, stacksToMicro } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
 
 type SendConfirmNavigationProp = StackNavigationProp<
@@ -60,7 +59,7 @@ export const SendConfirmScreen = () => {
     if (mnemonic) {
       const network = new StacksTestnet();
 
-      const rootNode = await getRootKeychainFromMnemonic(mnemonic);
+      const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
       const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
 
       let transaction: StacksTransaction;

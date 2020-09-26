@@ -23,12 +23,6 @@ export const generateMnemonicRootKeychain = async () => {
   };
 };
 
-export const getRootKeychainFromMnemonic = async (mnemonic: string) => {
-  const seedBuffer = await mnemonicToSeed(mnemonic);
-  const rootNode = bip32.fromSeed(seedBuffer);
-  return rootNode;
-};
-
 /**
  * @description Return the secure storage key used to store the private key.
  */
