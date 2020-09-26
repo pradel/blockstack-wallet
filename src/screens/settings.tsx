@@ -70,7 +70,7 @@ export const SettingsScreen = () => {
           title="Currency"
           style={styles.listItem}
           accessoryRight={() => (
-            // TODO make version dynamic on the release version
+            // TODO select currency
             <Text
               style={styles.listItemRightText}
               category="s2"
@@ -79,7 +79,6 @@ export const SettingsScreen = () => {
               USD
             </Text>
           )}
-          // TODO select currency
         />
         <Divider />
 
