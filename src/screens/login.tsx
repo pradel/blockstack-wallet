@@ -6,11 +6,8 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 import { ChainID } from '@blockstack/stacks-transactions';
-import {
-  getStorageKeyPk,
-  getRootKeychainFromMnemonic,
-  deriveStxAddressChain,
-} from '../utils';
+import { deriveStxAddressChain } from '@blockstack/keychain';
+import { getStorageKeyPk, getRootKeychainFromMnemonic } from '../utils';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
 
