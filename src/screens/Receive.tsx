@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
   },
   qrCodeContainer: {
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingTop: 16,
   },
   text: {
-    marginTop: 32,
+    paddingTop: 32,
     textAlign: 'center',
     fontWeight: '700',
   },
