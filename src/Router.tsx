@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-  createBottomTabNavigator,
-  BottomTabBarProps,
-} from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  BottomNavigation,
-  BottomNavigationTab,
-  Icon,
-  Divider,
-} from '@ui-kitten/components';
+import { BottomNavigation } from 'react-native-paper';
 import { useAuth } from './context/AuthContext';
 import { LoginScreen } from './screens/login';
 import { DashboardScreen } from './screens/dashboard';
@@ -23,32 +15,20 @@ import { RootStackParamList } from './types/router';
 import { SendConfirmScreen } from './screens/SendConfirm';
 import { SendScanAddress } from './screens/SendScanAddress';
 
-const Tab = createBottomTabNavigator();
-
-const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => (
-  <BottomNavigation
-    selectedIndex={state.index}
-    onSelect={(index) => navigation.navigate(state.routeNames[index])}
-    appearance="noIndicator"
-  >
-    <BottomNavigationTab icon={(props) => <Icon {...props} name="home" />} />
-    <BottomNavigationTab
-      icon={(props) => <Icon {...props} name="settings" />}
-    />
-  </BottomNavigation>
-);
+const Tab = createMaterialBottomTabNavigator();
 
 const MainStackScreen = () => (
-  <Tab.Navigator
-    tabBar={(props) => (
-      <React.Fragment>
-        <Divider />
-        <BottomTabBar {...props} />
-      </React.Fragment>
-    )}
-  >
-    <Tab.Screen name="Dashboard" component={DashboardScreen} />
-    <Tab.Screen name="Settings" component={SettingsScreen} />
+  <Tab.Navigator labeled={false}>
+    <Tab.Screen
+      name="Dashboard"
+      options={{ tabBarIcon: 'home' }}
+      component={DashboardScreen}
+    />
+    <Tab.Screen
+      name="Settings"
+      options={{ tabBarIcon: 'settings' }}
+      component={SettingsScreen}
+    />
   </Tab.Navigator>
 );
 
@@ -79,7 +59,7 @@ export const Router = () => {
         component={MainStackScreen}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen
+      {/* <RootStack.Screen
         name="SendScanAddress"
         component={SendScanAddress}
         options={{ headerShown: false }}
@@ -108,7 +88,7 @@ export const Router = () => {
         name="Fingerprint"
         component={Fingerprint}
         options={{ headerShown: false }}
-      />
+      /> */}
     </RootStack.Navigator>
   );
 };
