@@ -84,11 +84,11 @@ export const Router = () => {
         component={BackupPassphrase}
         options={{ headerShown: false }}
       />
-      {/* <RootStack.Screen
+      <RootStack.Screen
         name="Fingerprint"
         component={Fingerprint}
         options={{ headerShown: false }}
-      />  */}
+      />
     </RootStack.Navigator>
   );
 };
