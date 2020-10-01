@@ -130,20 +130,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
-  wordItemContainer: {
-    marginVertical: 8,
-    marginRight: 8,
-  },
-  textContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 64,
-    alignItems: 'center',
-  },
   text: {
     marginRight: 8,
-    // flex: 1,
-    // textAlign: 'center'
   },
   buttonsContainer: {
     paddingTop: 16,
