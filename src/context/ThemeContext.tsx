@@ -1,12 +1,34 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Provider as PaperProvider } from 'react-native-paper';
-import * as eva from '@eva-design/eva';
-import { IconRegistry, ApplicationProvider } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
-import { default as customTheme } from '../../custom-theme.json';
-import { default as customMapping } from '../mapping.json';
+import {
+  Provider as PaperProvider,
+  DefaultTheme as PaperDefaultTheme,
+  DarkTheme as PaperDarkTheme,
+} from 'react-native-paper';
+import {
+  NavigationContainer,
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from '@react-navigation/native';
+
+const CombinedDefaultTheme = {
+  ...PaperDefaultTheme,
+  ...NavigationDefaultTheme,
+  colors: {
+    ...PaperDefaultTheme.colors,
+    ...NavigationDefaultTheme.colors,
+    primary: '#1A202C',
+  },
+};
+const CombinedDarkTheme = {
+  ...PaperDarkTheme,
+  ...NavigationDarkTheme,
+  colors: {
+    ...PaperDarkTheme.colors,
+    ...NavigationDarkTheme.colors,
+  },
+};
 
 const ThemeContext = createContext<{
   theme: 'light' | 'dark';
@@ -53,17 +75,17 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     return null;
   }
 
+  const customTheme =
+    theme === 'light' ? CombinedDefaultTheme : CombinedDarkTheme;
+
   return (
     <React.Fragment>
-      <IconRegistry icons={EvaIconsPack} />
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
-        <ApplicationProvider
-          {...eva}
-          customMapping={customMapping as any}
-          theme={{ ...eva[theme], ...customTheme }}
-        >
-          <PaperProvider>{children}</PaperProvider>
-        </ApplicationProvider>
+        <PaperProvider theme={customTheme}>
+          <NavigationContainer theme={customTheme}>
+            {children}
+          </NavigationContainer>
+        </PaperProvider>
       </ThemeContext.Provider>
     </React.Fragment>
   );
