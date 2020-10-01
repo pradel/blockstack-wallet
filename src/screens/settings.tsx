@@ -1,14 +1,7 @@
 import React from 'react';
 import Constants from 'expo-constants';
-import {
-  Layout,
-  Text,
-  ListItem,
-  Icon,
-  TopNavigation,
-  Divider,
-} from '@ui-kitten/components';
-import { ScrollView, StyleSheet } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { List, Divider, Surface, Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 
@@ -17,100 +10,74 @@ export const SettingsScreen = () => {
   const theme = useTheme();
 
   return (
-    <Layout style={styles.container} level="2">
-      <TopNavigation title="Settings" alignment="center" />
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.Content title="Settings" />
+      </Appbar.Header>
 
       <ScrollView>
-        <Text category="h6" style={styles.listHeader}>
-          Security
-        </Text>
-        <Divider />
-        <ListItem
-          title="Fingerprint"
-          accessoryRight={(props) => (
-            <Icon {...props} name="chevron-right-outline" />
-          )}
-          style={styles.listItem}
-          onPress={() => navigation.navigate('Fingerprint')}
-        />
-        <Divider />
-        <ListItem
-          title="Backup your passphrase"
-          accessoryRight={(props) => (
-            <Icon {...props} name="chevron-right-outline" />
-          )}
-          style={styles.listItem}
-          onPress={() => navigation.navigate('BackupPassphrase')}
-        />
-        <Divider />
-
-        <Text category="h6" style={styles.listHeader}>
-          General
-        </Text>
-        <Divider />
-        <ListItem
-          title={theme.theme === 'light' ? 'Dark mode' : 'Light mode'}
-          accessoryRight={(props) => (
-            <Icon
-              name={theme.theme === 'light' ? 'moon-outline' : 'sun-outline'}
-              {...props}
-              style={{
-                // @ts-ignore
-                ...(props?.style ?? {}),
-                height: 18,
-                width: 18,
-              }}
+        <List.Section>
+          <List.Subheader>Security</List.Subheader>
+          <Surface>
+            <List.Item
+              title="Fingerprint"
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => navigation.navigate('Fingerprint')}
             />
-          )}
-          style={styles.listItem}
-          onPress={theme.toggleTheme}
-        />
-        <Divider />
-        <ListItem
-          title="Currency"
-          style={styles.listItem}
-          accessoryRight={() => (
-            // TODO select currency
-            <Text
-              style={styles.listItemRightText}
-              category="s2"
-              appearance="hint"
-            >
-              USD
-            </Text>
-          )}
-        />
-        <Divider />
+            <Divider />
+            <List.Item
+              title="Backup your passphrase"
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => navigation.navigate('BackupPassphrase')}
+            />
+          </Surface>
+        </List.Section>
 
-        <Text category="h6" style={styles.listHeader}>
-          Info
-        </Text>
-        <Divider />
-        <ListItem
-          title="About"
-          accessoryRight={(props) => (
-            <Icon {...props} name="chevron-right-outline" />
-          )}
-          style={styles.listItem}
-          // TODO make it open an about page
-        />
-        <Divider />
-        <ListItem
-          title="Version"
-          style={styles.listItem}
-          accessoryRight={() => (
-            <Text
-              style={styles.listItemRightText}
-              category="s2"
-              appearance="hint"
-            >
-              {Constants.nativeAppVersion!}
-            </Text>
-          )}
-        />
-        <Divider />
+        <List.Section>
+          <List.Subheader>General</List.Subheader>
+          <Surface>
+            <List.Item
+              title={theme.theme === 'light' ? 'Dark mode' : 'Light mode'}
+              right={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={
+                    theme.theme === 'light'
+                      ? 'moon-waning-crescent'
+                      : 'white-balance-sunny'
+                  }
+                />
+              )}
+              onPress={theme.toggleTheme}
+            />
+            <Divider />
+            <List.Item
+              title="Currency"
+              description="USD"
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => Alert.alert('Coming soon')}
+            />
+          </Surface>
+        </List.Section>
+
+        <List.Section>
+          <List.Subheader>Info</List.Subheader>
+          <Surface>
+            <List.Item
+              title="About"
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => Alert.alert('Coming soon')}
+            />
+            <Divider />
+            <List.Item
+              title="Version"
+              description={Constants.nativeAppVersion}
+              onPress={() => Alert.alert('Coming soon')}
+            />
+          </Surface>
+        </List.Section>
       </ScrollView>
-    </Layout>
+    </View>
   );
 };
 
@@ -119,17 +86,5 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
     flex: 1,
     flexDirection: 'column',
-  },
-  listHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 32,
-    paddingBottom: 16,
-  },
-  listItem: {
-    paddingTop: 16,
-    paddingBottom: 16,
-  },
-  listItemRightText: {
-    marginRight: 8,
   },
 });

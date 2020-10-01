@@ -15,7 +15,7 @@ export const StatusBar = () => {
     <ExpoStatusBar
       animated
       style={theme === 'light' ? 'dark' : 'light'}
-      backgroundColor={theme === 'light' ? undefined : '#191D33'}
+      backgroundColor={theme === 'light' ? undefined : '#1A202C'}
     />
   );
 };
