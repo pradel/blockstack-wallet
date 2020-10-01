@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { StyleSheet, Share, Alert, View } from 'react-native';
-import { Layout, Text, Button } from '@ui-kitten/components';
+import { Button, Surface, Text } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import BottomSheet, {
   BottomSheetView,
@@ -62,35 +62,43 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
     <BottomSheet
       ref={bottomSheetRef}
       initialSnapIndex={-1}
-      snapPoints={[0, 450]}
+      snapPoints={[0, 430]}
       onChange={handleSheetChanges}
     >
       <BottomSheetView>
-        <Layout style={styles.container}>
-          <Layout style={styles.qrCodeContainer}>
+        <Surface style={styles.container}>
+          <View style={styles.qrCodeContainer}>
             <QRCode value={auth.address} size={160} />
-          </Layout>
-          <Text
-            appearance="hint"
-            category="p2"
-            style={styles.text}
-            onPress={handleShare}
-          >
+          </View>
+          <Text style={styles.text} onPress={handleShare}>
             {auth.address}
           </Text>
 
           <View style={styles.buttonsContainer}>
             {/* TODO display only on testnet */}
             <TouchableOpacity onPress={handleRequestStx} activeOpacity={0.7}>
-              <Button size="large" style={styles.buttonFaucet}>
+              <Button
+                mode="contained"
+                labelStyle={{
+                  marginVertical: 16,
+                }}
+                style={styles.buttonFaucet}
+              >
                 Get STX from faucet
               </Button>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
-              <Button size="large">Share</Button>
+              <Button
+                mode="contained"
+                labelStyle={{
+                  marginVertical: 16,
+                }}
+              >
+                Share
+              </Button>
             </TouchableOpacity>
           </View>
-        </Layout>
+        </Surface>
       </BottomSheetView>
     </BottomSheet>
   );
@@ -98,6 +106,7 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
   },

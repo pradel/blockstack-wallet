@@ -34,7 +34,7 @@ export const LoginScreen = () => {
       }
     };
 
-    // checkWalletInDevice();
+    checkWalletInDevice();
   }, []);
 
   const handleCreateNewWallet = () => {
