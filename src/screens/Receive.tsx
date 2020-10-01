@@ -65,30 +65,32 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
       snapPoints={[0, 450]}
       onChange={handleSheetChanges}
     >
-      <BottomSheetView style={styles.container}>
-        <Layout style={styles.qrCodeContainer} level="2">
-          <QRCode value={auth.address} size={160} />
-        </Layout>
-        <Text
-          appearance="hint"
-          category="p2"
-          style={styles.text}
-          onPress={handleShare}
-        >
-          {auth.address}
-        </Text>
+      <BottomSheetView>
+        <Layout style={styles.container}>
+          <Layout style={styles.qrCodeContainer}>
+            <QRCode value={auth.address} size={160} />
+          </Layout>
+          <Text
+            appearance="hint"
+            category="p2"
+            style={styles.text}
+            onPress={handleShare}
+          >
+            {auth.address}
+          </Text>
 
-        <View style={styles.buttonsContainer}>
-          {/* TODO display only on testnet */}
-          <TouchableOpacity onPress={handleRequestStx} activeOpacity={0.7}>
-            <Button size="large" style={styles.buttonFaucet}>
-              Get STX from faucet
-            </Button>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
-            <Button size="large">Share</Button>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.buttonsContainer}>
+            {/* TODO display only on testnet */}
+            <TouchableOpacity onPress={handleRequestStx} activeOpacity={0.7}>
+              <Button size="large" style={styles.buttonFaucet}>
+                Get STX from faucet
+              </Button>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
+              <Button size="large">Share</Button>
+            </TouchableOpacity>
+          </View>
+        </Layout>
       </BottomSheetView>
     </BottomSheet>
   );
