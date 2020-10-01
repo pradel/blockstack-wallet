@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Layout, Text, Button } from '@ui-kitten/components';
+import { Button } from 'react-native-paper';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
@@ -13,6 +13,7 @@ import {
 import { getStorageKeyPk } from '../utils';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
+import { UndrawVoid } from '../images/UndrawVoid';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
@@ -33,10 +34,11 @@ export const LoginScreen = () => {
       }
     };
 
-    checkWalletInDevice();
+    // checkWalletInDevice();
   }, []);
 
   const handleCreateNewWallet = () => {
+    console.log('press');
     navigation.navigate('CreateWallet');
   };
 
@@ -62,39 +64,47 @@ export const LoginScreen = () => {
   };
 
   return (
-    <Layout style={styles.container}>
+    <View style={styles.container}>
+      {/* TODO replace with real logo */}
       <View style={styles.logoContainer}>
-        <Text category="h1">Blockstack wallet</Text>
+        <UndrawVoid height={150} />
       </View>
 
       <View style={styles.buttonsContainer}>
         {haveWallet && (
           <Button
-            size="large"
             style={styles.button}
+            mode="contained"
             onPress={handleAuthenticateWithBiometrics}
+            labelStyle={{
+              marginVertical: 16,
+            }}
           >
             Login with biometrics
           </Button>
         )}
         <Button
-          size="large"
           style={styles.button}
-          appearance={haveWallet ? 'ghost' : 'filled'}
+          mode={!haveWallet ? 'contained' : 'outlined'}
           onPress={handleCreateNewWallet}
+          labelStyle={{
+            marginVertical: 16,
+          }}
         >
           Create a new wallet
         </Button>
         <Button
-          size="large"
           style={styles.button}
-          appearance="ghost"
+          mode="outlined"
           onPress={handleImportWallet}
+          labelStyle={{
+            marginVertical: 16,
+          }}
         >
           I already have a wallet
         </Button>
       </View>
-    </Layout>
+    </View>
   );
 };
 
@@ -103,21 +113,18 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
     flex: 1,
     justifyContent: 'space-between',
-  },
-  logoContainer: {
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 64,
+  },
+  logoContainer: {
+    paddingTop: 128,
     alignItems: 'center',
   },
   buttonsContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
     paddingTop: 16,
     paddingBottom: 16,
   },
   button: {
-    width: '100%',
     marginBottom: 8,
   },
 });
