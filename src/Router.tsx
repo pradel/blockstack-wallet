@@ -78,17 +78,17 @@ export const Router = () => {
         name="SendConfirm"
         component={SendConfirmScreen}
         options={{ headerShown: false }}
-      />
+      />*/}
       <RootStack.Screen
         name="BackupPassphrase"
         component={BackupPassphrase}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen
+      {/* <RootStack.Screen
         name="Fingerprint"
         component={Fingerprint}
         options={{ headerShown: false }}
-      /> */}
+      />  */}
     </RootStack.Navigator>
   );
 };
