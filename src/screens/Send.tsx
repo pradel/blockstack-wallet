@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import Clipboard from '@react-native-community/clipboard';
+// import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
 import { validateStacksAddress } from '../utils';
 
@@ -29,10 +29,11 @@ export const SendScreen = () => {
     }
   }, [route.params?.address]);
 
-  const handlePaste = async () => {
-    const text = await Clipboard.getString();
-    setAddress(text);
-  };
+  // TODO allow the user to paste
+  // const handlePaste = async () => {
+  //   const text = await Clipboard.getString();
+  //   setAddress(text);
+  // };
 
   const handleScan = () => {
     navigation.navigate('SendScanAddress');

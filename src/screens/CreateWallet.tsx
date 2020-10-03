@@ -62,10 +62,6 @@ export const CreateWalletScreen = () => {
     }
   };
 
-  const handleImportWallet = () => {
-    // TODO redirect to the import wallet flow
-  };
-
   // TODO back button to return to login screen
 
   return (
