@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import {
-  Icon,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Text,
-} from '@ui-kitten/components';
+import { Appbar, Text } from 'react-native-paper';
 import { BarCodeScanner, BarCodeScannedCallback } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -37,19 +31,13 @@ export const SendScanAddress = () => {
   };
 
   return (
-    <Layout style={styles.container}>
-      <TopNavigation
-        title="Scan recipient address"
-        alignment="center"
-        accessoryLeft={() => (
-          <TopNavigationAction
-            icon={(props) => <Icon {...props} name="arrow-ios-back-outline" />}
-            onPress={() => navigation.goBack()}
-          />
-        )}
-      />
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Scan recipient address" />
+      </Appbar.Header>
 
-      <Layout style={styles.contentContainer}>
+      <View style={styles.contentContainer}>
         {hasPermission === null ? (
           <Text>Requesting for camera permission</Text>
         ) : null}
@@ -60,8 +48,8 @@ export const SendScanAddress = () => {
             style={StyleSheet.absoluteFillObject}
           />
         ) : null}
-      </Layout>
-    </Layout>
+      </View>
+    </View>
   );
 };
 

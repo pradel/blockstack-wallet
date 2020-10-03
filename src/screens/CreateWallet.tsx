@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Layout, Text, Button, Spinner } from '@ui-kitten/components';
+import {
+  Surface,
+  Button,
+  Title,
+  Paragraph,
+  ActivityIndicator,
+} from 'react-native-paper';
 import { ChainID } from '@blockstack/stacks-transactions';
 import { deriveStxAddressChain } from '@blockstack/keychain';
 import * as SecureStore from 'expo-secure-store';
@@ -9,8 +15,6 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import { BIP32Interface } from 'bitcoinjs-lib';
 import { useAuth } from '../context/AuthContext';
 import { getStorageKeyPk, generateMnemonicRootKeychain } from '../utils';
-
-// TODO display mnemonic 24-word phrase
 
 export const CreateWalletScreen = () => {
   const auth = useAuth();
@@ -58,70 +62,75 @@ export const CreateWalletScreen = () => {
     }
   };
 
-  const handleImportWallet = () => {
-    // TODO redirect to the import wallet flow
-  };
-
-  if (!mnemonic) {
-    return (
-      <Layout style={styles.containerFull}>
-        <Spinner size="large" />
-      </Layout>
-    );
-  }
+  // TODO back button to return to login screen
 
   return (
-    <Layout style={styles.container}>
-      <View style={styles.textContainer}>
-        {mnemonic && (
-          <Text style={styles.text} category="s1">
-            {mnemonic.plaintextMnemonic}
-          </Text>
+    <View style={styles.container}>
+      <View>
+        <Title style={{ marginTop: 32, textAlign: 'center' }}>
+          Write down your mnemonic
+        </Title>
+        <Paragraph style={{ textAlign: 'center' }}>
+          These words are the keys to access your blockstack wallet. Keep it in
+          a safe place and do not share it with anyone.
+        </Paragraph>
+
+        {mnemonic ? (
+          <Surface style={styles.wordContainer}>
+            {mnemonic.plaintextMnemonic.split(' ').map((word, index) => (
+              <Paragraph key={index} style={styles.text}>
+                {word}
+              </Paragraph>
+            ))}
+          </Surface>
+        ) : (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator animating={true} />
+          </View>
         )}
       </View>
 
       <View style={styles.buttonsContainer}>
-        <Button style={styles.button} onPress={handleCreateNewWallet}>
+        <Button
+          mode="contained"
+          onPress={handleCreateNewWallet}
+          labelStyle={{
+            marginVertical: 16,
+          }}
+          disabled={!mnemonic}
+        >
           Save wallet
         </Button>
-        <Button
-          style={styles.button}
-          appearance="ghost"
-          onPress={handleImportWallet}
-        >
-          I already have a wallet
-        </Button>
       </View>
-    </Layout>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  containerFull: {
-    marginTop: Constants.statusBarHeight,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   container: {
     marginTop: Constants.statusBarHeight,
     flex: 1,
     justifyContent: 'space-between',
-  },
-  textContainer: {
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 64,
-    alignItems: 'center',
   },
-  text: { textAlign: 'center' },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 80,
+  },
+  wordContainer: {
+    marginTop: 64,
+    padding: 32,
+    flexWrap: 'wrap',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  text: {
+    marginRight: 8,
+  },
   buttonsContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
     paddingTop: 16,
     paddingBottom: 16,
-  },
-  button: {
-    width: '100%',
   },
 });

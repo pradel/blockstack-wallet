@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import {
-  Icon,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Button,
-  Input,
-} from '@ui-kitten/components';
+import { Appbar, Button, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/router';
@@ -37,39 +30,40 @@ export const SendAmountScreen = () => {
   };
 
   return (
-    <Layout style={styles.container}>
-      <TopNavigation
-        title="Enter Amount"
-        alignment="center"
-        accessoryLeft={() => (
-          <TopNavigationAction
-            icon={(props) => <Icon {...props} name="arrow-back" />}
-            onPress={() => navigation.goBack()}
-          />
-        )}
-      />
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Enter Amount" />
+      </Appbar.Header>
 
-      <Layout style={styles.contentContainer}>
-        <Layout />
+      <View style={styles.contentContainer}>
+        <View />
 
-        <Layout style={styles.inputContainer}>
-          <Input
+        <View style={styles.inputContainer}>
+          <TextInput
             placeholder="Amount"
-            size="large"
+            mode="outlined"
             autoFocus={true}
             value={amount}
             keyboardType="number-pad"
             onChangeText={(nextValue) => setAmount(nextValue)}
           />
-        </Layout>
+        </View>
 
-        <Layout style={styles.buttonsContainer}>
-          <Button size="large" onPress={handleConfirm} disabled={!amount}>
+        <View style={styles.buttonsContainer}>
+          <Button
+            mode="contained"
+            onPress={handleConfirm}
+            disabled={!amount}
+            labelStyle={{
+              marginVertical: 16,
+            }}
+          >
             Next
           </Button>
-        </Layout>
-      </Layout>
-    </Layout>
+        </View>
+      </View>
+    </View>
   );
 };
 

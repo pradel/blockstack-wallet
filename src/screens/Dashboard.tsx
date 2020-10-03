@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
-  Layout,
+  IconButton,
+  Caption,
+  Surface,
+  Title,
   Text,
   Divider,
   List,
-  ListItem,
-  Icon,
-  Button,
-} from '@ui-kitten/components';
+} from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import useSWR from 'swr';
 import { format } from 'date-fns';
@@ -73,82 +73,64 @@ export const DashboardScreen = () => {
     ? microToStacks(balanceData.stx.balance)
     : '...';
 
+  // TODO change style of IconButton to be black background
+
   return (
-    <Layout style={styles.container}>
-      <Layout style={styles.balanceContainer} level="2">
-        <Text style={styles.balanceTextCrypto} category="h2">
-          {balanceString} STX
-        </Text>
-        <Text appearance="hint">~{fiatPrice} EUR</Text>
+    <View style={styles.container}>
+      <Surface style={styles.balanceContainer}>
+        <Title style={styles.balanceTextCrypto}>{balanceString} STX</Title>
+        <Caption>~{fiatPrice} EUR</Caption>
 
         <View style={styles.actionsContainer}>
           <View style={styles.actionsButtonContainer}>
-            <Button
+            <IconButton
+              icon="arrow-bottom-left"
               style={styles.actionButton}
-              accessoryLeft={(props) => (
-                <Icon {...props} name="diagonal-arrow-left-down-outline" />
-              )}
               onPress={handleReceive}
             />
-            <Text style={styles.actionsText} category="p2">
-              Receive
-            </Text>
+            <Text style={styles.actionsText}>Receive</Text>
           </View>
           <View style={styles.actionsButtonContainer}>
-            <Button
+            <IconButton
+              icon="arrow-top-right"
               style={styles.actionButton}
-              accessoryLeft={(props) => (
-                <Icon {...props} name="diagonal-arrow-right-up-outline" />
-              )}
               onPress={() => navigation.navigate('Send')}
             />
-            <Text style={styles.actionsText} category="p2">
-              Send
-            </Text>
+            <Text style={styles.actionsText}>Send</Text>
           </View>
           <View style={styles.actionsButtonContainer}>
-            <Button
+            <IconButton
+              icon="camera"
               style={styles.actionButton}
-              accessoryLeft={(props) => (
-                <Icon {...props} name="camera-outline" />
-              )}
               onPress={handleScan}
             />
-            <Text style={styles.actionsText} category="p2">
-              Scan
-            </Text>
+            <Text style={styles.actionsText}>Scan</Text>
           </View>
         </View>
-      </Layout>
+      </Surface>
 
-      <Layout style={styles.transactionsContainer}>
-        <Divider />
-        <List
+      <View style={styles.transactionsContainer}>
+        <FlatList
           style={styles.transactionsList}
           data={transactionsData?.results}
           ItemSeparatorComponent={Divider}
           ListEmptyComponent={() => (
             <View style={styles.transactionsImageContainer}>
               <UndrawVoid height={150} />
-              <Text style={styles.transactionsImageText} appearance="hint">
+              <Caption style={styles.transactionsImageText}>
                 Transactions will appear here
-              </Text>
+              </Caption>
             </View>
           )}
           onRefresh={handleRefresh}
           refreshing={isRefreshing}
-          renderItem={({
-            item,
-          }: {
-            item: TransactionResults['results'][0];
-          }) => {
+          renderItem={({ item }) => {
             const isIncomingTx =
               item.tx_type === 'token_transfer' &&
               item.token_transfer.recipient_address === auth.address;
 
             return (
-              <ListItem
-                style={styles.listItem}
+              <List.Item
                 title={
                   item.tx_type === 'token_transfer'
                     ? isIncomingTx
@@ -165,37 +147,37 @@ export const DashboardScreen = () => {
                     ? format(item.burn_block_time * 1000, 'dd MMMM ')
                     : undefined
                 }
-                accessoryLeft={(props) => (
-                  <Icon
+                left={(props) => (
+                  <List.Icon
                     {...props}
-                    name={
+                    icon={
                       item.tx_type === 'token_transfer'
-                        ? 'diagonal-arrow-right-up'
+                        ? 'arrow-top-right'
                         : item.tx_type === 'smart_contract'
-                        ? 'upload'
+                        ? 'file-upload'
                         : item.tx_type === 'contract_call'
-                        ? 'code'
-                        : 'question-mark'
+                        ? 'code-tags'
+                        : 'help'
                     }
-                    style={[
-                      props?.style,
-                      {
-                        height: 18,
-                        width: 18,
-                        transform:
-                          item.tx_type === 'token_transfer'
-                            ? [
-                                {
-                                  rotate: isIncomingTx ? '180deg' : '0deg',
-                                },
-                              ]
-                            : [],
-                      },
-                    ]}
+                    // style={[
+                    //   props.style,
+                    //   {
+                    //     height: 18,
+                    //     width: 18,
+                    //     transform:
+                    //       item.tx_type === 'token_transfer'
+                    //         ? [
+                    //             {
+                    //               rotate: isIncomingTx ? '180deg' : '0deg',
+                    //             },
+                    //           ]
+                    //         : [],
+                    //   },
+                    // ]}
                   />
                 )}
-                accessoryRight={() => (
-                  <Text style={styles.listItemRightText} appearance="hint">
+                right={(props) => (
+                  <Caption {...props} style={styles.listItemRightText}>
                     {item.tx_type === 'token_transfer'
                       ? `${isIncomingTx ? '+' : '-'}${microToStacks(
                           item.token_transfer.amount
@@ -205,19 +187,19 @@ export const DashboardScreen = () => {
                       : item.tx_type === 'contract_call'
                       ? `-${microToStacks(item.fee_rate)} STX`
                       : ''}
-                  </Text>
+                  </Caption>
                 )}
               />
             );
           }}
         />
-      </Layout>
+      </View>
 
       <ReceiveScreen
         open={isBottomSheetOpen}
         onClose={() => setIsBottomSheetOpen(false)}
       />
-    </Layout>
+    </View>
   );
 };
 

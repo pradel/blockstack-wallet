@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import {
-  Icon,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Text,
-} from '@ui-kitten/components';
+import { Appbar, Paragraph, Surface } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -36,33 +30,27 @@ export const BackupPassphrase = () => {
   }, []);
 
   return (
-    <Layout style={styles.container}>
-      <TopNavigation
-        title="Backup your passphrase"
-        alignment="center"
-        accessoryLeft={() => (
-          <TopNavigationAction
-            icon={(props) => <Icon {...props} name="arrow-back" />}
-            onPress={() => navigation.goBack()}
-          />
-        )}
-      />
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Backup your passphrase" />
+      </Appbar.Header>
 
-      <Layout style={styles.wordContainer}>
+      <Surface style={styles.wordContainer}>
         {mnemonic?.split(' ').map((word, index) => (
-          <Layout key={index} level="3" style={styles.wordItemContainer}>
-            <Text category="h6">{word}</Text>
-          </Layout>
+          <Paragraph key={index} style={styles.text}>
+            {word}
+          </Paragraph>
         ))}
-      </Layout>
+      </Surface>
 
-      <Layout style={styles.textContainer}>
-        <Text>
+      <View style={styles.textContainer}>
+        <Paragraph>
           These words are the keys to access your blockstack wallet. Keep it in
           a safe place and do not share it with anyone.
-        </Text>
-      </Layout>
-    </Layout>
+        </Paragraph>
+      </View>
+    </View>
   );
 };
 
@@ -72,22 +60,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
+    marginHorizontal: 16,
     paddingTop: 16,
   },
   wordContainer: {
+    marginHorizontal: 16,
+    marginTop: 32,
+    padding: 32,
+    flexWrap: 'wrap',
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 16,
   },
-  wordItemContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    marginVertical: 8,
+  text: {
     marginRight: 8,
   },
 });

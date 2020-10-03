@@ -1,15 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import {
-  Icon,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Divider,
-  Toggle,
-  ListItem,
-} from '@ui-kitten/components';
+import { Appbar, Divider, List, Surface, Switch } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useAppConfig } from '../context/AppConfigContext';
 
@@ -29,44 +21,43 @@ export const Fingerprint = () => {
   };
 
   return (
-    <Layout style={styles.container}>
-      <TopNavigation
-        title="Fingerprint"
-        alignment="center"
-        accessoryLeft={() => (
-          <TopNavigationAction
-            icon={(props) => <Icon {...props} name="arrow-back" />}
-            onPress={() => navigation.goBack()}
-          />
-        )}
-      />
-      <Divider />
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Fingerprint" />
+      </Appbar.Header>
 
-      <ListItem
-        title="Require to open app"
-        accessoryRight={() => (
-          <Toggle
-            checked={requireBiometricOpenApp}
-            onChange={handleChangeRequireBiometricOpenApp}
+      <List.Section>
+        <List.Subheader>Security</List.Subheader>
+        <Surface>
+          <List.Item
+            title="Require to open app"
+            style={styles.listItem}
+            right={(props) => (
+              <Switch
+                {...props}
+                value={requireBiometricOpenApp}
+                onValueChange={handleChangeRequireBiometricOpenApp}
+              />
+            )}
+            onPress={handleChangeRequireBiometricOpenApp}
           />
-        )}
-        style={styles.listItem}
-        onPress={handleChangeRequireBiometricOpenApp}
-      />
-      <Divider />
-      <ListItem
-        title="Require for transactions"
-        accessoryRight={() => (
-          <Toggle
-            checked={requireBiometricTransaction}
-            onChange={handleChangeRequireBiometricTransaction}
+          <Divider />
+          <List.Item
+            title="Require for transactions"
+            style={styles.listItem}
+            right={(props) => (
+              <Switch
+                {...props}
+                value={requireBiometricTransaction}
+                onValueChange={handleChangeRequireBiometricTransaction}
+              />
+            )}
+            onPress={handleChangeRequireBiometricTransaction}
           />
-        )}
-        style={styles.listItem}
-        onPress={handleChangeRequireBiometricTransaction}
-      />
-      <Divider />
-    </Layout>
+        </Surface>
+      </List.Section>
+    </View>
   );
 };
 
@@ -76,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
   },
 });
