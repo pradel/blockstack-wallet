@@ -68,12 +68,12 @@ export const Router = () => {
         component={SendScreen}
         options={{ headerShown: false }}
       />
-      {/* <RootStack.Screen
+      <RootStack.Screen
         name="SendAmount"
         component={SendAmountScreen}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen
+      {/* <RootStack.Screen
         name="SendConfirm"
         component={SendConfirmScreen}
         options={{ headerShown: false }}
