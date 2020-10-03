@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableHighlight, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Appbar,
@@ -7,7 +7,6 @@ import {
   Button,
   HelperText,
   IconButton,
-  Text,
 } from 'react-native-paper';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
