@@ -34,7 +34,7 @@ export const DashboardScreen = () => {
     // error: balanceError,
     mutate: balanceMutate,
   } = useSWR<BalanceResponse>(
-    `${config.blockstackApiUrl}/extended/v1/address/ST11NJTTKGVT6D1HY4NJRVQWMQM7TVAR091EJ8P2Y/balances`,
+    `${config.blockstackApiUrl}/extended/v1/address/${auth.address}/balances`,
     fetcher
   );
   const {
@@ -42,7 +42,7 @@ export const DashboardScreen = () => {
     // error: transactionsError,
     mutate: transactionMutate,
   } = useSWR<TransactionResults>(
-    `${config.blockstackApiUrl}/extended/v1/address/ST11NJTTKGVT6D1HY4NJRVQWMQM7TVAR091EJ8P2Y/transactions`,
+    `${config.blockstackApiUrl}/extended/v1/address/${auth.address}/transactions`,
     fetcher
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
