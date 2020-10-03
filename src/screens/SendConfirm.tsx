@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
-import {
-  Icon,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Button,
-  Spinner,
-} from '@ui-kitten/components';
+import { Button, Appbar } from 'react-native-paper';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -91,41 +84,30 @@ export const SendConfirmScreen = () => {
   };
 
   return (
-    <Layout style={styles.container}>
-      <TopNavigation
-        title="Confirm details"
-        alignment="center"
-        accessoryLeft={() => (
-          <TopNavigationAction
-            icon={(props) => <Icon {...props} name="arrow-back" />}
-            onPress={() => navigation.goBack()}
-          />
-        )}
-      />
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Confirm details" />
+      </Appbar.Header>
 
-      <Layout style={styles.contentContainer}>
-        <Layout />
+      <View style={styles.contentContainer}>
+        <View />
 
-        <Layout style={styles.buttonsContainer}>
+        <View style={styles.buttonsContainer}>
           <Button
-            size="large"
+            mode="contained"
             onPress={handleConfirm}
-            accessoryLeft={(props) =>
-              loading ? (
-                <View style={[props?.style, styles.indicator]}>
-                  <Spinner />
-                </View>
-              ) : (
-                (null as any)
-              )
-            }
+            loading={loading}
             disabled={loading}
+            labelStyle={{
+              marginVertical: 16,
+            }}
           >
             {!loading ? 'Confirm' : ''}
           </Button>
-        </Layout>
-      </Layout>
-    </Layout>
+        </View>
+      </View>
+    </View>
   );
 };
 

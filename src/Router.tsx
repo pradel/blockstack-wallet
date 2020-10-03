@@ -73,11 +73,11 @@ export const Router = () => {
         component={SendAmountScreen}
         options={{ headerShown: false }}
       />
-      {/* <RootStack.Screen
+      <RootStack.Screen
         name="SendConfirm"
         component={SendConfirmScreen}
         options={{ headerShown: false }}
-      />*/}
+      />
       <RootStack.Screen
         name="BackupPassphrase"
         component={BackupPassphrase}
