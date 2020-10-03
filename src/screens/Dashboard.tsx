@@ -85,6 +85,7 @@ export const DashboardScreen = () => {
           <View style={styles.actionsButtonContainer}>
             <IconButton
               icon="arrow-bottom-left"
+              color="#ffffff"
               style={styles.actionButton}
               onPress={handleReceive}
             />
@@ -93,6 +94,7 @@ export const DashboardScreen = () => {
           <View style={styles.actionsButtonContainer}>
             <IconButton
               icon="arrow-top-right"
+              color="#ffffff"
               style={styles.actionButton}
               onPress={() => navigation.navigate('Send')}
             />
@@ -101,6 +103,7 @@ export const DashboardScreen = () => {
           <View style={styles.actionsButtonContainer}>
             <IconButton
               icon="camera"
+              color="#ffffff"
               style={styles.actionButton}
               onPress={handleScan}
             />
@@ -177,17 +180,19 @@ export const DashboardScreen = () => {
                   />
                 )}
                 right={(props) => (
-                  <Caption {...props} style={styles.listItemRightText}>
-                    {item.tx_type === 'token_transfer'
-                      ? `${isIncomingTx ? '+' : '-'}${microToStacks(
-                          item.token_transfer.amount
-                        )} STX`
-                      : item.tx_type === 'smart_contract'
-                      ? `-${microToStacks(item.fee_rate)} STX`
-                      : item.tx_type === 'contract_call'
-                      ? `-${microToStacks(item.fee_rate)} STX`
-                      : ''}
-                  </Caption>
+                  <View {...props} style={{ justifyContent: 'center' }}>
+                    <Text style={styles.listItemRightText}>
+                      {item.tx_type === 'token_transfer'
+                        ? `${isIncomingTx ? '+' : '-'}${microToStacks(
+                            item.token_transfer.amount
+                          )} STX`
+                        : item.tx_type === 'smart_contract'
+                        ? `-${microToStacks(item.fee_rate)} STX`
+                        : item.tx_type === 'contract_call'
+                        ? `-${microToStacks(item.fee_rate)} STX`
+                        : ''}
+                    </Text>
+                  </View>
                 )}
               />
             );
@@ -215,6 +220,7 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
   },
   balanceTextCrypto: {
+    fontSize: 26,
     fontWeight: '700',
   },
   actionsContainer: {
@@ -229,6 +235,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 18,
+    backgroundColor: '#1A202C',
   },
   actionsText: {
     marginTop: 8,
@@ -254,6 +261,6 @@ const styles = StyleSheet.create({
   },
   listItemRightText: {
     marginRight: 8,
-    // fontWeight: '700',
+    fontSize: 14,
   },
 });
