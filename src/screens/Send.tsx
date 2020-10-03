@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableHighlight, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
-  Icon,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-  Text,
+  Appbar,
+  TextInput,
   Button,
-  Input,
-} from '@ui-kitten/components';
+  HelperText,
+  IconButton,
+} from 'react-native-paper';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
 import { validateStacksAddress } from '../utils';
-import { HeroQrCode } from '../images/HeroQrCode';
 
 type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
 type SendRouteProp = RouteProp<RootStackParamList, 'Send'>;
@@ -48,60 +45,60 @@ export const SendScreen = () => {
   const isAddressValid = address && validateStacksAddress(address);
 
   return (
-    <Layout style={styles.container}>
-      <TopNavigation
-        title="Recipient address"
-        alignment="center"
-        accessoryLeft={() => (
-          <TopNavigationAction
-            icon={(props) => <Icon {...props} name="arrow-ios-back-outline" />}
-            onPress={() => navigation.goBack()}
-          />
-        )}
-      />
+    <View style={styles.container}>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Recipient address" />
+      </Appbar.Header>
 
-      <Layout style={styles.contentContainer}>
-        <Layout />
+      <View style={styles.contentContainer}>
+        <View />
 
-        <Layout style={styles.inputContainer}>
-          <Input
+        <View style={styles.inputContainer}>
+          <TextInput
             placeholder="Address"
-            size="large"
+            mode="outlined"
             autoFocus={true}
             value={address}
             onChangeText={(nextValue) => setAddress(nextValue)}
-            status={address && !isAddressValid ? 'danger' : undefined}
-            caption={
-              address && !isAddressValid ? 'Invalid STX address' : undefined
-            }
-            accessoryRight={() => (
-              <TouchableHighlight onPress={handlePaste}>
-                <Text style={styles.inputTextAction}>Paste</Text>
-              </TouchableHighlight>
-            )}
+            right={() => <Button>Hey</Button>}
+            // TODO see how we can add a PASTE button on the right side
+            // right={() => (
+            //   <TouchableHighlight onPress={handlePaste}>
+            //     <Text style={styles.inputTextAction}>Paste</Text>
+            //   </TouchableHighlight>
+            // )}
           />
-        </Layout>
+          <HelperText
+            type="error"
+            visible={Boolean(address && !isAddressValid)}
+          >
+            Invalid STX address
+          </HelperText>
+        </View>
 
-        <Layout style={styles.buttonsContainer}>
+        <View style={styles.buttonsContainer}>
           <View style={{ alignItems: 'center' }}>
-            <Button
+            <IconButton
+              icon="qrcode"
               style={styles.qrCodeButton}
-              size="large"
-              appearance="ghost"
-              accessoryLeft={HeroQrCode as any}
+              size={24}
               onPress={handleScan}
             />
           </View>
           <Button
-            size="large"
+            mode="contained"
             onPress={handleConfirm}
             disabled={!isAddressValid}
+            labelStyle={{
+              marginVertical: 16,
+            }}
           >
             Next
           </Button>
-        </Layout>
-      </Layout>
-    </Layout>
+        </View>
+      </View>
+    </View>
   );
 };
 
@@ -125,7 +122,5 @@ const styles = StyleSheet.create({
   },
   qrCodeButton: {
     marginBottom: 16,
-    width: 48,
-    height: 48,
   },
 });

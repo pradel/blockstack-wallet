@@ -1,7 +1,6 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { BottomNavigation } from 'react-native-paper';
 import { useAuth } from './context/AuthContext';
 import { LoginScreen } from './screens/login';
 import { DashboardScreen } from './screens/dashboard';
@@ -59,7 +58,7 @@ export const Router = () => {
         component={MainStackScreen}
         options={{ headerShown: false }}
       />
-      {/* <RootStack.Screen
+      <RootStack.Screen
         name="SendScanAddress"
         component={SendScanAddress}
         options={{ headerShown: false }}
@@ -69,7 +68,7 @@ export const Router = () => {
         component={SendScreen}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen
+      {/* <RootStack.Screen
         name="SendAmount"
         component={SendAmountScreen}
         options={{ headerShown: false }}
