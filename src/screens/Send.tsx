@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableHighlight, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Appbar,
@@ -7,10 +7,11 @@ import {
   Button,
   HelperText,
   IconButton,
+  Text,
 } from 'react-native-paper';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-// import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
 import { validateStacksAddress } from '../utils';
 
@@ -29,11 +30,10 @@ export const SendScreen = () => {
     }
   }, [route.params?.address]);
 
-  // TODO allow the user to paste
-  // const handlePaste = async () => {
-  //   const text = await Clipboard.getString();
-  //   setAddress(text);
-  // };
+  const handlePaste = async () => {
+    const text = await Clipboard.getString();
+    setAddress(text);
+  };
 
   const handleScan = () => {
     navigation.navigate('SendScanAddress');
@@ -62,13 +62,9 @@ export const SendScreen = () => {
             autoFocus={true}
             value={address}
             onChangeText={(nextValue) => setAddress(nextValue)}
-            right={() => <Button>Hey</Button>}
-            // TODO see how we can add a PASTE button on the right side
-            // right={() => (
-            //   <TouchableHighlight onPress={handlePaste}>
-            //     <Text style={styles.inputTextAction}>Paste</Text>
-            //   </TouchableHighlight>
-            // )}
+            right={
+              <TextInput.Icon name="content-paste" onPress={handlePaste} />
+            }
           />
           <HelperText
             type="error"
