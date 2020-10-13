@@ -30,7 +30,8 @@ platform :android do
       ks_key_alias_password: key_password,
       bundletool_version: '1.2.0',
       aab_path: "android/app/build/outputs/bundle/release/app-release.aab",
-      apk_output_path: "android/app/build/outputs/bundle/release/app-release.apk"
+      apk_output_path: "android/app/build/outputs/bundle/release/app-release.apk",
+      verbose: true
     )
   end
 end
