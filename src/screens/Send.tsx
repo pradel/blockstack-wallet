@@ -12,6 +12,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
+import { AppbarHeader } from '../components/Appbar';
 import { validateStacksAddress } from '../utils';
 
 type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
@@ -46,10 +47,10 @@ export const SendScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
+      <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Recipient address" />
-      </Appbar.Header>
+      </AppbarHeader>
 
       <View style={styles.contentContainer}>
         <View />

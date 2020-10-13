@@ -18,6 +18,7 @@ const CombinedDefaultTheme = {
   colors: {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
+    background: '#ffffff',
     primary: '#1A202C',
   },
 };

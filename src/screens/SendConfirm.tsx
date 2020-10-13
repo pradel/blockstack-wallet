@@ -19,6 +19,7 @@ import {
 } from '@blockstack/keychain';
 import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
+import { AppbarHeader } from '../components/Appbar';
 import { getStorageKeyPk, stacksToMicro } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
 
@@ -85,10 +86,10 @@ export const SendConfirmScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
+      <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Confirm details" />
-      </Appbar.Header>
+      </AppbarHeader>
 
       <View style={styles.contentContainer}>
         <View />

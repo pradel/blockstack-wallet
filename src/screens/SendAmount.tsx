@@ -5,6 +5,7 @@ import { Appbar, Button, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/router';
+import { AppbarHeader } from '../components/Appbar';
 
 type SendAmountNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -31,10 +32,10 @@ export const SendAmountScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
+      <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Enter Amount" />
-      </Appbar.Header>
+      </AppbarHeader>
 
       <View style={styles.contentContainer}>
         <View />
