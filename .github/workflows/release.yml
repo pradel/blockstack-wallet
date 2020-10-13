@@ -41,6 +41,7 @@ jobs:
       - name: Install Fastlane
         run: |
           cd fastlane
+          gem install bundler
           bundle install
 
       - name: Injecting secrets
