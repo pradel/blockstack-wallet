@@ -2,9 +2,9 @@
 
 # -------------Android Build & Deploy-------------#
 platform :android do
-  desc "Build the production release AAB."
+  desc "Build the production release AAB and APK."
   lane :build_production do
-    keystore_path = "android/app/app.keystore"
+    keystore_path = "app.keystore"
     keystore_password = ENV["ANDROID_KEYSTORE_PASSWORD"]
     key_alias = ENV["ANDROID_KEY_ALIAS"]
     key_password = ENV["ANDROID_KEY_PASSWORD"]

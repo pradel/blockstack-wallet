@@ -58,7 +58,7 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - name: Upload production aab
+      - name: Upload production files
         uses: actions/upload-artifact@v2
         with:
           name: blockstack-wallet
