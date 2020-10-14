@@ -28,7 +28,7 @@ platform :android do
       ks_password: keystore_password,
       ks_key_alias: key_alias,
       ks_key_alias_password: key_password,
-      bundletool_version: '0.11.0',
+      bundletool_version: '1.2.0',
       aab_path: "android/app/build/outputs/bundle/release/app-release.aab",
       apk_output_path: "android/app/build/outputs/bundle/release/app-release.apk",
       verbose: true
