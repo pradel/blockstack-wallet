@@ -3,7 +3,6 @@ import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
   Surface,
-  Button,
   Title,
   Paragraph,
   ActivityIndicator,
@@ -15,6 +14,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import { BIP32Interface } from 'bitcoinjs-lib';
 import { useAuth } from '../context/AuthContext';
 import { getStorageKeyPk, generateMnemonicRootKeychain } from '../utils';
+import { Button } from '../components/Button';
 
 export const CreateWalletScreen = () => {
   const auth = useAuth();
@@ -67,10 +67,8 @@ export const CreateWalletScreen = () => {
   return (
     <View style={styles.container}>
       <View>
-        <Title style={{ marginTop: 32, textAlign: 'center' }}>
-          Write down your mnemonic
-        </Title>
-        <Paragraph style={{ textAlign: 'center' }}>
+        <Title style={styles.title}>Write down your mnemonic</Title>
+        <Paragraph style={styles.paragraph}>
           These words are the keys to access your blockstack wallet. Keep it in
           a safe place and do not share it with anyone.
         </Paragraph>
@@ -94,9 +92,6 @@ export const CreateWalletScreen = () => {
         <Button
           mode="contained"
           onPress={handleCreateNewWallet}
-          labelStyle={{
-            marginVertical: 16,
-          }}
           disabled={!mnemonic}
         >
           Save wallet
@@ -118,6 +113,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginTop: 80,
+  },
+  title: {
+    fontSize: 26,
+    marginTop: 32,
+    textAlign: 'center',
+  },
+  paragraph: {
+    textAlign: 'center',
   },
   wordContainer: {
     marginTop: 64,

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Appbar, Button, TextInput } from 'react-native-paper';
+import { Appbar, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/router';
+import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 
@@ -56,14 +57,7 @@ export const SendAmountScreen = () => {
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button
-            mode="contained"
-            onPress={handleConfirm}
-            disabled={!amount}
-            labelStyle={{
-              marginVertical: 16,
-            }}
-          >
+          <Button mode="contained" onPress={handleConfirm} disabled={!amount}>
             Next
           </Button>
         </View>

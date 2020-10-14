@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Button, Appbar, List } from 'react-native-paper';
+import { Appbar, List } from 'react-native-paper';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -21,6 +21,7 @@ import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
 import { getStorageKeyPk, stacksToMicro } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
+import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 
@@ -132,9 +133,6 @@ export const SendConfirmScreen = () => {
             onPress={handleConfirm}
             loading={loading}
             disabled={loading}
-            labelStyle={{
-              marginVertical: 16,
-            }}
           >
             {!loading ? 'Confirm' : ''}
           </Button>

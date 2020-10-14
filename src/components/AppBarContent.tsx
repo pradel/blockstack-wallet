@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { useTheme } from '../context/ThemeContext';
 
@@ -13,15 +14,21 @@ export const AppbarContent = ({
     <Appbar.Content
       {...props}
       color={color}
-      style={{
-        flex: 0,
-      }}
-      titleStyle={{
-        fontSize: 32,
-      }}
-      subtitleStyle={{
-        fontSize: 14,
-      }}
+      style={styles.container}
+      titleStyle={styles.title}
+      subtitleStyle={styles.subtitle}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 0,
+  },
+  title: {
+    fontSize: 32,
+  },
+  subtitle: {
+    fontSize: 14,
+  },
+});

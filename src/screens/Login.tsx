@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Button } from 'react-native-paper';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +13,7 @@ import { getStorageKeyPk } from '../utils';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
 import { UndrawVoid } from '../images/UndrawVoid';
+import { Button } from '../components/Button';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
@@ -76,9 +76,6 @@ export const LoginScreen = () => {
             style={styles.button}
             mode="contained"
             onPress={handleAuthenticateWithBiometrics}
-            labelStyle={{
-              marginVertical: 16,
-            }}
           >
             Login with biometrics
           </Button>
@@ -87,9 +84,6 @@ export const LoginScreen = () => {
           style={styles.button}
           mode={!haveWallet ? 'contained' : 'outlined'}
           onPress={handleCreateNewWallet}
-          labelStyle={{
-            marginVertical: 16,
-          }}
         >
           Create a new wallet
         </Button>
@@ -97,9 +91,6 @@ export const LoginScreen = () => {
           style={styles.button}
           mode="outlined"
           onPress={handleImportWallet}
-          labelStyle={{
-            marginVertical: 16,
-          }}
         >
           I already have a wallet
         </Button>
