@@ -4,6 +4,8 @@ import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { List, Divider, Surface, Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
+import { AppbarHeader } from '../components/AppbarHeader';
+import { AppbarContent } from '../components/AppBarContent';
 
 export const SettingsScreen = () => {
   const navigation = useNavigation();
@@ -11,9 +13,9 @@ export const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
-        <Appbar.Content title="Settings" />
-      </Appbar.Header>
+      <AppbarHeader>
+        <AppbarContent title="Settings" />
+      </AppbarHeader>
 
       <ScrollView>
         <List.Section>
