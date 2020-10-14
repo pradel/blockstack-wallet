@@ -5,6 +5,7 @@ import {
   Provider as PaperProvider,
   DefaultTheme as PaperDefaultTheme,
   DarkTheme as PaperDarkTheme,
+  configureFonts,
 } from 'react-native-paper';
 import {
   NavigationContainer,
@@ -12,9 +13,31 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
 
+const fontConfig = {
+  default: {
+    regular: {
+      fontFamily: 'Inter_500Medium',
+      fontWeight: '500' as '500',
+    },
+    medium: {
+      fontFamily: 'Inter_800ExtraBold',
+      fontWeight: '800' as '800',
+    },
+    light: {
+      fontFamily: 'Inter_300Light',
+      fontWeight: '300' as '300',
+    },
+    thin: {
+      fontFamily: 'Inter_100Thin',
+      fontWeight: '100' as '100',
+    },
+  },
+};
+
 const CombinedDefaultTheme = {
   ...PaperDefaultTheme,
   ...NavigationDefaultTheme,
+  fonts: configureFonts(fontConfig),
   colors: {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
@@ -25,6 +48,7 @@ const CombinedDefaultTheme = {
 const CombinedDarkTheme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
+  fonts: configureFonts(fontConfig),
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
