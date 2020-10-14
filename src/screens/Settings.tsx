@@ -1,7 +1,7 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
-import { List, Divider, Surface, Appbar } from 'react-native-paper';
+import { List, Divider, Surface } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import { AppbarHeader } from '../components/AppbarHeader';
