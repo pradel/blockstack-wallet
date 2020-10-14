@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import { ActivityIndicator, Appbar, Text } from 'react-native-paper';
