@@ -1,9 +1,6 @@
 import './src/globals';
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
-// Before rendering any navigation stack
-import { enableScreens } from 'react-native-screens';
-enableScreens();
 
 import App from './App';
 
