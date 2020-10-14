@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Button, Appbar, List, Text } from 'react-native-paper';
+import { Button, Appbar, List } from 'react-native-paper';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
