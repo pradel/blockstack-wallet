@@ -6,6 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { getStorageKeyPk } from '../utils';
+import { AppbarHeader } from '../components/AppbarHeader';
+import { AppbarContent } from '../components/AppBarContent';
 
 export const BackupPassphrase = () => {
   const navigation = useNavigation();
@@ -31,10 +33,11 @@ export const BackupPassphrase = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
+      <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Backup your passphrase" />
-      </Appbar.Header>
+      </AppbarHeader>
+
+      <AppbarContent title="Backup your passphrase" />
 
       <Surface style={styles.wordContainer}>
         {mnemonic?.split(' ').map((word, index) => (
