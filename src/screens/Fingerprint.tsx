@@ -4,6 +4,8 @@ import Constants from 'expo-constants';
 import { Appbar, Divider, List, Surface, Switch } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useAppConfig } from '../context/AppConfigContext';
+import { AppbarHeader } from '../components/AppbarHeader';
+import { AppbarContent } from '../components/AppBarContent';
 
 export const Fingerprint = () => {
   const navigation = useNavigation();
@@ -22,12 +24,13 @@ export const Fingerprint = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
+      <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Fingerprint" />
-      </Appbar.Header>
+      </AppbarHeader>
 
-      <List.Section>
+      <AppbarContent title="Fingerprint" />
+
+      <List.Section style={styles.listSection}>
         <List.Subheader>Security</List.Subheader>
         <Surface>
           <List.Item
@@ -65,6 +68,9 @@ const styles = StyleSheet.create({
   container: {
     marginTop: Constants.statusBarHeight,
     flex: 1,
+  },
+  listSection: {
+    marginTop: 32,
   },
   listItem: {
     paddingTop: 12,

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { StyleSheet, Share, Alert, View } from 'react-native';
-import { Button, Surface, Text } from 'react-native-paper';
+import { Surface, Text } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import BottomSheet, {
   BottomSheetView,
@@ -8,6 +8,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { useAuth } from '../context/AuthContext';
 import { config } from '../config';
+import { Button } from '../components/Button';
 
 interface ReceiveScreenProps {
   open: boolean;
@@ -48,9 +49,11 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
       }
     );
     if (data.ok) {
-      alert("You'll receive your testing Stacks Token (STX) momentarily.");
+      Alert.alert(
+        "You'll receive your testing Stacks Token (STX) momentarily."
+      );
     } else {
-      alert(`Request failed with status ${data.status}`);
+      Alert.alert(`Request failed with status ${data.status}`);
       console.error(await data.json());
     }
   };
@@ -77,25 +80,12 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
           <View style={styles.buttonsContainer}>
             {/* TODO display only on testnet */}
             <TouchableOpacity onPress={handleRequestStx} activeOpacity={0.7}>
-              <Button
-                mode="contained"
-                labelStyle={{
-                  marginVertical: 16,
-                }}
-                style={styles.buttonFaucet}
-              >
+              <Button mode="contained" style={styles.buttonFaucet}>
                 Get STX from faucet
               </Button>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
-              <Button
-                mode="contained"
-                labelStyle={{
-                  marginVertical: 16,
-                }}
-              >
-                Share
-              </Button>
+              <Button mode="contained">Share</Button>
             </TouchableOpacity>
           </View>
         </Surface>

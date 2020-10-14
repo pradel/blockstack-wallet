@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import {
-  Appbar,
-  TextInput,
-  Button,
-  HelperText,
-  IconButton,
-} from 'react-native-paper';
+import { Appbar, TextInput, HelperText, IconButton } from 'react-native-paper';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
 import { validateStacksAddress } from '../utils';
+import { Button } from '../components/Button';
+import { AppbarHeader } from '../components/AppbarHeader';
+import { AppbarContent } from '../components/AppBarContent';
 
 type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
 type SendRouteProp = RouteProp<RootStackParamList, 'Send'>;
@@ -46,13 +43,15 @@ export const SendScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
+      <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Recipient address" />
-      </Appbar.Header>
+      </AppbarHeader>
 
       <View style={styles.contentContainer}>
-        <View />
+        <AppbarContent
+          title="Recipient address"
+          subtitle="Who would you like to send money to?"
+        />
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -74,7 +73,7 @@ export const SendScreen = () => {
         </View>
 
         <View style={styles.buttonsContainer}>
-          <View style={{ alignItems: 'center' }}>
+          <View style={styles.qrCodeContainer}>
             <IconButton
               icon="qrcode"
               style={styles.qrCodeButton}
@@ -86,9 +85,6 @@ export const SendScreen = () => {
             mode="contained"
             onPress={handleConfirm}
             disabled={!isAddressValid}
-            labelStyle={{
-              marginVertical: 16,
-            }}
           >
             Next
           </Button>
@@ -115,6 +111,9 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  qrCodeContainer: {
+    alignItems: 'center',
   },
   qrCodeButton: {
     marginBottom: 16,

@@ -6,6 +6,7 @@ import { BarCodeScanner, BarCodeScannedCallback } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/router';
+import { AppbarHeader } from '../components/AppbarHeader';
 
 type SendNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,10 +33,10 @@ export const SendScanAddress = () => {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
+      <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Scan recipient address" />
-      </Appbar.Header>
+      </AppbarHeader>
 
       <View style={styles.contentContainer}>
         {hasPermission === null ? (
