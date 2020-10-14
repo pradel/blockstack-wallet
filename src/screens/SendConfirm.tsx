@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Button, Appbar } from 'react-native-paper';
+import { Button, Appbar, List, Text } from 'react-native-paper';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -19,9 +19,10 @@ import {
 } from '@blockstack/keychain';
 import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
-import { AppbarHeader } from '../components/Appbar';
 import { getStorageKeyPk, stacksToMicro } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
+import { AppbarHeader } from '../components/AppbarHeader';
+import { AppbarContent } from '../components/AppBarContent';
 
 type SendConfirmNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -88,11 +89,42 @@ export const SendConfirmScreen = () => {
     <View style={styles.container}>
       <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Confirm details" />
       </AppbarHeader>
 
       <View style={styles.contentContainer}>
-        <View />
+        <View>
+          <AppbarContent
+            title="Confirm details"
+            subtitle="Please check that everything looks good."
+          />
+
+          <View style={styles.listContainer}>
+            <List.Item
+              title="Recipient address"
+              description={route.params.address}
+            />
+            <List.Item
+              title="Amount"
+              // TODO nicely display decimals etc..
+              description={`${route.params.amount} STX`}
+            />
+            <List.Item
+              title="Network fee"
+              // TODO show real network fee
+              description={`TODO STX`}
+            />
+            <List.Item
+              title="Memo"
+              // TODO show real network fee
+              description={`TODO`}
+            />
+            <List.Item
+              title="Total"
+              // TODO total amount + fee
+              description={`TODO STX`}
+            />
+          </View>
+        </View>
 
         <View style={styles.buttonsContainer}>
           <Button
@@ -120,6 +152,9 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'space-between',
+  },
+  listContainer: {
+    marginTop: 32,
   },
   buttonsContainer: {
     padding: 16,

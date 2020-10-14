@@ -12,8 +12,9 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
-import { AppbarHeader } from '../components/Appbar';
 import { validateStacksAddress } from '../utils';
+import { AppbarHeader } from '../components/AppbarHeader';
+import { AppbarContent } from '../components/AppBarContent';
 
 type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
 type SendRouteProp = RouteProp<RootStackParamList, 'Send'>;
@@ -49,11 +50,13 @@ export const SendScreen = () => {
     <View style={styles.container}>
       <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Recipient address" />
       </AppbarHeader>
 
       <View style={styles.contentContainer}>
-        <View />
+        <AppbarContent
+          title="Recipient address"
+          subtitle="Who would you like to send money to?"
+        />
 
         <View style={styles.inputContainer}>
           <TextInput

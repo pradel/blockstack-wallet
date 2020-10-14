@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Appbar, Button, TextInput } from 'react-native-paper';
+import { Appbar, Button, Text, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/router';
-import { AppbarHeader } from '../components/Appbar';
+import { AppbarHeader } from '../components/AppbarHeader';
+import { AppbarContent } from '../components/AppBarContent';
 
 type SendAmountNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -20,8 +21,8 @@ export const SendAmountScreen = () => {
 
   // TODO display available balance near by the button
   // TODO next button active only if amount lower than balance
-
-  // TODO adjust fees
+  // TODO allow user to adjust fees
+  // TODO verify that amount is valid, for now I can continue with "-"
 
   const handleConfirm = () => {
     navigation.navigate('SendConfirm', {
@@ -34,11 +35,13 @@ export const SendAmountScreen = () => {
     <View style={styles.container}>
       <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Enter Amount" />
       </AppbarHeader>
 
       <View style={styles.contentContainer}>
-        <View />
+        <AppbarContent
+          title="Enter Amount"
+          subtitle="How many stacks would you like to send?"
+        />
 
         <View style={styles.inputContainer}>
           <TextInput
@@ -49,6 +52,7 @@ export const SendAmountScreen = () => {
             keyboardType="number-pad"
             onChangeText={(nextValue) => setAmount(nextValue)}
           />
+          {/* TODO find a way to display STX on the right side of the input */}
         </View>
 
         <View style={styles.buttonsContainer}>
