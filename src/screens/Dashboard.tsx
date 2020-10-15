@@ -220,8 +220,7 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
   },
   balanceTextCrypto: {
-    fontSize: 26,
-    fontWeight: '700',
+    fontSize: 28,
   },
   actionsContainer: {
     marginTop: 32,
