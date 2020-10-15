@@ -54,7 +54,10 @@ export const CreateWalletScreen = () => {
         const result = deriveStxAddressChain(ChainID.Testnet)(
           mnemonic.rootNode
         );
-        auth.signIn(result.address);
+        auth.signIn({
+          address: result.address,
+          publicKey: result.childKey.publicKey.toString('hex'),
+        });
       } catch (error) {
         // TODO report error to Sentry
         Alert.alert(error.message);
