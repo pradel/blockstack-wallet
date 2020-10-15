@@ -2,10 +2,37 @@
 
 # -------------Android Build & Deploy-------------#
 platform :android do
-  desc "Build the production release AAB."
+  desc "Build the production release AAB and APK."
   lane :build_production do
-    gradle(task: 'clean', project_dir: 'android/')
-    gradle(task: "bundleRelease", project_dir: 'android/')
+    keystore_path = "#{ENV["GITHUB_WORKSPACE"]}/android/app/app.keystore"
+    keystore_password = ENV["ANDROID_KEYSTORE_PASSWORD"]
+    key_alias = ENV["ANDROID_KEY_ALIAS"]
+    key_password = ENV["ANDROID_KEY_PASSWORD"]
+
+    gradle(task: "clean", project_dir: "android/")
+    gradle(
+      task: "bundleRelease",
+      project_dir: "android/",
+      # This is really important, the command will not be printed in the console to avoid secrets to leak
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => keystore_path,
+        "android.injected.signing.store.password" => keystore_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
+    )
+    # Generate universal APK from aab that can be installed on any android device
+    bundletool(
+      ks_path: keystore_path,
+      ks_password: keystore_password,
+      ks_key_alias: key_alias,
+      ks_key_alias_password: key_password,
+      bundletool_version: '1.2.0',
+      aab_path: "android/app/build/outputs/bundle/release/app-release.aab",
+      apk_output_path: "android/app/build/outputs/bundle/release/app-release.apk",
+      verbose: true
+    )
   end
 end
 

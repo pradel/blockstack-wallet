@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-android:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -22,6 +22,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -41,6 +46,7 @@ jobs:
       - name: Install Fastlane
         run: |
           cd fastlane
+          gem install bundler
           bundle install
 
       - name: Injecting secrets
@@ -58,8 +64,10 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - name: Upload production aab
+      - name: Upload production files
         uses: actions/upload-artifact@v2
         with:
-          name: blockstack-wallet-aab
-          path: android/app/build/outputs/bundle/release/app-release.aab
+          name: blockstack-wallet
+          path: |
+            android/app/build/outputs/bundle/release/app-release.aab
+            android/app/build/outputs/bundle/release/app-release.apk
