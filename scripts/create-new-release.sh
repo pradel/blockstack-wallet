@@ -30,3 +30,5 @@ git commit -m "v${NEW_VERSION}"
 
 # create git tag for the previous release commit
 git tag "v${NEW_VERSION}" HEAD
+git push
+git push --tags
