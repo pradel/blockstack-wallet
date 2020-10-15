@@ -28,7 +28,7 @@ Bump build numbers, and set the display version to match the package.json versio
 ```
 fastlane android build_production
 ```
-Build the production release AAB.
+Build the production release AAB and APK.
 
 ----
 
