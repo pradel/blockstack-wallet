@@ -68,13 +68,12 @@ export const SettingsScreen = () => {
             <List.Item
               title="About"
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
-              onPress={() => Alert.alert('Coming soon')}
+              onPress={() => navigation.navigate('About')}
             />
             <Divider />
             <List.Item
               title="Version"
               description={Constants.nativeAppVersion}
-              onPress={() => Alert.alert('Coming soon')}
             />
           </Surface>
         </List.Section>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Alert, Image, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -43,8 +43,7 @@ export const LoginScreen = () => {
   };
 
   const handleImportWallet = () => {
-    throw new Error('Test Crashlytics');
-    // TODO redirect to the import wallet flow
+    Alert.alert('Coming soon');
   };
 
   const handleAuthenticateWithBiometrics = async () => {

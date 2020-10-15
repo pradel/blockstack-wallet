@@ -7,4 +7,5 @@ export type RootStackParamList = {
   Receive: undefined;
   BackupPassphrase: undefined;
   Fingerprint: undefined;
+  About: undefined;
 };

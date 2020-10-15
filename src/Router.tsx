@@ -13,6 +13,7 @@ import { SendAmountScreen } from './screens/SendAmount';
 import { RootStackParamList } from './types/router';
 import { SendConfirmScreen } from './screens/SendConfirm';
 import { SendScanAddress } from './screens/SendScanAddress';
+import { AboutScreen } from './screens/About';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -86,6 +87,11 @@ export const Router = () => {
       <RootStack.Screen
         name="Fingerprint"
         component={Fingerprint}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name="About"
+        component={AboutScreen}
         options={{ headerShown: false }}
       />
     </RootStack.Navigator>
