@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -12,8 +12,8 @@ import {
 import { getStorageKeyPk } from '../utils';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
-import { UndrawVoid } from '../images/UndrawVoid';
 import { Button } from '../components/Button';
+import StacksinMetaverse from '../../assets/StacksinMetaverse.png';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
@@ -67,7 +67,7 @@ export const LoginScreen = () => {
     <View style={styles.container}>
       {/* TODO replace with real logo */}
       <View style={styles.logoContainer}>
-        <UndrawVoid height={150} />
+        <Image source={StacksinMetaverse} style={{ height: 400, width: 400 }} />
       </View>
 
       <View style={styles.buttonsContainer}>
