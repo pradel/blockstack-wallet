@@ -73,6 +73,7 @@ jobs:
             android/app/build/outputs/bundle/release/app-release.apk
 
       - name: Create Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -91,7 +92,7 @@ jobs:
           asset_path: android/app/build/outputs/bundle/release/app-release.aab
           asset_name: blockstack-wallet.aab
           asset_content_type: application/zip
-      
+
       - name: Upload Release APK
         uses: actions/upload-release-asset@v1
         env:
