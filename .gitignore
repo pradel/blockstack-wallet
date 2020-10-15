@@ -67,3 +67,4 @@ android/app/google-services.json
 
 # Project
 .env
+android/app/private_key.pepk
