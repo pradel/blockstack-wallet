@@ -2,7 +2,8 @@ import React, { createContext, useState, useMemo } from 'react';
 
 const AuthContext = createContext<{
   address: string;
-  signIn: (address: string) => void;
+  publicKey: string;
+  signIn: (data: { address: string; publicKey: string }) => void;
   signOut: () => void;
 }>({} as any);
 
@@ -11,15 +12,21 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [address, setAddress] = useState<string>();
+  const [data, setData] = useState<{ address: string; publicKey: string }>();
 
   const authContext = useMemo(
     () => ({
-      signIn: async (newAddress: string) => {
-        setAddress(newAddress);
+      signIn: async ({
+        address,
+        publicKey,
+      }: {
+        address: string;
+        publicKey: string;
+      }) => {
+        setData({ address, publicKey });
       },
       signOut: () => {
-        setAddress(undefined);
+        setData(undefined);
       },
     }),
     []
@@ -28,7 +35,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        address: address!,
+        address: data?.address!,
+        publicKey: data?.publicKey!,
         signIn: authContext.signIn,
         signOut: authContext.signOut,
       }}

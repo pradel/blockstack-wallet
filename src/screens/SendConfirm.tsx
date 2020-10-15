@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Alert, View } from 'react-native';
 import Constants from 'expo-constants';
 import { Appbar, List } from 'react-native-paper';
@@ -12,6 +12,7 @@ import {
   broadcastTransaction,
   StacksTransaction,
   ChainID,
+  makeUnsignedSTXTokenTransfer,
 } from '@blockstack/stacks-transactions';
 import {
   deriveStxAddressChain,
@@ -19,11 +20,12 @@ import {
 } from '@blockstack/keychain';
 import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
-import { getStorageKeyPk, stacksToMicro } from '../utils';
+import { getStorageKeyPk, stacksToMicro, microToStacks } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
+import { useAuth } from '../context/AuthContext';
 
 type SendConfirmNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -35,7 +37,29 @@ export const SendConfirmScreen = () => {
   const navigation = useNavigation<SendConfirmNavigationProp>();
   const route = useRoute<SendConfirmScreenRouteProp>();
   const appConfig = useAppConfig();
+  const auth = useAuth();
+  const [unsignedTransaction, setUnsignedTransaction] = useState<
+    StacksTransaction
+  >();
   const [loading, setLoading] = useState(false);
+  // TODO pass down memo once it's ready
+  const memo = undefined;
+
+  useEffect(() => {
+    // We create an unsigned transaction to estimate the network fees and show them to the user
+    const network = new StacksTestnet();
+
+    // TODO catch in case of failure
+    makeUnsignedSTXTokenTransfer({
+      recipient: route.params.address,
+      amount: new Big(stacksToMicro(route.params.amount)),
+      network,
+      publicKey: auth.publicKey,
+      memo,
+    }).then((transaction) => {
+      setUnsignedTransaction(transaction);
+    });
+  }, [setUnsignedTransaction, auth.publicKey, route.params]);
 
   // TODO show transaction details for confirmation
 
@@ -58,6 +82,13 @@ export const SendConfirmScreen = () => {
       const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
       const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
 
+      const fee = unsignedTransaction?.auth.getFee();
+
+      if (!fee) {
+        Alert.alert('Fee not found');
+        return;
+      }
+
       let transaction: StacksTransaction;
       try {
         transaction = await makeSTXTokenTransfer({
@@ -65,8 +96,8 @@ export const SendConfirmScreen = () => {
           amount: new Big(stacksToMicro(route.params.amount)),
           senderKey: result.privateKey,
           network,
-          // TODO allow custom memo message
-          memo: 'test memo',
+          fee,
+          memo,
         });
       } catch (error) {
         Alert.alert(`Failed to create transaction. ${error.message}`);
@@ -111,18 +142,29 @@ export const SendConfirmScreen = () => {
             />
             <List.Item
               title="Network fee"
-              // TODO show real network fee
-              description={`TODO STX`}
+              description={
+                unsignedTransaction
+                  ? // TODO use big for this calc
+                    `${microToStacks(
+                      unsignedTransaction.auth.getFee()!.toString()
+                    )} STX`
+                  : 'Estimating fee ...'
+              }
             />
-            <List.Item
-              title="Memo"
-              // TODO show real network fee
-              description={`TODO`}
-            />
+            {memo ? <List.Item title="Memo" description={memo} /> : null}
             <List.Item
               title="Total"
-              // TODO total amount + fee
-              description={`TODO STX`}
+              description={
+                unsignedTransaction
+                  ? // TODO use big for this calc
+                    `${microToStacks(
+                      unsignedTransaction.auth
+                        .getFee()!
+                        .add(new Big(stacksToMicro(route.params.amount)))
+                        .toString()
+                    )} STX`
+                  : ''
+              }
             />
           </View>
         </View>
@@ -132,7 +174,7 @@ export const SendConfirmScreen = () => {
             mode="contained"
             onPress={handleConfirm}
             loading={loading}
-            disabled={loading}
+            disabled={!unsignedTransaction || loading}
           >
             {!loading ? 'Confirm' : ''}
           </Button>

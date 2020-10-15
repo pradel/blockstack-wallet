@@ -58,7 +58,10 @@ export const LoginScreen = () => {
     if (mnemonic) {
       const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
       const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
-      auth.signIn(result.address);
+      auth.signIn({
+        address: result.address,
+        publicKey: result.childKey.publicKey.toString('hex'),
+      });
     }
   };
 
