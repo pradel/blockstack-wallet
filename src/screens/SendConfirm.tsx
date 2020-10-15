@@ -148,7 +148,7 @@ export const SendConfirmScreen = () => {
                     `${microToStacks(
                       unsignedTransaction.auth.getFee()!.toString()
                     )} STX`
-                  : 'Estimating network fee ...'
+                  : 'Estimating fee ...'
               }
             />
             {memo ? <List.Item title="Memo" description={memo} /> : null}
