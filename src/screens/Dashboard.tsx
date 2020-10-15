@@ -67,7 +67,7 @@ export const DashboardScreen = () => {
   // TODO infinite scrolling
 
   // TODO price eur if available
-  const fiatPrice = '1.89';
+  const fiatPrice = '0.00';
 
   const balanceString = balanceData
     ? microToStacks(balanceData.stx.balance)
@@ -79,7 +79,7 @@ export const DashboardScreen = () => {
     <View style={styles.container}>
       <Surface style={styles.balanceContainer}>
         <Title style={styles.balanceTextCrypto}>{balanceString} STX</Title>
-        <Caption>~{fiatPrice} EUR</Caption>
+        <Caption>~{fiatPrice} USD</Caption>
 
         <View style={styles.actionsContainer}>
           <View style={styles.actionsButtonContainer}>
