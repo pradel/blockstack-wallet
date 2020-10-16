@@ -28,7 +28,7 @@ export const AboutScreen = () => {
         <AppbarContent title="About" />
 
         <Paragraph style={styles.paragraph}>
-          blockstack-wallet is an open source mobile wallet enables STX holders
+          blockstack-wallet is an open source mobile wallet enabling STX holders
           to send, receive and stack their tokens.
         </Paragraph>
 
