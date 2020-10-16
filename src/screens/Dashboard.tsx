@@ -156,11 +156,7 @@ export const DashboardScreen = () => {
                     ? item.contract_call.contract_id.split('.')[1]
                     : 'Unknown'
                 }
-                description={
-                  item.burn_block_time
-                    ? format(item.burn_block_time * 1000, 'dd MMMM ')
-                    : undefined
-                }
+                description={format(item.burn_block_time * 1000, 'dd MMMM ')}
                 left={(props) => (
                   <List.Icon
                     {...props}

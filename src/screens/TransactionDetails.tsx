@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { Linking, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import { ActivityIndicator, Appbar, List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -75,51 +75,55 @@ export const TransactionDetails = () => {
                 ? `${isIncomingTx ? '' : '-'}${microToStacks(
                     transactionData.token_transfer.amount
                   )} STX`
+                : transactionData.tx_type === 'smart_contract'
+                ? 'Contract creation'
                 : 'TODO'
             }
           />
 
           <View style={styles.listContainer}>
+            <List.Item
+              title="Timestamp"
+              description={format(
+                transactionData.burn_block_time * 1000,
+                'HH:mm, MMMM dd yyyy'
+              )}
+            />
+            <List.Item
+              title="Block height"
+              description={`#${transactionData.block_height}`}
+            />
+            <List.Item title="Status" description={transactionData.tx_status} />
             {transactionData.tx_type === 'token_transfer' ? (
-              <React.Fragment>
-                <List.Item
-                  title="Timestamp"
-                  description={format(
-                    transactionData.burn_block_time * 1000,
-                    'HH:mm, MMMM dd yyyy'
-                  )}
-                />
-                <List.Item
-                  title="Block height"
-                  description={`#${transactionData.block_height}`}
-                />
-                <List.Item
-                  title="Status"
-                  description={transactionData.tx_status}
-                />
-                <List.Item
-                  title="Recipient address"
-                  description={transactionData.token_transfer.recipient_address}
-                />
-
-                <List.Item
-                  title="Network fee"
-                  description={`${microToStacks(transactionData.fee_rate)} STX`}
-                />
-                <List.Item
-                  title="Memo"
-                  description={getMemoString(
-                    transactionData.token_transfer.memo
-                  )}
-                />
-                <List.Item
-                  title="Transaction ID"
-                  description={transactionData.tx_id}
-                  descriptionStyle={styles.txHashDescription}
-                  onPress={handleTransactionIdPress}
-                />
-              </React.Fragment>
+              <List.Item
+                title="Recipient address"
+                description={transactionData.token_transfer.recipient_address}
+              />
             ) : null}
+            {transactionData.tx_type === 'smart_contract' ? (
+              <List.Item
+                title="Contract name"
+                description={
+                  transactionData.smart_contract.contract_id.split('.')[1]
+                }
+              />
+            ) : null}
+            <List.Item
+              title="Network fee"
+              description={`${microToStacks(transactionData.fee_rate)} STX`}
+            />
+            {transactionData.tx_type === 'token_transfer' ? (
+              <List.Item
+                title="Memo"
+                description={getMemoString(transactionData.token_transfer.memo)}
+              />
+            ) : null}
+            <List.Item
+              title="Transaction ID"
+              description={transactionData.tx_id}
+              descriptionStyle={styles.txHashDescription}
+              onPress={handleTransactionIdPress}
+            />
           </View>
         </View>
       ) : null}
