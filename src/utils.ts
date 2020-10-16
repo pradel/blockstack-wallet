@@ -67,4 +67,6 @@ export const stacksToMicro = (amountInStacks: string) =>
  * @param string - the memo transaction
  */
 export const getMemoString = (string: string): string | null =>
-  string ? Buffer.from(string.replace('0x', ''), 'hex').toString('utf8') : null;
+  string
+    ? global.Buffer.from(string.replace('0x', ''), 'hex').toString('utf8')
+    : null;
