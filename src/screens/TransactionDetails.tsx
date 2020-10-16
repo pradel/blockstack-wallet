@@ -96,10 +96,16 @@ export const TransactionDetails = () => {
               description={`#${transactionData.block_height}`}
             />
             <List.Item title="Status" description={transactionData.tx_status} />
-            {transactionData.tx_type === 'token_transfer' ? (
+            {transactionData.tx_type === 'token_transfer' && !isIncomingTx ? (
               <List.Item
                 title="Recipient address"
                 description={transactionData.token_transfer.recipient_address}
+              />
+            ) : null}
+            {transactionData.tx_type === 'token_transfer' && isIncomingTx ? (
+              <List.Item
+                title="Sender address"
+                description={transactionData.sender_address}
               />
             ) : null}
             {transactionData.tx_type === 'smart_contract' ||
