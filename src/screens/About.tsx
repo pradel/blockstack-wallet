@@ -2,13 +2,17 @@ import React from 'react';
 import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Constants from 'expo-constants';
 import { Appbar, Paragraph } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { config } from '../config';
+import { RootStackParamList } from '../types/router';
+
+type AboutNavigationProp = StackNavigationProp<RootStackParamList, 'About'>;
 
 export const AboutScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<AboutNavigationProp>();
 
   const handleClickGithub = () => {
     Linking.canOpenURL(config.githubUrl).then((supported) => {

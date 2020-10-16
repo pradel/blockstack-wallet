@@ -61,3 +61,10 @@ export const microToStacks = (amountInMicroStacks: string) =>
  */
 export const stacksToMicro = (amountInStacks: string) =>
   Number(amountInStacks) * Math.pow(10, 6);
+
+/**
+ * @description Return a transaction memo as a readable string
+ * @param string - the memo transaction
+ */
+export const getMemoString = (string: string): string | null =>
+  string ? Buffer.from(string.replace('0x', ''), 'hex').toString('utf8') : null;

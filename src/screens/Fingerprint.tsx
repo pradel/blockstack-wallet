@@ -2,13 +2,20 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import { Appbar, Divider, List, Surface, Switch } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { useAppConfig } from '../context/AppConfigContext';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
+import { RootStackParamList } from '../types/router';
+
+type FingerprintNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Fingerprint'
+>;
 
 export const Fingerprint = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<FingerprintNavigationProp>();
   const appConfig = useAppConfig();
 
   const requireBiometricOpenApp = appConfig.appConfig.requireBiometricOpenApp;
