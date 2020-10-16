@@ -77,7 +77,9 @@ export const TransactionDetails = () => {
                   )} STX`
                 : transactionData.tx_type === 'smart_contract'
                 ? 'Contract creation'
-                : 'TODO'
+                : transactionData.tx_type === 'contract_call'
+                ? 'Contract call'
+                : 'Unknown transaction'
             }
           />
 
@@ -100,11 +102,14 @@ export const TransactionDetails = () => {
                 description={transactionData.token_transfer.recipient_address}
               />
             ) : null}
-            {transactionData.tx_type === 'smart_contract' ? (
+            {transactionData.tx_type === 'smart_contract' ||
+            transactionData.tx_type === 'contract_call' ? (
               <List.Item
                 title="Contract name"
                 description={
-                  transactionData.smart_contract.contract_id.split('.')[1]
+                  transactionData.tx_type === 'smart_contract'
+                    ? transactionData.smart_contract.contract_id.split('.')[1]
+                    : transactionData.contract_call.contract_id.split('.')[1]
                 }
               />
             ) : null}
