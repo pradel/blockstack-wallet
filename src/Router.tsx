@@ -14,6 +14,7 @@ import { RootStackParamList } from './types/router';
 import { SendConfirmScreen } from './screens/SendConfirm';
 import { SendScanAddress } from './screens/SendScanAddress';
 import { AboutScreen } from './screens/About';
+import { TransactionDetails } from './screens/TransactionDetails';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -60,6 +61,12 @@ export const Router = () => {
         options={{ headerShown: false }}
       />
       <RootStack.Screen
+        name="TransactionDetails"
+        component={TransactionDetails}
+        options={{ headerShown: false }}
+      />
+      {/* Send flow */}
+      <RootStack.Screen
         name="SendScanAddress"
         component={SendScanAddress}
         options={{ headerShown: false }}
@@ -79,6 +86,7 @@ export const Router = () => {
         component={SendConfirmScreen}
         options={{ headerShown: false }}
       />
+      {/* Settings */}
       <RootStack.Screen
         name="BackupPassphrase"
         component={BackupPassphrase}

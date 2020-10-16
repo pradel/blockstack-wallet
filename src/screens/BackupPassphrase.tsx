@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import { Appbar, Paragraph, Surface } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { getStorageKeyPk } from '../utils';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
+import { RootStackParamList } from '../types/router';
+
+type BackupPassphraseNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'BackupPassphrase'
+>;
 
 export const BackupPassphrase = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<BackupPassphraseNavigationProp>();
   const [mnemonic, setMnemonic] = useState<string>();
 
   useEffect(() => {

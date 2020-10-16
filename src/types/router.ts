@@ -8,4 +8,5 @@ export type RootStackParamList = {
   BackupPassphrase: undefined;
   Fingerprint: undefined;
   About: undefined;
+  TransactionDetails: { txId: string };
 };

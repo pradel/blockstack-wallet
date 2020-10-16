@@ -10,6 +10,7 @@ import {
   Divider,
   List,
 } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import useSWR from 'swr';
 import { format } from 'date-fns';
@@ -19,6 +20,7 @@ import { useAuth } from '../context/AuthContext';
 import { ReceiveScreen } from './Receive';
 import { UndrawVoid } from '../images/UndrawVoid';
 import { config } from '../config';
+import { RootStackParamList } from '../types/router';
 
 interface BalanceResponse {
   stx: {
@@ -26,8 +28,10 @@ interface BalanceResponse {
   };
 }
 
+type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList>;
+
 export const DashboardScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DashboardScreenNavigationProp>();
   const auth = useAuth();
   const {
     data: balanceData,
@@ -111,11 +115,13 @@ export const DashboardScreen = () => {
           </View>
         </View>
       </Surface>
+      <Divider />
 
       <View style={styles.transactionsContainer}>
         <FlatList
           style={styles.transactionsList}
           data={transactionsData?.results}
+          keyExtractor={(item) => item.tx_id}
           ItemSeparatorComponent={Divider}
           ListEmptyComponent={() => (
             <View style={styles.transactionsImageContainer}>
@@ -134,6 +140,11 @@ export const DashboardScreen = () => {
 
             return (
               <List.Item
+                onPress={() =>
+                  navigation.navigate('TransactionDetails', {
+                    txId: item.tx_id,
+                  })
+                }
                 title={
                   item.tx_type === 'token_transfer'
                     ? isIncomingTx
@@ -145,11 +156,7 @@ export const DashboardScreen = () => {
                     ? item.contract_call.contract_id.split('.')[1]
                     : 'Unknown'
                 }
-                description={
-                  item.burn_block_time
-                    ? format(item.burn_block_time * 1000, 'dd MMMM ')
-                    : undefined
-                }
+                description={format(item.burn_block_time * 1000, 'dd MMMM ')}
                 left={(props) => (
                   <List.Icon
                     {...props}
@@ -162,21 +169,19 @@ export const DashboardScreen = () => {
                         ? 'code-tags'
                         : 'help'
                     }
-                    // style={[
-                    //   props.style,
-                    //   {
-                    //     height: 18,
-                    //     width: 18,
-                    //     transform:
-                    //       item.tx_type === 'token_transfer'
-                    //         ? [
-                    //             {
-                    //               rotate: isIncomingTx ? '180deg' : '0deg',
-                    //             },
-                    //           ]
-                    //         : [],
-                    //   },
-                    // ]}
+                    style={[
+                      props.style,
+                      {
+                        transform:
+                          item.tx_type === 'token_transfer'
+                            ? [
+                                {
+                                  rotate: isIncomingTx ? '180deg' : '0deg',
+                                },
+                              ]
+                            : [],
+                      },
+                    ]}
                   />
                 )}
                 right={(props) => (
@@ -260,6 +265,6 @@ const styles = StyleSheet.create({
   },
   listItemRightText: {
     marginRight: 8,
-    fontSize: 14,
+    fontSize: 16,
   },
 });
