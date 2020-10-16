@@ -26,7 +26,6 @@ export const SettingsScreen = () => {
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={() => navigation.navigate('Fingerprint')}
             />
-            <Divider />
             <List.Item
               title="Backup your passphrase"
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
@@ -36,6 +35,7 @@ export const SettingsScreen = () => {
         </List.Section>
 
         <List.Section>
+          <Divider />
           <List.Subheader>General</List.Subheader>
           <Surface>
             <List.Item
@@ -52,7 +52,6 @@ export const SettingsScreen = () => {
               )}
               onPress={theme.toggleTheme}
             />
-            <Divider />
             <List.Item
               title="Currency"
               description="USD"
@@ -63,6 +62,7 @@ export const SettingsScreen = () => {
         </List.Section>
 
         <List.Section>
+          <Divider />
           <List.Subheader>Info</List.Subheader>
           <Surface>
             <List.Item
@@ -70,7 +70,6 @@ export const SettingsScreen = () => {
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={() => navigation.navigate('About')}
             />
-            <Divider />
             <List.Item
               title="Version"
               description={Constants.nativeAppVersion}
