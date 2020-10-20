@@ -116,7 +116,7 @@ export const StackingAmountScreen = () => {
             />
             <HelperText type="info">
               A minimum of{' '}
-              {microToStacks(stacksInfo.poxInfo.min_amount_ustx.toString())}STX
+              {microToStacks(stacksInfo.poxInfo.min_amount_ustx.toString())} STX
               is required.
               {/* TODO why link */}
             </HelperText>
