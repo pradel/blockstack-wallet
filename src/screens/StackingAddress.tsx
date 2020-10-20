@@ -40,12 +40,14 @@ export const StackingAddressScreen = () => {
   };
 
   const handleScan = () => {
-    navigation.navigate('StackingScanAddress', { amount: route.params.amount });
+    navigation.navigate('StackingScanAddress', {
+      amountInMicro: route.params.amountInMicro,
+    });
   };
 
   const handleConfirm = () => {
     navigation.navigate('StackingConfirm', {
-      amount: route.params.amount,
+      amountInMicro: route.params.amountInMicro,
       bitcoinAddress,
     });
   };

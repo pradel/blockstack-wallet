@@ -45,8 +45,6 @@ export const StackingConfirmScreen = () => {
 
   // TODO
   const numberOfCycles = 1;
-  // TODO
-  const microstacksoLockup = 1;
 
   useEffect(() => {
     const fetchIsUserEligible = async () => {
@@ -74,7 +72,9 @@ export const StackingConfirmScreen = () => {
                     version,
                   })
                 ).toString('hex')}`,
-                `0x${serializeCV(uintCV(microstacksoLockup)).toString('hex')}`,
+                `0x${serializeCV(uintCV(route.params.amountInMicro)).toString(
+                  'hex'
+                )}`,
                 // explicilty check eligibility for next cycle
                 `0x${serializeCV(uintCV(poxInfo.reward_cycle_id)).toString(
                   'hex'
@@ -149,7 +149,7 @@ export const StackingConfirmScreen = () => {
           <View>
             <List.Item
               title="Amount to lock"
-              description={microstacksoLockup}
+              description={`${microToStacks(route.params.amountInMicro)} STX`}
             />
             <List.Item title="Number of cycles" description={numberOfCycles} />
             <List.Item title="Start date" description={'TODO'} />

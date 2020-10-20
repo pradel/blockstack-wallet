@@ -36,7 +36,7 @@ export const StackingScanAddress = () => {
     // We keep this scanned value so the callback is not called 2 times while we process the response
     setScanned(true);
     navigation.navigate('StackingAddress', {
-      amount: route.params.amount,
+      amountInMicro: route.params.amountInMicro,
       bitcoinAddress: data,
     });
   };
