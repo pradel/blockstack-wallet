@@ -13,6 +13,7 @@ import {
   StacksTransaction,
   ChainID,
   makeUnsignedSTXTokenTransfer,
+  StacksMainnet,
 } from '@blockstack/stacks-transactions';
 import {
   deriveStxAddressChain,
@@ -36,7 +37,7 @@ type SendConfirmScreenRouteProp = RouteProp<RootStackParamList, 'SendConfirm'>;
 export const SendConfirmScreen = () => {
   const navigation = useNavigation<SendConfirmNavigationProp>();
   const route = useRoute<SendConfirmScreenRouteProp>();
-  const appConfig = useAppConfig();
+  const { appConfig } = useAppConfig();
   const auth = useAuth();
   const [unsignedTransaction, setUnsignedTransaction] = useState<
     StacksTransaction
@@ -64,7 +65,7 @@ export const SendConfirmScreen = () => {
   const handleConfirm = async () => {
     setLoading(false);
 
-    if (appConfig.appConfig.requireBiometricTransaction) {
+    if (appConfig.requireBiometricTransaction) {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
       if (!authenticateResult.success) {
         return;
@@ -80,10 +81,15 @@ export const SendConfirmScreen = () => {
       return;
     }
 
-    const network = new StacksTestnet();
+    const network =
+      appConfig.network === 'mainnet'
+        ? new StacksMainnet()
+        : new StacksTestnet();
 
     const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
-    const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
+    const result = deriveStxAddressChain(
+      appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
+    )(rootNode);
 
     const fee = unsignedTransaction?.auth.getFee();
 
