@@ -1,9 +1,7 @@
 import {
   InfoApi,
   AccountsApi,
-  SmartContractsApi,
   Configuration,
-  TransactionsApi,
 } from '@stacks/blockchain-api-client';
 
 const apiConfig = new Configuration({
