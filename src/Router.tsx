@@ -15,6 +15,8 @@ import { SendConfirmScreen } from './screens/SendConfirm';
 import { SendScanAddress } from './screens/SendScanAddress';
 import { AboutScreen } from './screens/About';
 import { TransactionDetails } from './screens/TransactionDetails';
+import { StackingScreen } from './screens/Stacking';
+import { StartStackingScreen } from './screens/StartStacking';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -24,6 +26,11 @@ const MainStackScreen = () => (
       name="Dashboard"
       options={{ tabBarIcon: 'home' }}
       component={DashboardScreen}
+    />
+    <Tab.Screen
+      name="Stacking"
+      options={{ tabBarIcon: 'bank' }}
+      component={StackingScreen}
     />
     <Tab.Screen
       name="Settings"
@@ -84,6 +91,12 @@ export const Router = () => {
       <RootStack.Screen
         name="SendConfirm"
         component={SendConfirmScreen}
+        options={{ headerShown: false }}
+      />
+      {/* Stacking */}
+      <RootStack.Screen
+        name="StartStacking"
+        component={StartStackingScreen}
         options={{ headerShown: false }}
       />
       {/* Settings */}

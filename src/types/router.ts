@@ -9,4 +9,5 @@ export type RootStackParamList = {
   Fingerprint: undefined;
   About: undefined;
   TransactionDetails: { txId: string };
+  StartStacking: undefined;
 };
