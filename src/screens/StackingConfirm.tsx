@@ -153,7 +153,10 @@ export const StackingConfirmScreen = () => {
             />
             <List.Item title="Number of cycles" description={numberOfCycles} />
             <List.Item title="Start date" description={'TODO'} />
-            <List.Item title="BTC address" description={'TODO'} />
+            <List.Item
+              title="BTC address"
+              description={route.params.bitcoinAddress}
+            />
             {/* TODO estimation of the reward */}
           </View>
         ) : null}
