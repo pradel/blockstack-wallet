@@ -37,7 +37,7 @@ export const StackingScanAddress = () => {
     setScanned(true);
     navigation.navigate('StackingAddress', {
       amount: route.params.amount,
-      address: data,
+      bitcoinAddress: data,
     });
   };
 

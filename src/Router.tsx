@@ -19,6 +19,7 @@ import { StackingScreen } from './screens/Stacking';
 import { StackingAmountScreen } from './screens/StackingAmount';
 import { StackingAddressScreen } from './screens/StackingAddress';
 import { StackingScanAddress } from './screens/StackingScanAddress';
+import { StackingConfirmScreen } from './screens/StackingConfirm';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -109,6 +110,11 @@ export const Router = () => {
       <RootStack.Screen
         name="StackingScanAddress"
         component={StackingScanAddress}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name="StackingConfirm"
+        component={StackingConfirmScreen}
         options={{ headerShown: false }}
       />
       {/* Settings */}

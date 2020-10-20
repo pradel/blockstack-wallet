@@ -23,20 +23,20 @@ type StackingAddressScreenRouteProp = RouteProp<
 export const StackingAddressScreen = () => {
   const navigation = useNavigation<StackingAddressScreenNavigationProp>();
   const route = useRoute<StackingAddressScreenRouteProp>();
-  const [address, setAddress] = useState('');
+  const [bitcoinAddress, setBitcoinAddress] = useState('');
 
   // Listen to the navigation param so if we can on this screen it will fill the input
   useEffect(() => {
-    if (route.params.address) {
-      route.params.address.startsWith('bitcoin:')
-        ? setAddress(route.params.address.replace('bitcoin:', ''))
-        : setAddress(route.params.address);
+    if (route.params.bitcoinAddress) {
+      route.params.bitcoinAddress.startsWith('bitcoin:')
+        ? setBitcoinAddress(route.params.bitcoinAddress.replace('bitcoin:', ''))
+        : setBitcoinAddress(route.params.bitcoinAddress);
     }
-  }, [route.params.address]);
+  }, [route.params.bitcoinAddress]);
 
   const handlePaste = async () => {
     const text = await Clipboard.getString();
-    setAddress(text);
+    setBitcoinAddress(text);
   };
 
   const handleScan = () => {
@@ -44,13 +44,17 @@ export const StackingAddressScreen = () => {
   };
 
   const handleConfirm = () => {
-    // TODO navigate to next step
+    navigation.navigate('StackingConfirm', {
+      amount: route.params.amount,
+      bitcoinAddress,
+    });
   };
 
   // TODO based on testnet / mainnet as the format is different
-  const isAddressValid = address && validateBitcoinAddress(address);
+  const isBitcoinAddressValid =
+    bitcoinAddress && validateBitcoinAddress(bitcoinAddress);
 
-  const canContinue = isAddressValid;
+  const canContinue = isBitcoinAddressValid;
 
   return (
     <View style={styles.container}>
@@ -72,15 +76,15 @@ export const StackingAddressScreen = () => {
             mode="outlined"
             autoFocus={true}
             autoCorrect={false}
-            value={address}
-            onChangeText={(nextValue) => setAddress(nextValue)}
+            value={bitcoinAddress}
+            onChangeText={(nextValue) => setBitcoinAddress(nextValue)}
             right={
               <TextInput.Icon name="content-paste" onPress={handlePaste} />
             }
           />
           <HelperText
             type="error"
-            visible={Boolean(address && !isAddressValid)}
+            visible={Boolean(bitcoinAddress && !isBitcoinAddressValid)}
           >
             Invalid BTC address
           </HelperText>
