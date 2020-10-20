@@ -1,6 +1,6 @@
 import React from 'react';
 import Constants from 'expo-constants';
-import { StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +18,14 @@ export const StackingScreen = () => {
   // TODO only show this if user is not already stacking
   // TODO if user is stacking show stacking dashboard with metrics
 
+  const handleHowItWorks = async () => {
+    const url = 'https://docs.blockstack.org/stacks-blockchain/stacking';
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      Linking.openURL(url);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <AppbarHeader>
@@ -31,10 +39,12 @@ export const StackingScreen = () => {
         <UndrawSavings height={200} />
 
         <Text>TODO some basic explanations</Text>
-        <Text>TODO how it works button that open a new link</Text>
       </View>
 
       <View style={styles.buttonsContainer}>
+        <Button style={styles.button} onPress={handleHowItWorks}>
+          How it works
+        </Button>
         <Button
           mode="contained"
           onPress={() => navigation.navigate('StackingAmount')}
@@ -57,5 +67,8 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  button: {
+    marginBottom: 8,
   },
 });
