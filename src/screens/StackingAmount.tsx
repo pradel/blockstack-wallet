@@ -77,6 +77,7 @@ export const StackingAmountScreen = () => {
   }
 
   const handleConfirm = () => {
+    // TODO select number of cycles first
     navigation.navigate('StackingAddress', { amount });
   };
 
