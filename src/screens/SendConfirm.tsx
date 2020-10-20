@@ -197,8 +197,4 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     padding: 16,
   },
-  indicator: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
