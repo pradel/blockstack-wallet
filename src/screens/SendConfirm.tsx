@@ -74,45 +74,49 @@ export const SendConfirmScreen = () => {
     setLoading(true);
 
     const mnemonic = await SecureStore.getItemAsync(getStorageKeyPk());
-    if (mnemonic) {
-      const network = new StacksTestnet();
 
-      const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
-      const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
-
-      const fee = unsignedTransaction?.auth.getFee();
-
-      if (!fee) {
-        Alert.alert('Fee not found');
-        return;
-      }
-
-      let transaction: StacksTransaction;
-      try {
-        transaction = await makeSTXTokenTransfer({
-          recipient: route.params.address,
-          amount: new Big(stacksToMicro(route.params.amount)),
-          senderKey: result.privateKey,
-          network,
-          fee,
-          memo,
-        });
-      } catch (error) {
-        Alert.alert(`Failed to create transaction. ${error.message}`);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        await broadcastTransaction(transaction, network);
-      } catch (error) {
-        Alert.alert(`Failed to broadcast transaction. ${error.message}`);
-        setLoading(false);
-        return;
-      }
-
-      navigation.navigate('Main');
+    if (!mnemonic) {
+      Alert.alert('Failed to get mnemonic');
+      return;
     }
+
+    const network = new StacksTestnet();
+
+    const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
+    const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
+
+    const fee = unsignedTransaction?.auth.getFee();
+
+    if (!fee) {
+      Alert.alert('Fee not found');
+      return;
+    }
+
+    let transaction: StacksTransaction;
+    try {
+      transaction = await makeSTXTokenTransfer({
+        recipient: route.params.address,
+        amount: new Big(stacksToMicro(route.params.amount)),
+        senderKey: result.privateKey,
+        network,
+        fee,
+        memo,
+      });
+    } catch (error) {
+      Alert.alert(`Failed to create transaction. ${error.message}`);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await broadcastTransaction(transaction, network);
+    } catch (error) {
+      Alert.alert(`Failed to broadcast transaction. ${error.message}`);
+      setLoading(false);
+      return;
+    }
+
+    navigation.navigate('Main');
   };
 
   return (
