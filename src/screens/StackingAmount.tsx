@@ -47,6 +47,43 @@ export const StackingAmountScreen = () => {
     return accountSTXBalance.cmp(minAmountSTX) >= 0;
   }, [stacksInfo]);
 
+  // Has the user selected an amount bigger than the minimum to start stacking
+  const minimumStackingReached = useMemo(() => {
+    if (!stacksInfo) return false;
+    let amountSTX: Big;
+    try {
+      // TODO find a better way to do this
+      // TODO also apply to send flow
+      amountSTX = new Big(stacksToMicro(amount));
+    } catch (error) {
+      // Amount is invalid and user cannot go to next step
+      // We can safely ignore
+      return false;
+    }
+    const minAmountSTX = new Big(stacksInfo.poxInfo.min_amount_ustx, 10);
+    return amountSTX.cmp(minAmountSTX) >= 0;
+  }, [stacksInfo, amount]);
+
+  // Has the amount exceeded the available balance
+  const amountExceedBalance = useMemo(() => {
+    if (!stacksInfo) return false;
+    let amountSTX: Big;
+    try {
+      // TODO find a better way to do this
+      // TODO also apply to send flow
+      amountSTX = new Big(stacksToMicro(amount));
+    } catch (error) {
+      // Amount is invalid and user cannot go to next step
+      // We can safely ignore
+      return false;
+    }
+    const accountSTXBalance = new Big(
+      stacksInfo.accountBalance.stx.balance,
+      10
+    );
+    return amountSTX.cmp(accountSTXBalance) >= 0;
+  }, [stacksInfo, amount]);
+
   useEffect(() => {
     const fetchPoxInfo = async () => {
       try {
@@ -78,12 +115,19 @@ export const StackingAmountScreen = () => {
 
   const handleConfirm = () => {
     // TODO select number of cycles first
-    navigation.navigate('StackingAddress', { amount });
+    navigation.navigate('StackingAddress', {
+      amountInMicro: stacksToMicro(amount).toString(),
+    });
   };
 
-  // TODO check amount entered does not exceed current balance
+  // TODO use max button in the input that will set the current balance
 
-  const canContinue = isAmountValid && stacksInfo && canParticipate;
+  const canContinue =
+    isAmountValid &&
+    stacksInfo &&
+    canParticipate &&
+    minimumStackingReached &&
+    !amountExceedBalance;
 
   return (
     <View style={styles.container}>
@@ -107,6 +151,11 @@ export const StackingAmountScreen = () => {
 
         {stacksInfo ? (
           <View style={styles.inputContainer}>
+            <HelperText type="info">
+              A minimum of{' '}
+              {microToStacks(stacksInfo.poxInfo.min_amount_ustx.toString())} STX
+              is required.
+            </HelperText>
             <TextInput
               placeholder="Amount"
               mode="outlined"
@@ -115,11 +164,9 @@ export const StackingAmountScreen = () => {
               keyboardType="number-pad"
               onChangeText={(nextValue) => setAmount(nextValue)}
             />
-            <HelperText type="info">
-              A minimum of{' '}
-              {microToStacks(stacksInfo.poxInfo.min_amount_ustx.toString())} STX
-              is required.
-              {/* TODO why link */}
+            <HelperText type={!amountExceedBalance ? 'info' : 'error'}>
+              {amount} / {microToStacks(stacksInfo.accountBalance.stx.balance)}{' '}
+              STX
             </HelperText>
           </View>
         ) : null}
