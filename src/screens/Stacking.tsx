@@ -1,7 +1,7 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import { Linking, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { List, Text } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { AppbarHeader } from '../components/AppbarHeader';
@@ -17,6 +17,8 @@ export const StackingScreen = () => {
 
   // TODO only show this if user is not already stacking
   // TODO if user is stacking show stacking dashboard with metrics
+
+  // TODO show real number for APY
 
   const handleHowItWorks = async () => {
     const url = 'https://docs.blockstack.org/stacks-blockchain/stacking';
@@ -35,10 +37,25 @@ export const StackingScreen = () => {
         />
       </AppbarHeader>
 
-      <View style={styles.imageContainer}>
-        <UndrawSavings height={200} />
+      <View>
+        <View style={styles.imageContainer}>
+          <UndrawSavings height={200} />
+        </View>
 
-        <Text>TODO some basic explanations</Text>
+        <List.Section style={styles.listSection}>
+          <List.Item
+            left={(props) => <List.Icon {...props} icon="check" />}
+            title="Earn up to X% APY"
+          />
+          <List.Item
+            left={(props) => <List.Icon {...props} icon="check" />}
+            title="Get Rewards in BTC every week"
+          />
+          <List.Item
+            left={(props) => <List.Icon {...props} icon="check" />}
+            title="Funds stay yours"
+          />
+        </List.Section>
       </View>
 
       <View style={styles.buttonsContainer}>
@@ -64,6 +81,10 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
+  },
+  listSection: {
+    marginTop: 32,
+    paddingHorizontal: 16,
   },
   buttonsContainer: {
     padding: 16,
