@@ -308,6 +308,7 @@ export const StackingConfirmScreen = () => {
               title="BTC address"
               description={route.params.bitcoinAddress}
             />
+            {/* TODO display fees of the transaction */}
             {/* TODO estimation of the reward */}
           </View>
         ) : null}
