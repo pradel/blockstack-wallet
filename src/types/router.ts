@@ -10,5 +10,6 @@ export type RootStackParamList = {
   About: undefined;
   TransactionDetails: { txId: string };
   StackingAmount: undefined;
-  StackingAddress: { amount: string };
+  StackingAddress: { amount: string; address?: string };
+  StackingScanAddress: { amount: string };
 };

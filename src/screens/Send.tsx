@@ -58,6 +58,7 @@ export const SendScreen = () => {
             placeholder="Address"
             mode="outlined"
             autoFocus={true}
+            autoCorrect={false}
             value={address}
             onChangeText={(nextValue) => setAddress(nextValue)}
             right={

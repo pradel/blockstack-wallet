@@ -3,18 +3,23 @@ import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import { ActivityIndicator, Appbar, Text } from 'react-native-paper';
 import { BarCodeScanner, BarCodeScannedCallback } from 'expo-barcode-scanner';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/router';
 import { AppbarHeader } from '../components/AppbarHeader';
 
-type SendNavigationProp = StackNavigationProp<
+type StackingScanAddressNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'SendScanAddress'
+  'StackingScanAddress'
+>;
+type StackingScanAddressRouteProp = RouteProp<
+  RootStackParamList,
+  'StackingScanAddress'
 >;
 
-export const SendScanAddress = () => {
-  const navigation = useNavigation<SendNavigationProp>();
+export const StackingScanAddress = () => {
+  const navigation = useNavigation<StackingScanAddressNavigationProp>();
+  const route = useRoute<StackingScanAddressRouteProp>();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
 
@@ -30,14 +35,17 @@ export const SendScanAddress = () => {
   const handleBarCodeScanned: BarCodeScannedCallback = ({ data }) => {
     // We keep this scanned value so the callback is not called 2 times while we process the response
     setScanned(true);
-    navigation.navigate('Send', { address: data });
+    navigation.navigate('StackingAddress', {
+      amount: route.params.amount,
+      address: data,
+    });
   };
 
   return (
     <View style={styles.container}>
       <AppbarHeader>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Scan recipient STX address" />
+        <Appbar.Content title="Scan recipient BTC address" />
       </AppbarHeader>
 
       {hasPermission !== true ? (
