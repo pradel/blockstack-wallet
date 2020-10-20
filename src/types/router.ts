@@ -1,5 +1,7 @@
 export type RootStackParamList = {
   Main: undefined;
+  Stacking: undefined;
+  Settings: undefined;
   SendScanAddress: undefined;
   Send?: { address?: string };
   SendAmount: { address: string };

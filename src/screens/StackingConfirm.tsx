@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { ActivityIndicator, Appbar, Text, List } from 'react-native-paper';
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import {
@@ -14,17 +16,28 @@ import {
   cvToString,
   deserializeCV,
   serializeCV,
+  StacksTestnet,
+  StacksMainnet,
   tupleCV,
   uintCV,
+  makeContractCall,
+  ChainID,
+  StacksTransaction,
+  broadcastTransaction,
 } from '@blockstack/stacks-transactions';
+import {
+  deriveRootKeychainFromMnemonic,
+  deriveStxAddressChain,
+} from '@blockstack/keychain';
 import { format } from 'date-fns';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
-import { microToStacks } from '../utils';
+import { getStorageKeyPk, microToStacks } from '../utils';
 import { stacksClientInfo, stacksClientSmartContracts } from '../stacksClient';
 import { RootStackParamList } from '../types/router';
 import { useAuth } from '../context/AuthContext';
+import { useAppConfig } from '../context/AppConfigContext';
 
 type StackingConfirmScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -39,6 +52,7 @@ export const StackingConfirmScreen = () => {
   const navigation = useNavigation<StackingConfirmScreenNavigationProp>();
   const route = useRoute<StackingConfirmScreenRouteProp>();
   const auth = useAuth();
+  const { appConfig } = useAppConfig();
   const [isEligible, setIsEligible] = useState<true | string>();
   const [stackingInfos, setStackingInfos] = useState<{
     nextCycleStartingAt: Date;
@@ -49,6 +63,13 @@ export const StackingConfirmScreen = () => {
     coreInfo: CoreNodeInfoResponse;
     blockTimeInfo: NetworkBlockTimesResponse;
   }>();
+  const [confirming, setConfirming] = useState(false);
+
+  // derive bitcoin address from Stacks account and convert into required format
+  const hashbytes = bufferCV(
+    global.Buffer.from(route.params.bitcoinAddress, 'hex')
+  );
+  const version = bufferCV(global.Buffer.from('01', 'hex'));
 
   useEffect(() => {
     const fetchPoxInfo = async () => {
@@ -77,17 +98,12 @@ export const StackingConfirmScreen = () => {
     const fetchIsUserEligible = async () => {
       if (!stacksInfo) return;
 
-      try {
-        // derive bitcoin address from Stacks account and convert into required format
-        const hashbytes = bufferCV(
-          global.Buffer.from(route.params.bitcoinAddress, 'hex')
-        );
-        const version = bufferCV(global.Buffer.from('01', 'hex'));
-        const [
-          contractAddress,
-          contractName,
-        ] = stacksInfo.poxInfo.contract_id.split('.');
+      const [
+        contractAddress,
+        contractName,
+      ] = stacksInfo.poxInfo.contract_id.split('.');
 
+      try {
         // read-only contract call
         const isEligible = await stacksClientSmartContracts.callReadOnlyFunction(
           {
@@ -136,11 +152,6 @@ export const StackingConfirmScreen = () => {
         console.error(error);
       }
 
-      // how long (in seconds) is a Stacking cycle?
-      const cycleDuration =
-        stacksInfo.poxInfo.reward_cycle_length *
-        stacksInfo.blockTimeInfo.testnet.target_block_time;
-
       // how much time is left (in seconds) until the next cycle begins?
       const secondsToNextCycle =
         (stacksInfo.poxInfo.reward_cycle_length -
@@ -169,11 +180,77 @@ export const StackingConfirmScreen = () => {
     fetchIsUserEligible();
   }, [stacksInfo]);
 
-  const handleConfirm = () => {
-    // TODO
-  };
+  const handleConfirm = async () => {
+    if (!stacksInfo) return;
 
-  // TODO check amount entered does not exceed current balance
+    if (appConfig.requireBiometricTransaction) {
+      const authenticateResult = await LocalAuthentication.authenticateAsync();
+      if (!authenticateResult.success) {
+        return;
+      }
+    }
+
+    setConfirming(true);
+
+    const mnemonic = await SecureStore.getItemAsync(getStorageKeyPk());
+
+    if (!mnemonic) {
+      Alert.alert('Failed to get mnemonic');
+      return;
+    }
+
+    const [
+      contractAddress,
+      contractName,
+    ] = stacksInfo.poxInfo.contract_id.split('.');
+
+    const network =
+      appConfig.network === 'mainnet'
+        ? new StacksMainnet()
+        : new StacksTestnet();
+
+    const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
+    const result = deriveStxAddressChain(
+      appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
+    )(rootNode);
+
+    let transaction: StacksTransaction;
+    try {
+      transaction = await makeContractCall({
+        contractAddress,
+        contractName,
+        functionName: 'stack-stx',
+        functionArgs: [
+          uintCV(route.params.amountInMicro),
+          tupleCV({
+            hashbytes,
+            version,
+          }),
+          uintCV(stacksInfo.coreInfo.burn_block_height + 1),
+          uintCV(numberOfCycles),
+        ],
+        senderKey: result.privateKey,
+        validateWithAbi: true,
+        network,
+      });
+    } catch (error) {
+      console.error(error);
+      Alert.alert(`Failed to create transaction. ${error.message}`);
+      setConfirming(false);
+      return;
+    }
+
+    try {
+      await broadcastTransaction(transaction, network);
+    } catch (error) {
+      console.error(error);
+      Alert.alert(`Failed to broadcast transaction. ${error.message}`);
+      setConfirming(false);
+      return;
+    }
+
+    navigation.navigate('Stacking');
+  };
 
   const canConfirm = isEligible === true;
 
@@ -238,9 +315,9 @@ export const StackingConfirmScreen = () => {
         <View style={styles.buttonsContainer}>
           <Button
             mode="contained"
-            // TODO loading
+            disabled={!canConfirm || confirming}
+            loading={confirming}
             onPress={handleConfirm}
-            disabled={!canConfirm}
           >
             Confirm
           </Button>
