@@ -9,7 +9,7 @@ import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
 import { stacksToMicro } from '../utils';
 
-export const StartStackingScreen = () => {
+export const StackingAmountScreen = () => {
   const navigation = useNavigation();
   const [amount, setAmount] = useState('');
 

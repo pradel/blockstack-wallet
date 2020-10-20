@@ -30,7 +30,7 @@ export const StackingScreen = () => {
       <View style={styles.buttonsContainer}>
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('StartStacking')}
+          onPress={() => navigation.navigate('StackingAmount')}
         >
           Get started
         </Button>

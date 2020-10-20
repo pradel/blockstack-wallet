@@ -16,7 +16,7 @@ import { SendScanAddress } from './screens/SendScanAddress';
 import { AboutScreen } from './screens/About';
 import { TransactionDetails } from './screens/TransactionDetails';
 import { StackingScreen } from './screens/Stacking';
-import { StartStackingScreen } from './screens/StartStacking';
+import { StackingAmountScreen } from './screens/StackingAmount';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -95,8 +95,8 @@ export const Router = () => {
       />
       {/* Stacking */}
       <RootStack.Screen
-        name="StartStacking"
-        component={StartStackingScreen}
+        name="StackingAmount"
+        component={StackingAmountScreen}
         options={{ headerShown: false }}
       />
       {/* Settings */}
