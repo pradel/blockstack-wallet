@@ -61,8 +61,6 @@ export const SendConfirmScreen = () => {
     });
   }, [setUnsignedTransaction, auth.publicKey, route.params]);
 
-  // TODO show transaction details for confirmation
-
   const handleConfirm = async () => {
     setLoading(false);
 
