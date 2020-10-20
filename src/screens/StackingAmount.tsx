@@ -118,6 +118,7 @@ export const StackingAmountScreen = () => {
               A minimum of{' '}
               {microToStacks(stacksInfo.poxInfo.min_amount_ustx.toString())}STX
               is required.
+              {/* TODO why link */}
             </HelperText>
           </View>
         ) : null}
