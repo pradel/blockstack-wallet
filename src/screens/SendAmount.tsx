@@ -52,8 +52,8 @@ export const SendAmountScreen = () => {
             value={amount}
             keyboardType="number-pad"
             onChangeText={(nextValue) => setAmount(nextValue)}
+            right={<TextInput.Affix text="STX" />}
           />
-          {/* TODO find a way to display STX on the right side of the input */}
         </View>
 
         <View style={styles.buttonsContainer}>
