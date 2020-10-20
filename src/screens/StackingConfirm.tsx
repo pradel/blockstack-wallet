@@ -1,17 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
 import { StyleSheet, View } from 'react-native';
-import {
-  ActivityIndicator,
-  Appbar,
-  HelperText,
-  TextInput,
-  Text,
-  List,
-} from 'react-native-paper';
+import { ActivityIndicator, Appbar, Text, List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import Big from 'bn.js';
 import {
   CoreNodePoxResponse,
   AddressBalanceResponse,
@@ -62,9 +54,9 @@ export const StackingConfirmScreen = () => {
         const poxInfo = await stacksClientInfo.getPoxInfo();
         // derive bitcoin address from Stacks account and convert into required format
         const hashbytes = bufferCV(
-          Buffer.from(route.params.bitcoinAddress, 'hex')
+          global.Buffer.from(route.params.bitcoinAddress, 'hex')
         );
-        const version = bufferCV(Buffer.from('01', 'hex'));
+        const version = bufferCV(global.Buffer.from('01', 'hex'));
         const [contractAddress, contractName] = poxInfo.contract_id.split('.');
 
         // read-only contract call
@@ -95,7 +87,7 @@ export const StackingConfirmScreen = () => {
         // error codes: https://github.com/blockstack/stacks-blockchain/blob/master/src/chainstate/stacks/boot/pox.clar#L2
         const response = cvToString(
           deserializeCV(
-            Buffer.from(
+            global.Buffer.from(
               isEligible.result ? isEligible.result.slice(2) : '',
               'hex'
             )
