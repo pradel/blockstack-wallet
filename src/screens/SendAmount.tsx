@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Appbar, TextInput } from 'react-native-paper';
+import { Appbar, HelperText, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Big from 'bn.js';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { RootStackParamList } from '../types/router';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
+import { stacksToMicro } from '../utils';
 
 type SendAmountNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -15,22 +19,61 @@ type SendAmountNavigationProp = StackNavigationProp<
 >;
 type SendAmountScreenRouteProp = RouteProp<RootStackParamList, 'SendAmount'>;
 
+const sendAmountSchema = yup
+  .object({
+    amountInStacks: yup
+      .string()
+      .defined()
+      .test('is-valid-stacks', 'Amount is invalid', (value) => {
+        if (value) {
+          const micro = stacksToMicro(value);
+          // Number needs to be a valid micro
+          if (isNaN(micro)) {
+            return false;
+          }
+          try {
+            const amount = new Big(micro);
+            // Number needs to be positive
+            if (!amount.gtn(0)) {
+              return false;
+            }
+            return true;
+          } catch (error) {
+            // Do nothing, invalid
+          }
+        }
+        return false;
+      })
+      .label('Amount'),
+  })
+  .defined();
+
+type SendAmountSchema = yup.InferType<typeof sendAmountSchema>;
+
 export const SendAmountScreen = () => {
   const navigation = useNavigation<SendAmountNavigationProp>();
   const route = useRoute<SendAmountScreenRouteProp>();
-  const [amount, setAmount] = useState('');
+
+  const formik = useFormik<SendAmountSchema>({
+    initialValues: {
+      amountInStacks: '',
+    },
+    validationSchema: sendAmountSchema,
+    validateOnMount: true,
+    onSubmit: (values, { setSubmitting }) => {
+      navigation.navigate('SendConfirm', {
+        address: route.params.address,
+        amountInMicro: stacksToMicro(values.amountInStacks).toString(),
+      });
+
+      setSubmitting(false);
+    },
+  });
 
   // TODO display available balance near by the button
   // TODO next button active only if amount lower than balance
-  // TODO allow user to adjust fees
-  // TODO verify that amount is valid, for now I can continue with "-"
 
-  const handleConfirm = () => {
-    navigation.navigate('SendConfirm', {
-      address: route.params.address,
-      amount,
-    });
-  };
+  const canContinue = formik.isValid && !formik.isSubmitting;
 
   return (
     <View style={styles.container}>
@@ -41,23 +84,38 @@ export const SendAmountScreen = () => {
       <View style={styles.contentContainer}>
         <AppbarContent
           title="Enter Amount"
-          subtitle="How many stacks would you like to send?"
+          subtitle="How many Stacks would you like to send?"
         />
 
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Amount"
             mode="outlined"
-            autoFocus={true}
-            value={amount}
             keyboardType="number-pad"
-            onChangeText={(nextValue) => setAmount(nextValue)}
+            autoFocus={true}
+            value={formik.values.amountInStacks}
+            onChangeText={(event) => {
+              formik.setFieldTouched('amountInStacks');
+              formik.handleChange('amountInStacks')(event);
+            }}
+            right={<TextInput.Affix text="STX" />}
           />
-          {/* TODO find a way to display STX on the right side of the input */}
+          <HelperText
+            type="error"
+            visible={Boolean(
+              formik.touched.amountInStacks && formik.errors.amountInStacks
+            )}
+          >
+            {formik.errors.amountInStacks}
+          </HelperText>
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button mode="contained" onPress={handleConfirm} disabled={!amount}>
+          <Button
+            mode="contained"
+            onPress={formik.handleSubmit}
+            disabled={!canContinue}
+          >
             Next
           </Button>
         </View>
