@@ -21,7 +21,7 @@ import {
 } from '@blockstack/keychain';
 import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
-import { getStorageKeyPk, stacksToMicro, microToStacks } from '../utils';
+import { getStorageKeyPk, microToStacks } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
@@ -53,7 +53,7 @@ export const SendConfirmScreen = () => {
     // TODO catch in case of failure
     makeUnsignedSTXTokenTransfer({
       recipient: route.params.address,
-      amount: new Big(stacksToMicro(route.params.amount)),
+      amount: new Big(route.params.amountInMicro),
       network,
       publicKey: auth.publicKey,
       memo,
@@ -102,7 +102,7 @@ export const SendConfirmScreen = () => {
     try {
       transaction = await makeSTXTokenTransfer({
         recipient: route.params.address,
-        amount: new Big(stacksToMicro(route.params.amount)),
+        amount: new Big(route.params.amountInMicro),
         senderKey: result.privateKey,
         network,
         fee,
@@ -146,7 +146,7 @@ export const SendConfirmScreen = () => {
             <List.Item
               title="Amount"
               // TODO nicely display decimals etc..
-              description={`${route.params.amount} STX`}
+              description={`${microToStacks(route.params.amountInMicro)} STX`}
             />
             <List.Item
               title="Network fee"
@@ -168,7 +168,7 @@ export const SendConfirmScreen = () => {
                     `${microToStacks(
                       unsignedTransaction.auth
                         .getFee()!
-                        .add(new Big(stacksToMicro(route.params.amount)))
+                        .add(new Big(route.params.amountInMicro))
                         .toString()
                     )} STX`
                   : ''
