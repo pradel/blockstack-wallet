@@ -25,18 +25,20 @@ const sendAmountSchema = yup
       .string()
       .defined()
       .test('is-valid-stacks', 'Amount is invalid', (value) => {
-        console.log('value', value);
         if (value) {
+          const micro = stacksToMicro(value);
+          // Number needs to be a valid micro
+          if (isNaN(micro)) {
+            return false;
+          }
           try {
-            const micro = stacksToMicro(value);
-            if (isNaN(micro)) {
+            const amount = new Big(micro);
+            // Number needs to be positive
+            if (!amount.gtn(0)) {
               return false;
             }
-            new Big(micro);
-            console.log('valid big');
             return true;
           } catch (error) {
-            console.log('Error');
             // Do nothing, invalid
           }
         }
@@ -72,9 +74,6 @@ export const SendAmountScreen = () => {
   // TODO next button active only if amount lower than balance
   // TODO allow user to adjust fees
   // TODO verify that amount is valid, for now I can continue with "-"
-
-  // console.log('formik.touched', formik.touched);
-  // console.log('formik.errors', formik.errors);
 
   const canContinue = formik.isValid && !formik.isSubmitting;
 
