@@ -6,6 +6,7 @@ import {
   Appbar,
   HelperText,
   TextInput,
+  Caption,
 } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -164,14 +165,19 @@ export const StackingAmountScreen = () => {
               keyboardType="number-pad"
               onChangeText={(nextValue) => setAmount(nextValue)}
             />
-            <HelperText type={!amountExceedBalance ? 'info' : 'error'}>
-              {amount} / {microToStacks(stacksInfo.accountBalance.stx.balance)}{' '}
-              STX
-            </HelperText>
+            {amountExceedBalance ? (
+              <HelperText type="error">Insufficient founds.</HelperText>
+            ) : null}
           </View>
         ) : null}
 
         <View style={styles.buttonsContainer}>
+          {stacksInfo ? (
+            <Caption style={styles.balanceText}>
+              Balance: {microToStacks(stacksInfo.accountBalance.stx.balance)}{' '}
+              STX
+            </Caption>
+          ) : null}
           <Button
             mode="contained"
             onPress={handleConfirm}
@@ -199,5 +205,9 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  balanceText: {
+    textAlign: 'center',
+    marginBottom: 16,
   },
 });
