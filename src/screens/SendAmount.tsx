@@ -72,8 +72,6 @@ export const SendAmountScreen = () => {
 
   // TODO display available balance near by the button
   // TODO next button active only if amount lower than balance
-  // TODO allow user to adjust fees
-  // TODO verify that amount is valid, for now I can continue with "-"
 
   const canContinue = formik.isValid && !formik.isSubmitting;
 
