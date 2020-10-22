@@ -3,7 +3,7 @@ export type RootStackParamList = {
   SendScanAddress: undefined;
   Send?: { address?: string };
   SendAmount: { address: string };
-  SendConfirm: { address: string; amount: string };
+  SendConfirm: { address: string; amountInMicro: string };
   Receive: undefined;
   BackupPassphrase: undefined;
   Fingerprint: undefined;
