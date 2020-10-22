@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Appbar, TextInput } from 'react-native-paper';
+import { Appbar, HelperText, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { RootStackParamList } from '../types/router';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
@@ -15,22 +17,40 @@ type SendAmountNavigationProp = StackNavigationProp<
 >;
 type SendAmountScreenRouteProp = RouteProp<RootStackParamList, 'SendAmount'>;
 
+const sendAmountSchema = yup
+  .object({
+    amount: yup.string().defined(),
+  })
+  .defined();
+
+type SendAmountSchema = yup.InferType<typeof sendAmountSchema>;
+
 export const SendAmountScreen = () => {
   const navigation = useNavigation<SendAmountNavigationProp>();
   const route = useRoute<SendAmountScreenRouteProp>();
-  const [amount, setAmount] = useState('');
+
+  const formik = useFormik<SendAmountSchema>({
+    initialValues: {
+      amount: '',
+    },
+    validationSchema: sendAmountSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+
+      navigation.navigate('SendConfirm', {
+        address: route.params.address,
+        amount: values.amount,
+      });
+    },
+  });
 
   // TODO display available balance near by the button
   // TODO next button active only if amount lower than balance
   // TODO allow user to adjust fees
   // TODO verify that amount is valid, for now I can continue with "-"
 
-  const handleConfirm = () => {
-    navigation.navigate('SendConfirm', {
-      address: route.params.address,
-      amount,
-    });
-  };
+  console.log('formik.touched', formik.touched);
+  console.log('formik.errors', formik.errors);
 
   return (
     <View style={styles.container}>
@@ -48,16 +68,27 @@ export const SendAmountScreen = () => {
           <TextInput
             placeholder="Amount"
             mode="outlined"
-            autoFocus={true}
-            value={amount}
             keyboardType="number-pad"
-            onChangeText={(nextValue) => setAmount(nextValue)}
+            autoFocus={true}
+            value={formik.values.amount}
+            onChangeText={formik.handleChange('amount')}
+            onBlur={formik.handleBlur('amount')}
+            right={<TextInput.Affix text="STX" />}
           />
-          {/* TODO find a way to display STX on the right side of the input */}
+          <HelperText
+            type="error"
+            visible={Boolean(formik.touched.amount && formik.errors.amount)}
+          >
+            {formik.errors.amount}
+          </HelperText>
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button mode="contained" onPress={handleConfirm} disabled={!amount}>
+          <Button
+            mode="contained"
+            onPress={formik.handleSubmit}
+            disabled={!formik.isValid || formik.isSubmitting}
+          >
             Next
           </Button>
         </View>
