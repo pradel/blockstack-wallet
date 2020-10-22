@@ -20,7 +20,7 @@ import {
 } from '@blockstack/keychain';
 import Big from 'bn.js';
 import { RootStackParamList } from '../types/router';
-import { getStorageKeyPk, stacksToMicro, microToStacks } from '../utils';
+import { getStorageKeyPk, microToStacks } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
