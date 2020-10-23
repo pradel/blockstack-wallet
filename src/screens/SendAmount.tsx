@@ -1,17 +1,20 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Appbar, HelperText, TextInput } from 'react-native-paper';
+import { Appbar, Caption, HelperText, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Big from 'bn.js';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import useSWR from 'swr';
 import { RootStackParamList } from '../types/router';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
-import { stacksToMicro } from '../utils';
+import { microToStacks, stacksToMicro } from '../utils';
+import { stacksClientAccounts } from '../stacksClient';
+import { useAuth } from '../context/AuthContext';
 
 type SendAmountNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -19,13 +22,26 @@ type SendAmountNavigationProp = StackNavigationProp<
 >;
 type SendAmountScreenRouteProp = RouteProp<RootStackParamList, 'SendAmount'>;
 
-const sendAmountSchema = yup
-  .object({
-    amountInStacks: yup
-      .string()
-      .defined()
-      .test('is-valid-stacks', 'Amount is invalid', (value) => {
-        if (value) {
+export const SendAmountScreen = () => {
+  const navigation = useNavigation<SendAmountNavigationProp>();
+  const route = useRoute<SendAmountScreenRouteProp>();
+  const auth = useAuth();
+  const { data: accountBalanceData } = useSWR('user-balance', () => {
+    return stacksClientAccounts.getAccountBalance({
+      principal: auth.address,
+    });
+  });
+
+  const sendAmountSchema = yup
+    .object({
+      amountInStacks: yup
+        .string()
+        .defined()
+        .test('is-valid-stacks', 'Amount is invalid', (value) => {
+          console.log('called1');
+          if (!value) {
+            return false;
+          }
           const micro = stacksToMicro(value);
           // Number needs to be a valid micro
           if (isNaN(micro)) {
@@ -41,18 +57,29 @@ const sendAmountSchema = yup
           } catch (error) {
             // Do nothing, invalid
           }
-        }
-        return false;
-      })
-      .label('Amount'),
-  })
-  .defined();
+          return false;
+        })
+        .test({
+          name: 'is-lower-than-balance',
+          message: 'Insufficient founds',
+          test: (value) => {
+            console.log('called2');
+            if (!value || !accountBalanceData) {
+              return false;
+            }
+            const accountSTXBalance = new Big(
+              accountBalanceData.stx.balance,
+              10
+            );
+            const amountSTX = new Big(stacksToMicro(value));
+            return amountSTX.lte(accountSTXBalance);
+          },
+        })
+        .label('Amount'),
+    })
+    .defined();
 
-type SendAmountSchema = yup.InferType<typeof sendAmountSchema>;
-
-export const SendAmountScreen = () => {
-  const navigation = useNavigation<SendAmountNavigationProp>();
-  const route = useRoute<SendAmountScreenRouteProp>();
+  type SendAmountSchema = yup.InferType<typeof sendAmountSchema>;
 
   const formik = useFormik<SendAmountSchema>({
     initialValues: {
@@ -111,6 +138,11 @@ export const SendAmountScreen = () => {
         </View>
 
         <View style={styles.buttonsContainer}>
+          {accountBalanceData ? (
+            <Caption style={styles.balanceText}>
+              Balance: {microToStacks(accountBalanceData.stx.balance)} STX
+            </Caption>
+          ) : null}
           <Button
             mode="contained"
             onPress={formik.handleSubmit}
@@ -138,5 +170,9 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  balanceText: {
+    textAlign: 'center',
+    marginBottom: 16,
   },
 });
