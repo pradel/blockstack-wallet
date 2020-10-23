@@ -33,3 +33,12 @@ export const validateBitcoinAddress = (
     return false;
   }
 };
+
+/**
+ * @description Check if the amount passed is a valid
+ * @param amount - the amount to validate
+ */
+const STXAmountRegex = /^(0|[1-9]\d*)$/;
+export const validateSTXAmount = (amount: string) => {
+  return STXAmountRegex.test(amount);
+};
