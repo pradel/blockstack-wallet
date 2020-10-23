@@ -3,7 +3,7 @@ import * as Application from 'expo-application';
 import * as Random from 'expo-random';
 import { c32addressDecode } from 'c32check';
 import { entropyToMnemonic, mnemonicToSeed } from 'bip39';
-import { bip32, address } from 'bitcoinjs-lib';
+import { bip32, address, networks } from 'bitcoinjs-lib';
 
 export const fetcher = (...args: any) =>
   // @ts-ignore
@@ -51,11 +51,17 @@ export const validateStacksAddress = (stacksAddress: string) => {
 /**
  * @description Check if the address is a valid BTC address.
  * @param bitcoinAddress - the BTC address to validate
+ * @param network - the network to run the check on
  */
-export const validateBitcoinAddress = (bitcoinAddress: string) => {
-  // TODO diff between testnet and mainnet
+export const validateBitcoinAddress = (
+  bitcoinAddress: string,
+  network: 'mainnet' | 'testnet'
+) => {
   try {
-    address.toOutputScript(bitcoinAddress);
+    address.toOutputScript(
+      bitcoinAddress,
+      network === 'mainnet' ? networks.bitcoin : networks.testnet
+    );
     return true;
   } catch (e) {
     return false;

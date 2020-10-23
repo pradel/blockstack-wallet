@@ -10,6 +10,7 @@ import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
 import { validateBitcoinAddress } from '../utils';
 import { RootStackParamList } from '../types/router';
+import { useAppConfig } from '../context/AppConfigContext';
 
 type StackingAddressScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -23,6 +24,7 @@ type StackingAddressScreenRouteProp = RouteProp<
 export const StackingAddressScreen = () => {
   const navigation = useNavigation<StackingAddressScreenNavigationProp>();
   const route = useRoute<StackingAddressScreenRouteProp>();
+  const { appConfig } = useAppConfig();
   const [bitcoinAddress, setBitcoinAddress] = useState('');
 
   // Listen to the navigation param so if we can on this screen it will fill the input
@@ -52,9 +54,8 @@ export const StackingAddressScreen = () => {
     });
   };
 
-  // TODO based on testnet / mainnet as the format is different
   const isBitcoinAddressValid =
-    bitcoinAddress && validateBitcoinAddress(bitcoinAddress);
+    bitcoinAddress && validateBitcoinAddress(bitcoinAddress, appConfig.network);
 
   const canContinue = isBitcoinAddressValid;
 
