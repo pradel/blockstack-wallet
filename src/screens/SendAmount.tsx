@@ -71,9 +71,6 @@ export const SendAmountScreen = () => {
     },
   });
 
-  // TODO display available balance near by the button
-  // TODO next button active only if amount lower than balance
-
   const canContinue = formik.isValid && !formik.isSubmitting;
 
   return (
