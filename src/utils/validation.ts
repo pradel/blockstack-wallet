@@ -38,7 +38,18 @@ export const validateBitcoinAddress = (
  * @description Check if the amount passed is a valid
  * @param amount - the amount to validate
  */
-const STXAmountRegex = /^(0|[1-9]\d*)$/;
+const STXAmountRegex = /[1-9]\d*(\.\d+)?$/;
 export const validateSTXAmount = (amount: string) => {
-  return STXAmountRegex.test(amount);
+  const matchRegex = STXAmountRegex.test(amount);
+  if (!matchRegex) {
+    return false;
+  }
+
+  const [number, decimals] = amount.split('.');
+  console.log(number.length);
+  if (number.length > 10 || decimals?.length > 6) {
+    console.log('return false');
+    return false;
+  }
+  return true;
 };

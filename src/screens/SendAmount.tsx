@@ -15,6 +15,7 @@ import { AppbarContent } from '../components/AppBarContent';
 import { microToStacks, stacksToMicro } from '../utils';
 import { stacksClientAccounts } from '../stacksClient';
 import { useAuth } from '../context/AuthContext';
+import { validateSTXAmount } from '../utils/validation';
 
 type SendAmountNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -37,45 +38,18 @@ export const SendAmountScreen = () => {
       amountInStacks: yup
         .string()
         .defined()
-        .test('is-valid-stacks', 'Amount is invalid', (value) => {
-          console.log('called1');
-          if (!value) {
+        .label('Amount')
+        .test('is-valid', 'Invalid amount', (value) => {
+          return value ? validateSTXAmount(value) : false;
+        })
+        .test('is-lower-than-balance', 'Insufficient founds', (value) => {
+          if (!value || !accountBalanceData || !validateSTXAmount(value)) {
             return false;
           }
-          const micro = stacksToMicro(value);
-          // Number needs to be a valid micro
-          if (isNaN(micro)) {
-            return false;
-          }
-          try {
-            const amount = new Big(micro);
-            // Number needs to be positive
-            if (!amount.gtn(0)) {
-              return false;
-            }
-            return true;
-          } catch (error) {
-            // Do nothing, invalid
-          }
-          return false;
-        })
-        .test({
-          name: 'is-lower-than-balance',
-          message: 'Insufficient founds',
-          test: (value) => {
-            console.log('called2');
-            if (!value || !accountBalanceData) {
-              return false;
-            }
-            const accountSTXBalance = new Big(
-              accountBalanceData.stx.balance,
-              10
-            );
-            const amountSTX = new Big(stacksToMicro(value));
-            return amountSTX.lte(accountSTXBalance);
-          },
-        })
-        .label('Amount'),
+          const accountSTXBalance = new Big(accountBalanceData.stx.balance, 10);
+          const amountSTX = new Big(stacksToMicro(value), 10);
+          return amountSTX.lte(accountSTXBalance);
+        }),
     })
     .defined();
 
