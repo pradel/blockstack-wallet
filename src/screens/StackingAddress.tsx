@@ -8,7 +8,7 @@ import Clipboard from '@react-native-community/clipboard';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
-import { validateBitcoinAddress } from '../utils';
+import { validateBitcoinAddress } from '../utils/validation';
 import { RootStackParamList } from '../types/router';
 import { useAppConfig } from '../context/AppConfigContext';
 
