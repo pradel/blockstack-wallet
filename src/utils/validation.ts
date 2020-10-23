@@ -46,9 +46,7 @@ export const validateSTXAmount = (amount: string) => {
   }
 
   const [number, decimals] = amount.split('.');
-  console.log(number.length);
   if (number.length > 10 || decimals?.length > 6) {
-    console.log('return false');
     return false;
   }
   return true;
