@@ -15,6 +15,8 @@ import {
   CoreNodePoxResponse,
   AddressBalanceResponse,
 } from '@stacks/blockchain-api-client';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
@@ -22,6 +24,7 @@ import { microToStacks, stacksToMicro } from '../utils';
 import { stacksClientInfo, stacksClientAccounts } from '../stacksClient';
 import { RootStackParamList } from '../types/router';
 import { useAuth } from '../context/AuthContext';
+import { validateSTXAmount } from '../utils/validation';
 
 type StackingAmountScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -31,11 +34,52 @@ type StackingAmountScreenNavigationProp = StackNavigationProp<
 export const StackingAmountScreen = () => {
   const navigation = useNavigation<StackingAmountScreenNavigationProp>();
   const auth = useAuth();
-  const [amount, setAmount] = useState('');
   const [stacksInfo, setStacksInfo] = useState<{
     poxInfo: CoreNodePoxResponse;
     accountBalance: AddressBalanceResponse;
   }>();
+
+  const stackingAmountSchema = yup
+    .object({
+      amountInStacks: yup
+        .string()
+        .defined()
+        .label('Amount')
+        .test('is-valid', 'Invalid amount', (value) => {
+          return value ? validateSTXAmount(value) : false;
+        })
+        .test('is-more-than-balance', 'Insufficient founds', (value) => {
+          if (!value || !stacksInfo || !validateSTXAmount(value)) {
+            return false;
+          }
+          const accountSTXBalance = new Big(
+            stacksInfo.accountBalance.stx.balance,
+            10
+          );
+          const amountSTX = new Big(stacksToMicro(value), 10);
+          return amountSTX.lte(accountSTXBalance);
+        }),
+    })
+    .defined();
+
+  type StackingAmountSchema = yup.InferType<typeof stackingAmountSchema>;
+
+  const formik = useFormik<StackingAmountSchema>({
+    initialValues: {
+      amountInStacks: '',
+    },
+    validationSchema: stackingAmountSchema,
+    validateOnMount: true,
+    onSubmit: (values, { setSubmitting }) => {
+      // TODO allow user to select number of cycles first
+      navigation.navigate('StackingAddress', {
+        amountInMicro: stacksToMicro(values.amountInStacks).toString(),
+      });
+
+      setSubmitting(false);
+    },
+  });
+
   // Is the user allowed to participate in stacking
   // We check that the balance has enough founds compared to the minimum required
   const canParticipate = useMemo(() => {
@@ -50,40 +94,13 @@ export const StackingAmountScreen = () => {
 
   // Has the user selected an amount bigger than the minimum to start stacking
   const minimumStackingReached = useMemo(() => {
-    if (!stacksInfo) return false;
-    let amountSTX: Big;
-    try {
-      // TODO find a better way to do this
-      // TODO also apply to send flow
-      amountSTX = new Big(stacksToMicro(amount));
-    } catch (error) {
-      // Amount is invalid and user cannot go to next step
-      // We can safely ignore
+    if (!stacksInfo || !validateSTXAmount(formik.values.amountInStacks)) {
       return false;
     }
+    let amountSTX = new Big(stacksToMicro(formik.values.amountInStacks));
     const minAmountSTX = new Big(stacksInfo.poxInfo.min_amount_ustx, 10);
     return amountSTX.cmp(minAmountSTX) >= 0;
-  }, [stacksInfo, amount]);
-
-  // Has the amount exceeded the available balance
-  const amountExceedBalance = useMemo(() => {
-    if (!stacksInfo) return false;
-    let amountSTX: Big;
-    try {
-      // TODO find a better way to do this
-      // TODO also apply to send flow
-      amountSTX = new Big(stacksToMicro(amount));
-    } catch (error) {
-      // Amount is invalid and user cannot go to next step
-      // We can safely ignore
-      return false;
-    }
-    const accountSTXBalance = new Big(
-      stacksInfo.accountBalance.stx.balance,
-      10
-    );
-    return amountSTX.cmp(accountSTXBalance) >= 0;
-  }, [stacksInfo, amount]);
+  }, [stacksInfo, formik.values.amountInStacks]);
 
   useEffect(() => {
     const fetchPoxInfo = async () => {
@@ -101,34 +118,13 @@ export const StackingAmountScreen = () => {
     fetchPoxInfo();
   }, [setStacksInfo]);
 
-  let isAmountValid = false;
-  if (amount) {
-    try {
-      // TODO find a better way to do this
-      // TODO also apply to send flow
-      new Big(stacksToMicro(amount));
-      isAmountValid = true;
-    } catch (error) {
-      // Amount is invalid and user cannot go to next step
-      // We can safely ignore
-    }
-  }
-
-  const handleConfirm = () => {
-    // TODO select number of cycles first
-    navigation.navigate('StackingAddress', {
-      amountInMicro: stacksToMicro(amount).toString(),
-    });
-  };
-
   // TODO use max button in the input that will set the current balance
 
   const canContinue =
-    isAmountValid &&
-    stacksInfo &&
     canParticipate &&
     minimumStackingReached &&
-    !amountExceedBalance;
+    formik.isValid &&
+    !formik.isSubmitting;
 
   return (
     <View style={styles.container}>
@@ -160,14 +156,23 @@ export const StackingAmountScreen = () => {
             <TextInput
               placeholder="Amount"
               mode="outlined"
-              autoFocus={true}
-              value={amount}
               keyboardType="number-pad"
-              onChangeText={(nextValue) => setAmount(nextValue)}
+              autoFocus={true}
+              value={formik.values.amountInStacks}
+              onChangeText={(event) => {
+                formik.setFieldTouched('amountInStacks');
+                formik.handleChange('amountInStacks')(event);
+              }}
+              right={<TextInput.Affix text="STX" />}
             />
-            {amountExceedBalance ? (
-              <HelperText type="error">Insufficient founds.</HelperText>
-            ) : null}
+            <HelperText
+              type="error"
+              visible={Boolean(
+                formik.touched.amountInStacks && formik.errors.amountInStacks
+              )}
+            >
+              {formik.errors.amountInStacks}
+            </HelperText>
           </View>
         ) : null}
 
@@ -180,7 +185,7 @@ export const StackingAmountScreen = () => {
           ) : null}
           <Button
             mode="contained"
-            onPress={handleConfirm}
+            onPress={formik.handleSubmit}
             disabled={!canContinue}
           >
             Next

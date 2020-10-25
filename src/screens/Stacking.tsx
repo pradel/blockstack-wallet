@@ -1,7 +1,7 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import { Linking, StyleSheet, View } from 'react-native';
-import { List, Text } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { AppbarHeader } from '../components/AppbarHeader';
