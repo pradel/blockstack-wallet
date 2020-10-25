@@ -31,6 +31,7 @@ export const CreateWalletScreen = () => {
         setMnemonic(newMnemonic);
       } catch (error) {
         // TODO display error in snackbar
+        // TODO report to sentry
       }
     };
 

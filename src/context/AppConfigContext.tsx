@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 interface AppConfig {
   requireBiometricOpenApp: boolean;
   requireBiometricTransaction: boolean;
+  network: 'mainnet' | 'testnet';
 }
 
 const AppConfigContext = createContext<{
@@ -24,6 +25,7 @@ const appConfigKey = '@appConfig';
 const defaultConfig: AppConfig = {
   requireBiometricOpenApp: true,
   requireBiometricTransaction: true,
+  network: 'testnet',
 };
 
 export const ConfigProvider = ({ children }: AppConfigProviderProps) => {

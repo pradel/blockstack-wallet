@@ -1,7 +1,6 @@
 import { Platform } from 'react-native';
 import * as Application from 'expo-application';
 import * as Random from 'expo-random';
-import { c32addressDecode } from 'c32check';
 import { entropyToMnemonic, mnemonicToSeed } from 'bip39';
 import { bip32 } from 'bitcoinjs-lib';
 
@@ -33,19 +32,6 @@ export const getStorageKeyPk = () => {
     return `${key}-${Application.androidId}`;
   }
   return key;
-};
-
-/**
- * @description Check if the address is a valid STX address.
- * @param stacksAddress - the STX address to validate
- */
-export const validateStacksAddress = (stacksAddress: string) => {
-  try {
-    c32addressDecode(stacksAddress);
-    return true;
-  } catch (e) {
-    return false;
-  }
 };
 
 /**

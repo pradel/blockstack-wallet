@@ -13,6 +13,7 @@ import {
   StacksTransaction,
   ChainID,
   makeUnsignedSTXTokenTransfer,
+  StacksMainnet,
 } from '@blockstack/stacks-transactions';
 import {
   deriveStxAddressChain,
@@ -36,7 +37,7 @@ type SendConfirmScreenRouteProp = RouteProp<RootStackParamList, 'SendConfirm'>;
 export const SendConfirmScreen = () => {
   const navigation = useNavigation<SendConfirmNavigationProp>();
   const route = useRoute<SendConfirmScreenRouteProp>();
-  const appConfig = useAppConfig();
+  const { appConfig } = useAppConfig();
   const auth = useAuth();
   const [unsignedTransaction, setUnsignedTransaction] = useState<
     StacksTransaction
@@ -61,12 +62,10 @@ export const SendConfirmScreen = () => {
     });
   }, [setUnsignedTransaction, auth.publicKey, route.params]);
 
-  // TODO show transaction details for confirmation
-
   const handleConfirm = async () => {
     setLoading(false);
 
-    if (appConfig.appConfig.requireBiometricTransaction) {
+    if (appConfig.requireBiometricTransaction) {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
       if (!authenticateResult.success) {
         return;
@@ -76,45 +75,54 @@ export const SendConfirmScreen = () => {
     setLoading(true);
 
     const mnemonic = await SecureStore.getItemAsync(getStorageKeyPk());
-    if (mnemonic) {
-      const network = new StacksTestnet();
 
-      const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
-      const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
-
-      const fee = unsignedTransaction?.auth.getFee();
-
-      if (!fee) {
-        Alert.alert('Fee not found');
-        return;
-      }
-
-      let transaction: StacksTransaction;
-      try {
-        transaction = await makeSTXTokenTransfer({
-          recipient: route.params.address,
-          amount: new Big(route.params.amountInMicro),
-          senderKey: result.privateKey,
-          network,
-          fee,
-          memo,
-        });
-      } catch (error) {
-        Alert.alert(`Failed to create transaction. ${error.message}`);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        await broadcastTransaction(transaction, network);
-      } catch (error) {
-        Alert.alert(`Failed to broadcast transaction. ${error.message}`);
-        setLoading(false);
-        return;
-      }
-
-      navigation.navigate('Main');
+    if (!mnemonic) {
+      Alert.alert('Failed to get mnemonic');
+      return;
     }
+
+    const network =
+      appConfig.network === 'mainnet'
+        ? new StacksMainnet()
+        : new StacksTestnet();
+
+    const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
+    const result = deriveStxAddressChain(
+      appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
+    )(rootNode);
+
+    const fee = unsignedTransaction?.auth.getFee();
+
+    if (!fee) {
+      Alert.alert('Fee not found');
+      return;
+    }
+
+    let transaction: StacksTransaction;
+    try {
+      transaction = await makeSTXTokenTransfer({
+        recipient: route.params.address,
+        amount: new Big(route.params.amountInMicro),
+        senderKey: result.privateKey,
+        network,
+        fee,
+        memo,
+      });
+    } catch (error) {
+      Alert.alert(`Failed to create transaction. ${error.message}`);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await broadcastTransaction(transaction, network);
+    } catch (error) {
+      Alert.alert(`Failed to broadcast transaction. ${error.message}`);
+      setLoading(false);
+      return;
+    }
+
+    navigation.navigate('Main');
   };
 
   return (
@@ -198,9 +206,5 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
-  },
-  indicator: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

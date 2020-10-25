@@ -6,7 +6,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Clipboard from '@react-native-community/clipboard';
 import { RootStackParamList } from '../types/router';
-import { validateStacksAddress } from '../utils';
+import { validateStacksAddress } from '../utils/validation';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
@@ -58,6 +58,7 @@ export const SendScreen = () => {
             placeholder="Address"
             mode="outlined"
             autoFocus={true}
+            autoCorrect={false}
             value={address}
             onChangeText={(nextValue) => setAddress(nextValue)}
             right={

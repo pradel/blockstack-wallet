@@ -53,8 +53,6 @@ export const TransactionDetails = () => {
     }
   };
 
-  console.log(transactionData);
-
   return (
     <View style={styles.container}>
       <AppbarHeader>

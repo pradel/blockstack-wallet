@@ -7,6 +7,7 @@ import BottomSheet, {
   TouchableOpacity,
 } from '@gorhom/bottom-sheet';
 import { useAuth } from '../context/AuthContext';
+import { useAppConfig } from '../context/AppConfigContext';
 import { config } from '../config';
 import { Button } from '../components/Button';
 
@@ -17,6 +18,7 @@ interface ReceiveScreenProps {
 
 export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
   const auth = useAuth();
+  const { appConfig } = useAppConfig();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   useEffect(() => {
@@ -41,9 +43,13 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
     }
   }, []);
 
-  const handleRequestStx = async () => {
+  // Request some stx from the faucet
+  // Long press on the button add stacking param to the request
+  const handleRequestStx = async (longPress?: true) => {
     const data = await fetch(
-      `${config.blockstackApiUrl}/extended/v1/faucets/stx?address=${auth.address}`,
+      `${config.blockstackApiUrl}/extended/v1/faucets/stx?address=${
+        auth.address
+      }${longPress ? '&stacking=true' : ''}`,
       {
         method: 'POST',
       }
@@ -78,12 +84,17 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
           </Text>
 
           <View style={styles.buttonsContainer}>
-            {/* TODO display only on testnet */}
-            <TouchableOpacity onPress={handleRequestStx} activeOpacity={0.7}>
-              <Button mode="contained" style={styles.buttonFaucet}>
-                Get STX from faucet
-              </Button>
-            </TouchableOpacity>
+            {appConfig.network === 'testnet' ? (
+              <TouchableOpacity
+                onPress={() => handleRequestStx()}
+                onLongPress={() => handleRequestStx(true)}
+                activeOpacity={0.7}
+              >
+                <Button mode="contained" style={styles.buttonFaucet}>
+                  Get STX from faucet
+                </Button>
+              </TouchableOpacity>
+            ) : null}
             <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
               <Button mode="contained">Share</Button>
             </TouchableOpacity>

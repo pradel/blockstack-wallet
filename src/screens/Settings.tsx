@@ -58,6 +58,12 @@ export const SettingsScreen = () => {
               right={(props) => <List.Icon {...props} icon="chevron-right" />}
               onPress={() => Alert.alert('Coming soon')}
             />
+            <List.Item
+              title="Network"
+              description="Testnet"
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => Alert.alert('Coming soon')}
+            />
           </Surface>
         </List.Section>
 

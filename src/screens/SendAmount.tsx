@@ -1,17 +1,21 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Appbar, HelperText, TextInput } from 'react-native-paper';
+import { Appbar, Caption, HelperText, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Big from 'bn.js';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import useSWR from 'swr';
 import { RootStackParamList } from '../types/router';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
-import { stacksToMicro } from '../utils';
+import { microToStacks, stacksToMicro } from '../utils';
+import { stacksClientAccounts } from '../stacksClient';
+import { useAuth } from '../context/AuthContext';
+import { validateSTXAmount } from '../utils/validation';
 
 type SendAmountNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -19,40 +23,37 @@ type SendAmountNavigationProp = StackNavigationProp<
 >;
 type SendAmountScreenRouteProp = RouteProp<RootStackParamList, 'SendAmount'>;
 
-const sendAmountSchema = yup
-  .object({
-    amountInStacks: yup
-      .string()
-      .defined()
-      .test('is-valid-stacks', 'Amount is invalid', (value) => {
-        if (value) {
-          const micro = stacksToMicro(value);
-          // Number needs to be a valid micro
-          if (isNaN(micro)) {
-            return false;
-          }
-          try {
-            const amount = new Big(micro);
-            // Number needs to be positive
-            if (!amount.gtn(0)) {
-              return false;
-            }
-            return true;
-          } catch (error) {
-            // Do nothing, invalid
-          }
-        }
-        return false;
-      })
-      .label('Amount'),
-  })
-  .defined();
-
-type SendAmountSchema = yup.InferType<typeof sendAmountSchema>;
-
 export const SendAmountScreen = () => {
   const navigation = useNavigation<SendAmountNavigationProp>();
   const route = useRoute<SendAmountScreenRouteProp>();
+  const auth = useAuth();
+  const { data: accountBalanceData } = useSWR('user-balance', () => {
+    return stacksClientAccounts.getAccountBalance({
+      principal: auth.address,
+    });
+  });
+
+  const sendAmountSchema = yup
+    .object({
+      amountInStacks: yup
+        .string()
+        .defined()
+        .label('Amount')
+        .test('is-valid', 'Invalid amount', (value) => {
+          return value ? validateSTXAmount(value) : false;
+        })
+        .test('is-lower-than-balance', 'Insufficient founds', (value) => {
+          if (!value || !accountBalanceData || !validateSTXAmount(value)) {
+            return false;
+          }
+          const accountSTXBalance = new Big(accountBalanceData.stx.balance, 10);
+          const amountSTX = new Big(stacksToMicro(value), 10);
+          return amountSTX.lte(accountSTXBalance);
+        }),
+    })
+    .defined();
+
+  type SendAmountSchema = yup.InferType<typeof sendAmountSchema>;
 
   const formik = useFormik<SendAmountSchema>({
     initialValues: {
@@ -69,9 +70,6 @@ export const SendAmountScreen = () => {
       setSubmitting(false);
     },
   });
-
-  // TODO display available balance near by the button
-  // TODO next button active only if amount lower than balance
 
   const canContinue = formik.isValid && !formik.isSubmitting;
 
@@ -111,6 +109,11 @@ export const SendAmountScreen = () => {
         </View>
 
         <View style={styles.buttonsContainer}>
+          {accountBalanceData ? (
+            <Caption style={styles.balanceText}>
+              Balance: {microToStacks(accountBalanceData.stx.balance)} STX
+            </Caption>
+          ) : null}
           <Button
             mode="contained"
             onPress={formik.handleSubmit}
@@ -138,5 +141,9 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     padding: 16,
+  },
+  balanceText: {
+    textAlign: 'center',
+    marginBottom: 16,
   },
 });
