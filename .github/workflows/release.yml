@@ -52,8 +52,10 @@ jobs:
       - name: Injecting secrets
         run: |
           echo $ANDROID_KEYSTORE | base64 --decode > android/app/app.keystore
+          echo $SENTRY_PROPERTIES | base64 --decode > android/sentry.properties
         env:
           ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          SENTRY_PROPERTIES: ${{ secrets.SENTRY_PROPERTIES }}
 
       - name: Bundle
         run: |
