@@ -37,6 +37,7 @@
     "@react-navigation/material-bottom-tabs": "5.2.18",
     "@react-navigation/native": "5.7.5",
     "@react-navigation/stack": "5.9.2",
+    "@sentry/react-native": "1.9.0",
     "@stacks/blockchain-api-client": "0.28.0",
     "assert": "2.0.0",
     "blockstack": "21.1.1",
