@@ -20,13 +20,20 @@ cd fastlane
 bundle exec fastlane bump
 cd ..
 
+# Generate CHANGELOG.md
+yarn standard-version --release-as ${NEW_VERSION}
+
+# Use prettier to normalise the changed files
+yarn prettier
+
 # git commit
+git add "./CHANGELOG.md"
 git add "./package.json"
 git add "./app.json"
 git add "./android/app/build.gradle"
 git add "./ios/blockstackwallet.xcodeproj/project.pbxproj"
 git add "./ios/blockstackwallet/Info.plist"
-git commit -m "v${NEW_VERSION}"
+git commit -m "chore: publish v${NEW_VERSION}"
 
 # create git tag for the previous release commit
 git tag "v${NEW_VERSION}" HEAD
