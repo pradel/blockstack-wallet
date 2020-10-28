@@ -92,7 +92,7 @@ export const DashboardScreen = () => {
     <View style={styles.container}>
       <Surface style={styles.balanceContainer}>
         <Title style={styles.balanceTextCrypto}>{balanceString} STX</Title>
-        {fiatPrice ? <Caption>~{fiatPrice} USD</Caption> : null}
+        <Caption>{fiatPrice ? `~${fiatPrice} USD` : ' '}</Caption>
 
         <View style={styles.actionsContainer}>
           <View style={styles.actionsButtonContainer}>
