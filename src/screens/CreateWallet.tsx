@@ -26,13 +26,8 @@ export const CreateWalletScreen = () => {
   useEffect(() => {
     // when the screen is mounted we generate a new private key
     const generateMnemonic = async () => {
-      try {
-        const newMnemonic = await generateMnemonicRootKeychain();
-        setMnemonic(newMnemonic);
-      } catch (error) {
-        // TODO display error in snackbar
-        // TODO report to sentry
-      }
+      const newMnemonic = await generateMnemonicRootKeychain();
+      setMnemonic(newMnemonic);
     };
 
     generateMnemonic();
