@@ -6,6 +6,7 @@ import {
   Title,
   Paragraph,
   ActivityIndicator,
+  Appbar,
 } from 'react-native-paper';
 import { ChainID } from '@blockstack/stacks-transactions';
 import { deriveStxAddressChain } from '@blockstack/keychain';
@@ -13,11 +14,14 @@ import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { BIP32Interface } from 'bitcoinjs-lib';
 import * as Sentry from '@sentry/react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { getStorageKeyPk, generateMnemonicRootKeychain } from '../utils';
 import { Button } from '../components/Button';
+import { AppbarHeader } from '../components/AppbarHeader';
 
 export const CreateWalletScreen = () => {
+  const navigation = useNavigation();
   const auth = useAuth();
   const [mnemonic, setMnemonic] = useState<{
     rootNode: BIP32Interface;
@@ -62,11 +66,13 @@ export const CreateWalletScreen = () => {
     }
   };
 
-  // TODO back button to return to login screen
-
   return (
     <View style={styles.container}>
       <View>
+        <AppbarHeader>
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
+        </AppbarHeader>
+
         <Title style={styles.title}>Write down your mnemonic</Title>
         <Paragraph style={styles.paragraph}>
           These words are the keys to access your blockstack wallet. Keep it in
@@ -116,7 +122,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
-    marginTop: 32,
+    marginTop: 16,
     textAlign: 'center',
   },
   paragraph: {
