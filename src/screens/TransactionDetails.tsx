@@ -1,7 +1,12 @@
 import React from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { ActivityIndicator, Appbar, List } from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Appbar,
+  HelperText,
+  List,
+} from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import useSWR from 'swr';
@@ -10,9 +15,10 @@ import type { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { RootStackParamList } from '../types/router';
-import { fetcher, microToStacks, getMemoString } from '../utils';
+import { microToStacks, getMemoString } from '../utils';
 import { config } from '../config';
 import { useAuth } from '../context/AuthContext';
+import { stacksClientTransactions } from '../stacksClient';
 
 type TransactionDetailsNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -28,13 +34,13 @@ export const TransactionDetails = () => {
   const route = useRoute<TransactionDetailsRouteProp>();
   const auth = useAuth();
 
-  const {
-    data: transactionData,
-    // TODO handle error
-    // error: balanceError,
-  } = useSWR<Transaction>(
-    `${config.blockstackApiUrl}/extended/v1/tx/${route.params.txId}`,
-    fetcher
+  const { data: transactionData, error: transactionError } = useSWR(
+    `transaction-details-${route.params.txId}`,
+    () => {
+      return stacksClientTransactions.getTransactionById({
+        txId: route.params.txId,
+      }) as Promise<Transaction>;
+    }
   );
 
   const isIncomingTx =
@@ -59,9 +65,19 @@ export const TransactionDetails = () => {
         <Appbar.BackAction onPress={() => navigation.goBack()} />
       </AppbarHeader>
 
-      {!transactionData ? (
+      {!transactionData && !transactionError ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator animating={true} />
+        </View>
+      ) : null}
+
+      {transactionError ? (
+        <View style={styles.errorContainer}>
+          <HelperText type="error">
+            {transactionError.message
+              ? transactionError.message
+              : transactionError}
+          </HelperText>
         </View>
       ) : null}
 
@@ -148,6 +164,10 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    flex: 1,
     alignItems: 'center',
   },
   contentContainer: {

@@ -2215,10 +2215,10 @@
   dependencies:
     type-detect "4.0.8"
 
-"@stacks/blockchain-api-client@0.28.0":
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/@stacks/blockchain-api-client/-/blockchain-api-client-0.28.0.tgz#d1dc06c38a459118e580d26ebf458b8fa14c5c6e"
-  integrity sha512-4hhmdhRmgDeuLLeQg+Oj+FlYggDn5Wu5EcVVSCcDXjdXpYsOBeoxkOjAfRdTSyxXHczqP0klSOsHOoe6BAqmeA==
+"@stacks/blockchain-api-client@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@stacks/blockchain-api-client/-/blockchain-api-client-0.29.1.tgz#9ceb5538b444b23d1a83225a2c6ddbcdfb120d12"
+  integrity sha512-tRwlY2/FM4sk8MXePYQ+/juXHuw7/OIeVIEeKnYa88CUslbiAHvaVMQergwgQ4+5n5rYHPGTjo16J+zGHDp57w==
   dependencies:
     "@blockstack/stacks-blockchain-api-types" "^0.5.3"
     "@types/ws" "^7.2.6"
