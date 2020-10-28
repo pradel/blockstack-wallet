@@ -22,7 +22,7 @@ import {
 import Big from 'big.js';
 import BnJs from 'bn.js';
 import { RootStackParamList } from '../types/router';
-import { getStorageKeyPk, microToStacks } from '../utils';
+import { getStorageKeyPk } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
