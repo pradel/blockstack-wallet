@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import { Appbar, Caption, HelperText, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import Big from 'bn.js';
+import Big from 'big.js';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import useSWR from 'swr';
@@ -15,6 +15,7 @@ import { AppbarContent } from '../components/AppBarContent';
 import { microToStacks, stacksToMicro } from '../utils';
 import { stacksClientAccounts } from '../stacksClient';
 import { useAuth } from '../context/AuthContext';
+import { usePrice } from '../context/PriceContext';
 import { validateSTXAmount } from '../utils/validation';
 
 type SendAmountNavigationProp = StackNavigationProp<
@@ -27,6 +28,7 @@ export const SendAmountScreen = () => {
   const navigation = useNavigation<SendAmountNavigationProp>();
   const route = useRoute<SendAmountScreenRouteProp>();
   const auth = useAuth();
+  const { price } = usePrice();
   const { data: accountBalanceData } = useSWR('user-balance', () => {
     return stacksClientAccounts.getAccountBalance({
       principal: auth.address,
@@ -46,8 +48,8 @@ export const SendAmountScreen = () => {
           if (!value || !accountBalanceData || !validateSTXAmount(value)) {
             return false;
           }
-          const accountSTXBalance = new Big(accountBalanceData.stx.balance, 10);
-          const amountSTX = new Big(stacksToMicro(value), 10);
+          const accountSTXBalance = new Big(accountBalanceData.stx.balance);
+          const amountSTX = new Big(stacksToMicro(value));
           return amountSTX.lte(accountSTXBalance);
         }),
     })
@@ -70,6 +72,21 @@ export const SendAmountScreen = () => {
       setSubmitting(false);
     },
   });
+
+  // Get the fiat price corresponding to the current balance
+  const amountFiatPrice = useMemo(() => {
+    if (
+      !price ||
+      !formik.values.amountInStacks ||
+      !validateSTXAmount(formik.values.amountInStacks)
+    ) {
+      return undefined;
+    }
+    const fiatBig = new Big(formik.values.amountInStacks).mul(price);
+    return fiatBig.toFixed(2);
+  }, [formik.values.amountInStacks, price]);
+
+  console.log(amountFiatPrice);
 
   const canContinue = formik.isValid && !formik.isSubmitting;
 
@@ -98,14 +115,14 @@ export const SendAmountScreen = () => {
             }}
             right={<TextInput.Affix text="STX" />}
           />
-          <HelperText
-            type="error"
-            visible={Boolean(
-              formik.touched.amountInStacks && formik.errors.amountInStacks
-            )}
-          >
-            {formik.errors.amountInStacks}
-          </HelperText>
+          {!(formik.touched.amountInStacks && formik.errors.amountInStacks) ? (
+            <HelperText type="info">
+              ~{amountFiatPrice ?? '0.00'} USD
+            </HelperText>
+          ) : null}
+          {formik.touched.amountInStacks && formik.errors.amountInStacks ? (
+            <HelperText type="error">{formik.errors.amountInStacks}</HelperText>
+          ) : null}
         </View>
 
         <View style={styles.buttonsContainer}>

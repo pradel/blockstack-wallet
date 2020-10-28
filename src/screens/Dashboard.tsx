@@ -18,11 +18,11 @@ import { format } from 'date-fns';
 import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-types';
 import { fetcher, microToStacks } from '../utils';
 import { useAuth } from '../context/AuthContext';
+import { usePrice } from '../context/PriceContext';
 import { ReceiveScreen } from './Receive';
 import { UndrawVoid } from '../images/UndrawVoid';
 import { config } from '../config';
 import { RootStackParamList } from '../types/router';
-import { usePrice } from '../context/PriceContext';
 
 interface BalanceResponse {
   stx: {
