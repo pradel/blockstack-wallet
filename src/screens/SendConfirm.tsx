@@ -19,7 +19,8 @@ import {
   deriveStxAddressChain,
   deriveRootKeychainFromMnemonic,
 } from '@blockstack/keychain';
-import Big from 'bn.js';
+import Big from 'big.js';
+import BnJs from 'bn.js';
 import { RootStackParamList } from '../types/router';
 import { getStorageKeyPk, microToStacks } from '../utils';
 import { useAppConfig } from '../context/AppConfigContext';
@@ -27,6 +28,7 @@ import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { useAuth } from '../context/AuthContext';
+import { usePrice } from '../context/PriceContext';
 
 type SendConfirmNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -39,6 +41,7 @@ export const SendConfirmScreen = () => {
   const route = useRoute<SendConfirmScreenRouteProp>();
   const { appConfig } = useAppConfig();
   const auth = useAuth();
+  const { price } = usePrice();
   const [unsignedTransaction, setUnsignedTransaction] = useState<
     StacksTransaction
   >();
@@ -53,7 +56,7 @@ export const SendConfirmScreen = () => {
     // TODO catch in case of failure
     makeUnsignedSTXTokenTransfer({
       recipient: route.params.address,
-      amount: new Big(route.params.amountInMicro),
+      amount: new BnJs(route.params.amountInMicro),
       network,
       publicKey: auth.publicKey,
       memo,
@@ -102,7 +105,7 @@ export const SendConfirmScreen = () => {
     try {
       transaction = await makeSTXTokenTransfer({
         recipient: route.params.address,
-        amount: new Big(route.params.amountInMicro),
+        amount: new BnJs(route.params.amountInMicro),
         senderKey: result.privateKey,
         network,
         fee,
@@ -125,6 +128,20 @@ export const SendConfirmScreen = () => {
     navigation.navigate('Main');
   };
 
+  const bigAmountInStack = new Big(route.params.amountInMicro).div(
+    Math.pow(10, 6)
+  );
+  const bigAmountFiat = price ? bigAmountInStack.mul(price) : undefined;
+  const bigFeeInStack = unsignedTransaction
+    ? new Big(unsignedTransaction.auth.getFee()!.toString()).div(
+        Math.pow(10, 6)
+      )
+    : undefined;
+  const bigFeeFiat =
+    price && bigFeeInStack ? bigFeeInStack.mul(price) : undefined;
+
+  // console.log('amountInStack', amountInStack.toFixed(6));
+
   return (
     <View style={styles.container}>
       <AppbarHeader>
@@ -146,31 +163,32 @@ export const SendConfirmScreen = () => {
             <List.Item
               title="Amount"
               // TODO nicely display decimals etc..
-              description={`${microToStacks(route.params.amountInMicro)} STX`}
+              description={`${bigAmountInStack.toFixed(6)} STX${
+                bigAmountFiat ? ` ~= ${bigAmountFiat.toFixed(2)} USD` : ''
+              }`}
             />
             <List.Item
               title="Network fee"
+              // TODO nicely display decimals etc..
               description={
-                unsignedTransaction
-                  ? // TODO use big for this calc
-                    `${microToStacks(
-                      unsignedTransaction.auth.getFee()!.toString()
-                    )} STX`
+                bigFeeInStack
+                  ? `${bigFeeInStack.toFixed(6)} STX${
+                      bigFeeFiat ? ` ~= ${bigFeeFiat.toFixed(2)} USD` : ''
+                    }`
                   : 'Estimating fee ...'
               }
             />
             {memo ? <List.Item title="Memo" description={memo} /> : null}
             <List.Item
               title="Total"
+              // TODO nicely display decimals etc..
               description={
-                unsignedTransaction
-                  ? // TODO use big for this calc
-                    `${microToStacks(
-                      unsignedTransaction.auth
-                        .getFee()!
-                        .add(new Big(route.params.amountInMicro))
-                        .toString()
-                    )} STX`
+                bigFeeInStack
+                  ? `${bigAmountInStack.add(bigFeeInStack).toFixed(6)} STX${
+                      bigAmountFiat && bigFeeFiat
+                        ? ` ~= ${bigAmountFiat.add(bigFeeFiat).toFixed(2)} USD`
+                        : ''
+                    }`
                   : ''
               }
             />
