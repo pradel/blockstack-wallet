@@ -20,6 +20,7 @@ import { StackingAmountScreen } from './screens/StackingAmount';
 import { StackingAddressScreen } from './screens/StackingAddress';
 import { StackingScanAddress } from './screens/StackingScanAddress';
 import { StackingConfirmScreen } from './screens/StackingConfirm';
+import { PriceProvider } from './context/PriceContext';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -64,75 +65,77 @@ export const Router = () => {
       />
     </Stack.Navigator>
   ) : (
-    <RootStack.Navigator mode="modal">
-      <RootStack.Screen
-        name="Main"
-        component={MainStackScreen}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="TransactionDetails"
-        component={TransactionDetails}
-        options={{ headerShown: false }}
-      />
-      {/* Send flow */}
-      <RootStack.Screen
-        name="SendScanAddress"
-        component={SendScanAddress}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="Send"
-        component={SendScreen}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="SendAmount"
-        component={SendAmountScreen}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="SendConfirm"
-        component={SendConfirmScreen}
-        options={{ headerShown: false }}
-      />
-      {/* Stacking */}
-      <RootStack.Screen
-        name="StackingAmount"
-        component={StackingAmountScreen}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="StackingAddress"
-        component={StackingAddressScreen}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="StackingScanAddress"
-        component={StackingScanAddress}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="StackingConfirm"
-        component={StackingConfirmScreen}
-        options={{ headerShown: false }}
-      />
-      {/* Settings */}
-      <RootStack.Screen
-        name="BackupPassphrase"
-        component={BackupPassphrase}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="Fingerprint"
-        component={Fingerprint}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name="About"
-        component={AboutScreen}
-        options={{ headerShown: false }}
-      />
-    </RootStack.Navigator>
+    <PriceProvider>
+      <RootStack.Navigator mode="modal">
+        <RootStack.Screen
+          name="Main"
+          component={MainStackScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="TransactionDetails"
+          component={TransactionDetails}
+          options={{ headerShown: false }}
+        />
+        {/* Send flow */}
+        <RootStack.Screen
+          name="SendScanAddress"
+          component={SendScanAddress}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="Send"
+          component={SendScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="SendAmount"
+          component={SendAmountScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="SendConfirm"
+          component={SendConfirmScreen}
+          options={{ headerShown: false }}
+        />
+        {/* Stacking */}
+        <RootStack.Screen
+          name="StackingAmount"
+          component={StackingAmountScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="StackingAddress"
+          component={StackingAddressScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="StackingScanAddress"
+          component={StackingScanAddress}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="StackingConfirm"
+          component={StackingConfirmScreen}
+          options={{ headerShown: false }}
+        />
+        {/* Settings */}
+        <RootStack.Screen
+          name="BackupPassphrase"
+          component={BackupPassphrase}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="Fingerprint"
+          component={Fingerprint}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="About"
+          component={AboutScreen}
+          options={{ headerShown: false }}
+        />
+      </RootStack.Navigator>
+    </PriceProvider>
   );
 };
