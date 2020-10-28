@@ -140,8 +140,6 @@ export const SendConfirmScreen = () => {
   const bigFeeFiat =
     price && bigFeeInStack ? bigFeeInStack.mul(price) : undefined;
 
-  // console.log('amountInStack', amountInStack.toFixed(6));
-
   return (
     <View style={styles.container}>
       <AppbarHeader>

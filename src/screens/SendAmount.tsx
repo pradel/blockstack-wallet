@@ -86,8 +86,6 @@ export const SendAmountScreen = () => {
     return fiatBig.toFixed(2);
   }, [formik.values.amountInStacks, price]);
 
-  console.log(amountFiatPrice);
-
   const canContinue = formik.isValid && !formik.isSubmitting;
 
   return (

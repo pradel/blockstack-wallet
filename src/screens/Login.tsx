@@ -38,7 +38,6 @@ export const LoginScreen = () => {
   }, []);
 
   const handleCreateNewWallet = () => {
-    console.log('press');
     navigation.navigate('CreateWallet');
   };
 
