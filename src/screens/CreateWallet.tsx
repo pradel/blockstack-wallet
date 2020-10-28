@@ -12,6 +12,7 @@ import { deriveStxAddressChain } from '@blockstack/keychain';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { BIP32Interface } from 'bitcoinjs-lib';
+import * as Sentry from '@sentry/react-native';
 import { useAuth } from '../context/AuthContext';
 import { getStorageKeyPk, generateMnemonicRootKeychain } from '../utils';
 import { Button } from '../components/Button';
@@ -55,8 +56,8 @@ export const CreateWalletScreen = () => {
           publicKey: result.childKey.publicKey.toString('hex'),
         });
       } catch (error) {
-        // TODO report error to Sentry
         Alert.alert(error.message);
+        Sentry.captureException(error);
       }
     }
   };
