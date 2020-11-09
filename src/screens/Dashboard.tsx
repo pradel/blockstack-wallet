@@ -247,8 +247,8 @@ const styles = StyleSheet.create({
   actionButton: {
     height: 50,
     width: 50,
-    borderRadius: 18,
-    backgroundColor: '#1A202C',
+    borderRadius: 26,
+    backgroundColor: config.colors.primary,
   },
   actionsText: {
     marginTop: 8,
