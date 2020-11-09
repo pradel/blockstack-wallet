@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import {
@@ -13,10 +13,12 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import useSWR from 'swr';
+import Big from 'big.js';
 import { format } from 'date-fns';
 import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-types';
 import { fetcher, microToStacks } from '../utils';
 import { useAuth } from '../context/AuthContext';
+import { usePrice } from '../context/PriceContext';
 import { ReceiveScreen } from './Receive';
 import { UndrawVoid } from '../images/UndrawVoid';
 import { config } from '../config';
@@ -33,6 +35,7 @@ type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 export const DashboardScreen = () => {
   const navigation = useNavigation<DashboardScreenNavigationProp>();
   const auth = useAuth();
+  const { price } = usePrice();
   const {
     data: balanceData,
     // error: balanceError,
@@ -51,6 +54,15 @@ export const DashboardScreen = () => {
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  // Get the fiat price corresponding to the current balance
+  const fiatPrice = useMemo(() => {
+    if (!price || !balanceData) {
+      return undefined;
+    }
+    const STXAmountBig = new Big(balanceData.stx.balance).div(Math.pow(10, 6));
+    const fiatBig = STXAmountBig.mul(price);
+    return fiatBig.toFixed(2);
+  }, [balanceData, price]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -70,9 +82,6 @@ export const DashboardScreen = () => {
 
   // TODO infinite scrolling
 
-  // TODO price eur if available
-  const fiatPrice = '0.00';
-
   const balanceString = balanceData
     ? microToStacks(balanceData.stx.balance)
     : '...';
@@ -83,7 +92,7 @@ export const DashboardScreen = () => {
     <View style={styles.container}>
       <Surface style={styles.balanceContainer}>
         <Title style={styles.balanceTextCrypto}>{balanceString} STX</Title>
-        <Caption>~{fiatPrice} USD</Caption>
+        <Caption>{fiatPrice ? `~${fiatPrice} USD` : ' '}</Caption>
 
         <View style={styles.actionsContainer}>
           <View style={styles.actionsButtonContainer}>
