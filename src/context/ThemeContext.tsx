@@ -12,6 +12,7 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
+import { config } from '../config';
 
 const fontConfig = {
   default: {
@@ -42,7 +43,7 @@ const CombinedDefaultTheme = {
     ...PaperDefaultTheme.colors,
     ...NavigationDefaultTheme.colors,
     background: '#ffffff',
-    primary: '#1A202C',
+    primary: config.colors.primary,
   },
 };
 const CombinedDarkTheme = {
@@ -52,7 +53,7 @@ const CombinedDarkTheme = {
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    primary: '#1A202C',
+    primary: config.colors.primary,
   },
 };
 

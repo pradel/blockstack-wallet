@@ -16,7 +16,7 @@ export const Button = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 20,
+    borderRadius: 26,
   },
   label: {
     marginVertical: 16,

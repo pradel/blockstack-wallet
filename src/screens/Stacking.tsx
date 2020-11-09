@@ -75,7 +75,8 @@ export const StackingScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Constants.statusBarHeight,
+    // +10 is used for AppbarHeader to center it with the Settings title
+    marginTop: Constants.statusBarHeight + 10,
     flex: 1,
     justifyContent: 'space-between',
   },

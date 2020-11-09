@@ -72,7 +72,7 @@ export const LoginScreen = () => {
       </View>
 
       <View style={styles.buttonsContainer}>
-        {haveWallet && (
+        {haveWallet ? (
           <Button
             style={styles.button}
             mode="contained"
@@ -80,21 +80,24 @@ export const LoginScreen = () => {
           >
             Login with biometrics
           </Button>
+        ) : (
+          <>
+            <Button
+              style={styles.button}
+              mode="contained"
+              onPress={handleCreateNewWallet}
+            >
+              Create a new wallet
+            </Button>
+            <Button
+              style={styles.button}
+              mode="outlined"
+              onPress={handleImportWallet}
+            >
+              I already have a wallet
+            </Button>
+          </>
         )}
-        <Button
-          style={styles.button}
-          mode={!haveWallet ? 'contained' : 'outlined'}
-          onPress={handleCreateNewWallet}
-        >
-          Create a new wallet
-        </Button>
-        <Button
-          style={styles.button}
-          mode="outlined"
-          onPress={handleImportWallet}
-        >
-          I already have a wallet
-        </Button>
       </View>
     </View>
   );

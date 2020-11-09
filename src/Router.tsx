@@ -1,7 +1,9 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import color from 'color';
 import { useAuth } from './context/AuthContext';
+import { useTheme } from './context/ThemeContext';
 import { LoginScreen } from './screens/Login';
 import { DashboardScreen } from './screens/Dashboard';
 import { SettingsScreen } from './screens/Settings';
@@ -21,28 +23,42 @@ import { StackingAddressScreen } from './screens/StackingAddress';
 import { StackingScanAddress } from './screens/StackingScanAddress';
 import { StackingConfirmScreen } from './screens/StackingConfirm';
 import { PriceProvider } from './context/PriceContext';
+import { config } from './config';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const MainStackScreen = () => (
-  <Tab.Navigator labeled={false}>
-    <Tab.Screen
-      name="Dashboard"
-      options={{ tabBarIcon: 'home' }}
-      component={DashboardScreen}
-    />
-    <Tab.Screen
-      name="Stacking"
-      options={{ tabBarIcon: 'bank' }}
-      component={StackingScreen}
-    />
-    <Tab.Screen
-      name="Settings"
-      options={{ tabBarIcon: 'settings' }}
-      component={SettingsScreen}
-    />
-  </Tab.Navigator>
-);
+const MainStackScreen = () => {
+  const { theme } = useTheme();
+
+  return (
+    <Tab.Navigator
+      labeled={false}
+      activeColor={config.colors.primary}
+      inactiveColor={
+        theme === 'light'
+          ? color('#000000').alpha(0.3).rgb().string()
+          : color('#ffffff').alpha(0.4).rgb().string()
+      }
+      barStyle={{ backgroundColor: theme === 'light' ? '#ffffff' : '#000000' }}
+    >
+      <Tab.Screen
+        name="Dashboard"
+        options={{ tabBarIcon: 'home' }}
+        component={DashboardScreen}
+      />
+      <Tab.Screen
+        name="Stacking"
+        options={{ tabBarIcon: 'bank' }}
+        component={StackingScreen}
+      />
+      <Tab.Screen
+        name="Settings"
+        options={{ tabBarIcon: 'settings' }}
+        component={SettingsScreen}
+      />
+    </Tab.Navigator>
+  );
+};
 
 const Stack = createStackNavigator();
 
