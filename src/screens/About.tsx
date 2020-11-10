@@ -8,7 +8,7 @@ import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { config } from '../config';
 import { RootStackParamList } from '../types/router';
-import StacksinMetaverse from '../../assets/StacksinMetaverse.png';
+import StacksInMetaverse from '../../assets/StacksInMetaverse.png';
 
 type AboutNavigationProp = StackNavigationProp<RootStackParamList, 'About'>;
 
@@ -34,7 +34,7 @@ export const AboutScreen = () => {
 
         <View style={styles.logoContainer}>
           <Image
-            source={StacksinMetaverse}
+            source={StacksInMetaverse}
             style={{ height: 200, width: 200 }}
           />
         </View>

@@ -10,13 +10,16 @@ import {
   deriveRootKeychainFromMnemonic,
 } from '@blockstack/keychain';
 import { getStorageKeyPk } from '../utils';
+import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
 import { Button } from '../components/Button';
-import StacksinMetaverse from '../../assets/StacksinMetaverse.png';
+import StacksInMetaverse from '../../assets/StacksInMetaverse.png';
+import StacksInMetaverseLight from '../../assets/StacksInMetaverseLight.png';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
+  const { theme } = useTheme();
   const auth = useAuth();
   const appConfig = useAppConfig();
   const [haveWallet, setHaveWallet] = useState<boolean>();
@@ -68,7 +71,12 @@ export const LoginScreen = () => {
     <View style={styles.container}>
       {/* TODO replace with real logo */}
       <View style={styles.logoContainer}>
-        <Image source={StacksinMetaverse} style={{ height: 400, width: 400 }} />
+        <Image
+          source={
+            theme === 'light' ? StacksInMetaverse : StacksInMetaverseLight
+          }
+          style={{ height: 400, width: 400 }}
+        />
       </View>
 
       <View style={styles.buttonsContainer}>
