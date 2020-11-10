@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View, Image } from 'react-native';
 import Constants from 'expo-constants';
 import {
   IconButton,
@@ -17,10 +17,12 @@ import Big from 'big.js';
 import { format } from 'date-fns';
 import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-types';
 import { fetcher, microToStacks } from '../utils';
+import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { usePrice } from '../context/PriceContext';
 import { ReceiveScreen } from './Receive';
-import { UndrawVoid } from '../images/UndrawVoid';
+import StacksBigMetaverse from '../../assets/StacksBigMetaverse.png';
+import StacksBigMetaverseLight from '../../assets/StacksBigMetaverseLight.png';
 import { config } from '../config';
 import { RootStackParamList } from '../types/router';
 
@@ -34,6 +36,7 @@ type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 export const DashboardScreen = () => {
   const navigation = useNavigation<DashboardScreenNavigationProp>();
+  const { theme } = useTheme();
   const auth = useAuth();
   const { price } = usePrice();
   const {
@@ -134,7 +137,14 @@ export const DashboardScreen = () => {
           ItemSeparatorComponent={Divider}
           ListEmptyComponent={() => (
             <View style={styles.transactionsImageContainer}>
-              <UndrawVoid height={150} />
+              <Image
+                source={
+                  theme === 'light'
+                    ? StacksBigMetaverse
+                    : StacksBigMetaverseLight
+                }
+                style={styles.transactionsImage}
+              />
               <Caption style={styles.transactionsImageText}>
                 Transactions will appear here
               </Caption>
@@ -261,6 +271,12 @@ const styles = StyleSheet.create({
     marginTop: 32,
     alignItems: 'center',
     height: '100%',
+  },
+  transactionsImage: {
+    height: 200,
+    width: 200,
+    marginTop: -50,
+    marginBottom: -50,
   },
   transactionsImageText: {
     marginTop: 16,
