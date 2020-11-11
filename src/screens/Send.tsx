@@ -10,6 +10,7 @@ import { validateStacksAddress } from '../utils/validation';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
+import { Clipboard as ClipboardIcon, QrCode } from '../icons';
 
 type SendNavigationProp = StackNavigationProp<RootStackParamList, 'Send'>;
 type SendRouteProp = RouteProp<RootStackParamList, 'Send'>;
@@ -62,7 +63,12 @@ export const SendScreen = () => {
             value={address}
             onChangeText={(nextValue) => setAddress(nextValue)}
             right={
-              <TextInput.Icon name="content-paste" onPress={handlePaste} />
+              <TextInput.Icon
+                name={(props) => (
+                  <ClipboardIcon size={props.size} fill={props.color} />
+                )}
+                onPress={handlePaste}
+              />
             }
           />
           <HelperText
@@ -76,7 +82,7 @@ export const SendScreen = () => {
         <View style={styles.buttonsContainer}>
           <View style={styles.qrCodeContainer}>
             <IconButton
-              icon="qrcode"
+              icon={(props) => <QrCode size={props.size} fill={props.color} />}
               style={styles.qrCodeButton}
               size={24}
               onPress={handleScan}
