@@ -53,7 +53,7 @@ export const StackingScreen = () => {
   useEffect(() => {
     if (stackingData?.result) {
       const response = deserializeCV(
-        Buffer.from(stackingData.result.slice(2), 'hex')
+        global.Buffer.from(stackingData.result.slice(2), 'hex')
       );
       console.log({ response });
 
