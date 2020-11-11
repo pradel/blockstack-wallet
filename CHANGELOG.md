@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/pradel/blockstack-wallet/compare/v0.2.4...v0.3.0) (2020-11-11)
+
+### Features
+
+- stacking dashboard ([#57](https://github.com/pradel/blockstack-wallet/issues/57)) ([ae338e2](https://github.com/pradel/blockstack-wallet/commit/ae338e2d24fe385b47a4bc2f24c595164f356f2a))
+- **android:** create splashscreen ([064bab2](https://github.com/pradel/blockstack-wallet/commit/064bab25f42d82386c646cef39f88ac446ae2489))
+
+### Bug Fixes
+
+- remove logs ([0024017](https://github.com/pradel/blockstack-wallet/commit/00240175edd071e3afb675953a0c87ba945d6e79))
+
 ### [0.2.4](https://github.com/pradel/blockstack-wallet/compare/v0.2.3...v0.2.4) (2020-11-11)
 
 ### Bug Fixes
