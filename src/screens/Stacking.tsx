@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Constants from 'expo-constants';
 import { Linking, StyleSheet, View, Image } from 'react-native';
 import { List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
+import useSWR from 'swr';
+import {
+  cvToString,
+  deserializeCV,
+  serializeCV,
+  standardPrincipalCV,
+} from '@blockstack/stacks-transactions';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
@@ -12,12 +20,57 @@ import { RootStackParamList } from '../types/router';
 import MetaverseBigBitcoin from '../../assets/MetaverseBigBitcoin.png';
 import MetaverseBigBitcoinLight from '../../assets/MetaverseBigBitcoinLight.png';
 import { Check } from '../icons';
+import { stacksClientSmartContracts, stacksClientInfo } from '../stacksClient';
 
 type StackingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 export const StackingScreen = () => {
   const { theme } = useTheme();
+  const auth = useAuth();
   const navigation = useNavigation<StackingScreenNavigationProp>();
+
+  const { data: stackingData } = useSWR('stacking', async () => {
+    const poxInfo = await stacksClientInfo.getPoxInfo();
+
+    const [contractAddress, contractName] = poxInfo.contract_id.split('.');
+    const functionName = 'get-stacker-info';
+
+    const stackingInfo = await stacksClientSmartContracts.callReadOnlyFunction({
+      contractAddress,
+      contractName,
+      functionName,
+      readOnlyFunctionArgs: {
+        sender: auth.address,
+        arguments: [
+          `0x${serializeCV(standardPrincipalCV(auth.address)).toString('hex')}`,
+        ],
+      },
+    });
+
+    return stackingInfo;
+  });
+
+  useEffect(() => {
+    if (stackingData?.result) {
+      const response = deserializeCV(
+        Buffer.from(stackingData.result.slice(2), 'hex')
+      );
+      console.log({ response });
+
+      // @ts-ignore
+      const data = response.value.data;
+
+      console.log({
+        lockPeriod: cvToString(data['lock-period']),
+        amountSTX: cvToString(data['amount-ustx']),
+        firstRewardCycle: cvToString(data['first-reward-cycle']),
+        poxAddr: {
+          version: cvToString(data['pox-addr'].data.version),
+          hashbytes: cvToString(data['pox-addr'].data.hashbytes),
+        },
+      });
+    }
+  }, [stackingData]);
 
   // TODO only show this if user is not already stacking
   // TODO if user is stacking show stacking dashboard with metrics
