@@ -11,6 +11,12 @@ export type RootStackParamList = {
   Fingerprint: undefined;
   About: undefined;
   TransactionDetails: { txId: string };
+  StackingDashboard: {
+    lockingAt: string;
+    unlockingAt: string;
+    numberOfCycles: number;
+    amountInMicro: string;
+  };
   StackingAmount: undefined;
   StackingAddress: { amountInMicro: string; bitcoinAddress?: string };
   StackingScanAddress: { amountInMicro: string };

@@ -11,3 +11,4 @@ export { QrCode } from './QrCode';
 export { QuestionMarkCircle } from './QuestionMarkCircle';
 export { Sun } from './Sun';
 export { Upload } from './Upload';
+export { ViewBoards } from './ViewBoards';

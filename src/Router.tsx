@@ -18,15 +18,14 @@ import { SendScanAddress } from './screens/SendScanAddress';
 import { AboutScreen } from './screens/About';
 import { TransactionDetails } from './screens/TransactionDetails';
 import { StackingScreen } from './screens/Stacking';
+import { StackingDashboardScreen } from './screens/StackingDashboard';
 import { StackingAmountScreen } from './screens/StackingAmount';
 import { StackingAddressScreen } from './screens/StackingAddress';
 import { StackingScanAddress } from './screens/StackingScanAddress';
 import { StackingConfirmScreen } from './screens/StackingConfirm';
 import { PriceProvider } from './context/PriceContext';
 import { config } from './config';
-import { ViewBoards } from './icons/ViewBoards';
-import { LightningBolt } from './icons/LightningBolt';
-import { Cog } from './icons/Cog';
+import { ViewBoards, LightningBolt, Cog } from './icons';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -124,6 +123,11 @@ export const Router = () => {
           options={{ headerShown: false }}
         />
         {/* Stacking */}
+        <RootStack.Screen
+          name="StackingDashboard"
+          component={StackingDashboardScreen}
+          options={{ headerShown: false }}
+        />
         <RootStack.Screen
           name="StackingAmount"
           component={StackingAmountScreen}
