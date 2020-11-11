@@ -24,6 +24,9 @@ import { StackingScanAddress } from './screens/StackingScanAddress';
 import { StackingConfirmScreen } from './screens/StackingConfirm';
 import { PriceProvider } from './context/PriceContext';
 import { config } from './config';
+import { ViewBoards } from './icons/ViewBoards';
+import { LightningBolt } from './icons/LightningBolt';
+import { Cog } from './icons/Cog';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -43,17 +46,23 @@ const MainStackScreen = () => {
     >
       <Tab.Screen
         name="Dashboard"
-        options={{ tabBarIcon: 'home' }}
+        options={{
+          tabBarIcon: (props) => <ViewBoards fill={props.color} />,
+        }}
         component={DashboardScreen}
       />
       <Tab.Screen
         name="Stacking"
-        options={{ tabBarIcon: 'bank' }}
+        options={{
+          tabBarIcon: (props) => <LightningBolt fill={props.color} />,
+        }}
         component={StackingScreen}
       />
       <Tab.Screen
         name="Settings"
-        options={{ tabBarIcon: 'settings' }}
+        options={{
+          tabBarIcon: (props) => <Cog fill={props.color} />,
+        }}
         component={SettingsScreen}
       />
     </Tab.Navigator>

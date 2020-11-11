@@ -33,10 +33,7 @@ export const AboutScreen = () => {
         <AppbarContent title="About" />
 
         <View style={styles.logoContainer}>
-          <Image
-            source={StacksInMetaverse}
-            style={{ height: 200, width: 200 }}
-          />
+          <Image source={StacksInMetaverse} style={styles.logoImage} />
         </View>
 
         <Paragraph style={styles.paragraph}>
@@ -69,6 +66,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: -32,
     marginBottom: -32,
+  },
+  logoImage: {
+    height: 200,
+    width: 200,
   },
   paragraph: {
     padding: 16,

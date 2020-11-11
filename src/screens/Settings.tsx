@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
+import { ChevronRight, Moon, Sun } from '../icons';
 
 export const SettingsScreen = () => {
   const navigation = useNavigation();
@@ -23,12 +24,26 @@ export const SettingsScreen = () => {
           <Surface>
             <List.Item
               title="Fingerprint"
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
+                  )}
+                />
+              )}
               onPress={() => navigation.navigate('Fingerprint')}
             />
             <List.Item
               title="Backup your passphrase"
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
+                  )}
+                />
+              )}
               onPress={() => navigation.navigate('BackupPassphrase')}
             />
           </Surface>
@@ -43,10 +58,12 @@ export const SettingsScreen = () => {
               right={(props) => (
                 <List.Icon
                   {...props}
-                  icon={
-                    theme.theme === 'light'
-                      ? 'moon-waning-crescent'
-                      : 'white-balance-sunny'
+                  icon={({ size, color }) =>
+                    theme.theme === 'light' ? (
+                      <Moon size={size} fill={color} />
+                    ) : (
+                      <Sun size={size} fill={color} />
+                    )
                   }
                 />
               )}
@@ -55,13 +72,27 @@ export const SettingsScreen = () => {
             <List.Item
               title="Currency"
               description="USD"
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
+                  )}
+                />
+              )}
               onPress={() => Alert.alert('Coming soon')}
             />
             <List.Item
               title="Network"
               description="Testnet"
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
+                  )}
+                />
+              )}
               onPress={() => Alert.alert('Coming soon')}
             />
           </Surface>
@@ -73,7 +104,14 @@ export const SettingsScreen = () => {
           <Surface>
             <List.Item
               title="About"
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
+                  )}
+                />
+              )}
               onPress={() => navigation.navigate('About')}
             />
             <List.Item

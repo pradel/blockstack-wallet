@@ -75,7 +75,7 @@ export const LoginScreen = () => {
           source={
             theme === 'light' ? StacksInMetaverse : StacksInMetaverseLight
           }
-          style={{ height: 400, width: 400 }}
+          style={styles.logoImage}
         />
       </View>
 
@@ -122,6 +122,10 @@ const styles = StyleSheet.create({
   logoContainer: {
     paddingTop: 128,
     alignItems: 'center',
+  },
+  logoImage: {
+    height: 400,
+    width: 400,
   },
   buttonsContainer: {
     paddingTop: 16,

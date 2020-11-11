@@ -11,6 +11,7 @@ import { Button } from '../components/Button';
 import { RootStackParamList } from '../types/router';
 import MetaverseBigBitcoin from '../../assets/MetaverseBigBitcoin.png';
 import MetaverseBigBitcoinLight from '../../assets/MetaverseBigBitcoinLight.png';
+import { Check } from '../icons';
 
 type StackingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -46,26 +47,36 @@ export const StackingScreen = () => {
             source={
               theme === 'light' ? MetaverseBigBitcoin : MetaverseBigBitcoinLight
             }
-            style={{
-              height: 300,
-              width: 300,
-              marginTop: -50,
-              marginBottom: -50,
-            }}
+            style={styles.image}
           />
         </View>
 
         <List.Section style={styles.listSection}>
           <List.Item
-            left={(props) => <List.Icon {...props} icon="check" />}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={({ size, color }) => <Check size={size} fill={color} />}
+              />
+            )}
             title="Earn up to X% APY"
           />
           <List.Item
-            left={(props) => <List.Icon {...props} icon="check" />}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={({ size, color }) => <Check size={size} fill={color} />}
+              />
+            )}
             title="Get Rewards in BTC every week"
           />
           <List.Item
-            left={(props) => <List.Icon {...props} icon="check" />}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={({ size, color }) => <Check size={size} fill={color} />}
+              />
+            )}
             title="Funds stay yours"
           />
         </List.Section>
@@ -95,6 +106,12 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
+  },
+  image: {
+    height: 300,
+    width: 300,
+    marginTop: -50,
+    marginBottom: -50,
   },
   listSection: {
     marginTop: 32,
