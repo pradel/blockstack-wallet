@@ -56,7 +56,7 @@ export const StackingScreen = () => {
             left={(props) => (
               <List.Icon
                 {...props}
-                icon={(props) => <Check size={props.size} fill={props.color} />}
+                icon={({ size, color }) => <Check size={size} fill={color} />}
               />
             )}
             title="Earn up to X% APY"
@@ -65,7 +65,7 @@ export const StackingScreen = () => {
             left={(props) => (
               <List.Icon
                 {...props}
-                icon={(props) => <Check size={props.size} fill={props.color} />}
+                icon={({ size, color }) => <Check size={size} fill={color} />}
               />
             )}
             title="Get Rewards in BTC every week"
@@ -74,7 +74,7 @@ export const StackingScreen = () => {
             left={(props) => (
               <List.Icon
                 {...props}
-                icon={(props) => <Check size={props.size} fill={props.color} />}
+                icon={({ size, color }) => <Check size={size} fill={color} />}
               />
             )}
             title="Funds stay yours"

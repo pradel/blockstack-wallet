@@ -27,8 +27,8 @@ export const SettingsScreen = () => {
               right={(props) => (
                 <List.Icon
                   {...props}
-                  icon={(props) => (
-                    <ChevronRight size={props.size} fill={props.color} />
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
                   )}
                 />
               )}
@@ -39,8 +39,8 @@ export const SettingsScreen = () => {
               right={(props) => (
                 <List.Icon
                   {...props}
-                  icon={(props) => (
-                    <ChevronRight size={props.size} fill={props.color} />
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
                   )}
                 />
               )}
@@ -58,11 +58,11 @@ export const SettingsScreen = () => {
               right={(props) => (
                 <List.Icon
                   {...props}
-                  icon={(props) =>
+                  icon={({ size, color }) =>
                     theme.theme === 'light' ? (
-                      <Moon size={props.size} fill={props.color} />
+                      <Moon size={size} fill={color} />
                     ) : (
-                      <Sun size={props.size} fill={props.color} />
+                      <Sun size={size} fill={color} />
                     )
                   }
                 />
@@ -75,8 +75,8 @@ export const SettingsScreen = () => {
               right={(props) => (
                 <List.Icon
                   {...props}
-                  icon={(props) => (
-                    <ChevronRight size={props.size} fill={props.color} />
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
                   )}
                 />
               )}
@@ -88,8 +88,8 @@ export const SettingsScreen = () => {
               right={(props) => (
                 <List.Icon
                   {...props}
-                  icon={(props) => (
-                    <ChevronRight size={props.size} fill={props.color} />
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
                   )}
                 />
               )}
@@ -107,8 +107,8 @@ export const SettingsScreen = () => {
               right={(props) => (
                 <List.Icon
                   {...props}
-                  icon={(props) => (
-                    <ChevronRight size={props.size} fill={props.color} />
+                  icon={({ size, color }) => (
+                    <ChevronRight size={size} fill={color} />
                   )}
                 />
               )}
