@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/pradel/blockstack-wallet/compare/v0.2.2...v0.2.3) (2020-11-11)
+
+### Features
+
+- adaptive app icons android ([b6b1edd](https://github.com/pradel/blockstack-wallet/commit/b6b1eddacf6ce7899179ea5917837c70d8cd127a))
+
+### Bug Fixes
+
+- fix ios expo-random configuration ([90e29db](https://github.com/pradel/blockstack-wallet/commit/90e29db2db9d50d1295d46590a4e9e8338b14014))
+- fix surface elevation on ios ([9a8bee9](https://github.com/pradel/blockstack-wallet/commit/9a8bee96759b5365a3dbd27d7ea41cfef338c900))
+- make it work in ios simulator ([32cb69a](https://github.com/pradel/blockstack-wallet/commit/32cb69a350bed56d793d7951130105e8380030ba))
+
+### Documentation
+
+- **readme:** add download section ([5b09dd0](https://github.com/pradel/blockstack-wallet/commit/5b09dd0e9cda519315de0e5e90f9c8984f696738))
+- **readme:** add features and built with sections ([47bd44a](https://github.com/pradel/blockstack-wallet/commit/47bd44aef95edc76c538979c5788d8d37de6c279))
+- **readme:** add philosophy section ([9684af4](https://github.com/pradel/blockstack-wallet/commit/9684af4f773fd4cb26ad231c14a34bbe3569b5ca))
+- **readme:** better screenshots ([bbc0572](https://github.com/pradel/blockstack-wallet/commit/bbc0572ba43e41cea5643eab00505bf2cfc47936))
+- **readme:** specify works only on testnet ([9e5987a](https://github.com/pradel/blockstack-wallet/commit/9e5987a24ddba0477b754a846bf452a432b3ed99))
+
 ### [0.2.2](https://github.com/pradel/blockstack-wallet/compare/v0.2.1...v0.2.2) (2020-11-11)
 
 ### Features
