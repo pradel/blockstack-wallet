@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/pradel/blockstack-wallet/compare/v0.2.3...v0.2.4) (2020-11-11)
+
+### Bug Fixes
+
+- **android:** fix flipper config ([d497e01](https://github.com/pradel/blockstack-wallet/commit/d497e0104a34b7f31ea231c03687eff7cdfcce1f))
+- **android:** fix splashscreen java config ([bbc543d](https://github.com/pradel/blockstack-wallet/commit/bbc543d0f018d563a7b646836d4a8e9093081f32))
+
+### Miscellaneous Chores
+
+- publish v0.2.3 ([8b81e89](https://github.com/pradel/blockstack-wallet/commit/8b81e899daa3fef176b2f7f05759b1d96b5b34ba))
+- update fastlane ([da0a81d](https://github.com/pradel/blockstack-wallet/commit/da0a81df3c2972954c349e4fc60e7f886b833f13))
+
 ### [0.2.3](https://github.com/pradel/blockstack-wallet/compare/v0.2.2...v0.2.3) (2020-11-11)
 
 ### Features
