@@ -11,6 +11,7 @@ import { Button } from '../components/Button';
 import { RootStackParamList } from '../types/router';
 import MetaverseBigBitcoin from '../../assets/MetaverseBigBitcoin.png';
 import MetaverseBigBitcoinLight from '../../assets/MetaverseBigBitcoinLight.png';
+import { Check } from '../icons/Check';
 
 type StackingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -52,15 +53,30 @@ export const StackingScreen = () => {
 
         <List.Section style={styles.listSection}>
           <List.Item
-            left={(props) => <List.Icon {...props} icon="check" />}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={(props) => <Check size={props.size} fill={props.color} />}
+              />
+            )}
             title="Earn up to X% APY"
           />
           <List.Item
-            left={(props) => <List.Icon {...props} icon="check" />}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={(props) => <Check size={props.size} fill={props.color} />}
+              />
+            )}
             title="Get Rewards in BTC every week"
           />
           <List.Item
-            left={(props) => <List.Icon {...props} icon="check" />}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon={(props) => <Check size={props.size} fill={props.color} />}
+              />
+            )}
             title="Funds stay yours"
           />
         </List.Section>
