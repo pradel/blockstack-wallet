@@ -21,7 +21,7 @@ export const SettingsScreen = () => {
       <ScrollView>
         <List.Section>
           <List.Subheader>Security</List.Subheader>
-          <Surface>
+          <Surface style={styles.surface}>
             <List.Item
               title="Fingerprint"
               right={(props) => (
@@ -52,7 +52,7 @@ export const SettingsScreen = () => {
         <List.Section>
           <Divider />
           <List.Subheader>General</List.Subheader>
-          <Surface>
+          <Surface style={styles.surface}>
             <List.Item
               title={theme.theme === 'light' ? 'Dark mode' : 'Light mode'}
               right={(props) => (
@@ -101,7 +101,7 @@ export const SettingsScreen = () => {
         <List.Section>
           <Divider />
           <List.Subheader>Info</List.Subheader>
-          <Surface>
+          <Surface style={styles.surface}>
             <List.Item
               title="About"
               right={(props) => (
@@ -130,5 +130,8 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
     flex: 1,
     flexDirection: 'column',
+  },
+  surface: {
+    elevation: 0,
   },
 });

@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     display: 'flex',
     flexDirection: 'row',
+    elevation: 0,
   },
   text: {
     marginRight: 8,

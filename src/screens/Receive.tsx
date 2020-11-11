@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
+    elevation: 0,
   },
   qrCodeContainer: {
     alignItems: 'center',

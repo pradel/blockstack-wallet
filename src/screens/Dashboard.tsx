@@ -276,6 +276,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 48,
     paddingBottom: 48,
+    elevation: 0,
   },
   balanceTextCrypto: {
     fontSize: 28,
