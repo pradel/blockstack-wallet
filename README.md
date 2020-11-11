@@ -5,7 +5,7 @@
 The open source mobile wallet that enables STX holders to send, receive and stack their tokens.
 
 <p align="center">
-  <img  src="docs-assets/dashbaord.png" alt="dasboard" height="350">
+  <img  src="docs-assets/theme.png" alt="theme light / dark" height="350">
 </p>
 
 ## Download
