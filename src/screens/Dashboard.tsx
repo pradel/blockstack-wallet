@@ -25,8 +25,7 @@ import StacksBigMetaverse from '../../assets/StacksBigMetaverse.png';
 import StacksBigMetaverseLight from '../../assets/StacksBigMetaverseLight.png';
 import { config } from '../config';
 import { RootStackParamList } from '../types/router';
-import { Camera } from '../icons/Camera';
-import { ArrowNarrowUp } from '../icons/ArrowNarrowUp';
+import { ArrowNarrowUp, Camera } from '../icons';
 
 interface BalanceResponse {
   stx: {

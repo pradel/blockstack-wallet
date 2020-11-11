@@ -11,7 +11,7 @@ import { Button } from '../components/Button';
 import { RootStackParamList } from '../types/router';
 import MetaverseBigBitcoin from '../../assets/MetaverseBigBitcoin.png';
 import MetaverseBigBitcoinLight from '../../assets/MetaverseBigBitcoinLight.png';
-import { Check } from '../icons/Check';
+import { Check } from '../icons';
 
 type StackingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
