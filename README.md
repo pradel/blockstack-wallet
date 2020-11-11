@@ -1,6 +1,6 @@
 # blockstack-wallet
 
-> 🚧 Beta 🚧
+> 🚧 Beta - Only works on testnet 🚧
 
 The open source mobile wallet that enables STX holders to send, receive and stack their tokens.
 
