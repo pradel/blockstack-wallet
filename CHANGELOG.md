@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/pradel/blockstack-wallet/compare/v0.2.1...v0.2.2) (2020-11-11)
+
+### Features
+
+- change the icons with heroicons ([#56](https://github.com/pradel/blockstack-wallet/issues/56)) ([3e6a762](https://github.com/pradel/blockstack-wallet/commit/3e6a762481e5fe031a36569da25b73f215be7348))
+
 ### [0.2.1](https://github.com/pradel/blockstack-wallet/compare/v0.2.0...v0.2.1) (2020-11-10)
 
 ### Bug Fixes
