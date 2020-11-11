@@ -74,9 +74,4 @@ static void InitializeFlipper(UIApplication *application) {
  #endif
 }
 
-- (void)appController:(EXUpdatesAppController *)appController didStartWithSuccess:(BOOL)success {
-  EXSplashScreenService *splashScreenService = (EXSplashScreenService *)[UMModuleRegistryProvider getSingletonModuleForClass:[EXSplashScreenService class]];
-  [splashScreenService showSplashScreenFor:self.window.rootViewController];
-}
-
 @end
