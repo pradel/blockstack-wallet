@@ -91,11 +91,6 @@ export const StackingScreen = () => {
         nextCycleStartingAt.getSeconds() + secondsToNextCycle
       );
 
-      console.log({
-        startRewardCycleId,
-        reward_cycle_id: stackingData.poxInfo.reward_cycle_id,
-      });
-
       // The projected datetime for the locking of tokens
       // the date can be in the past if the cycle already started
       const lockingAt = new Date(nextCycleStartingAt);
