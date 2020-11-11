@@ -25,6 +25,8 @@ import StacksBigMetaverse from '../../assets/StacksBigMetaverse.png';
 import StacksBigMetaverseLight from '../../assets/StacksBigMetaverseLight.png';
 import { config } from '../config';
 import { RootStackParamList } from '../types/router';
+import { Camera } from '../icons/Camera';
+import { ArrowNarrowUp } from '../icons/ArrowNarrowUp';
 
 interface BalanceResponse {
   stx: {
@@ -100,7 +102,19 @@ export const DashboardScreen = () => {
         <View style={styles.actionsContainer}>
           <View style={styles.actionsButtonContainer}>
             <IconButton
-              icon="arrow-bottom-left"
+              icon={(props) => (
+                <ArrowNarrowUp
+                  fill={props.color}
+                  style={{
+                    transform: [
+                      {
+                        rotate: '-135deg',
+                      },
+                    ],
+                  }}
+                  {...props}
+                />
+              )}
               color="#ffffff"
               style={styles.actionButton}
               onPress={handleReceive}
@@ -109,7 +123,19 @@ export const DashboardScreen = () => {
           </View>
           <View style={styles.actionsButtonContainer}>
             <IconButton
-              icon="arrow-top-right"
+              icon={(props) => (
+                <ArrowNarrowUp
+                  fill={props.color}
+                  style={{
+                    transform: [
+                      {
+                        rotate: '45deg',
+                      },
+                    ],
+                  }}
+                  {...props}
+                />
+              )}
               color="#ffffff"
               style={styles.actionButton}
               onPress={() => navigation.navigate('Send')}
@@ -118,7 +144,7 @@ export const DashboardScreen = () => {
           </View>
           <View style={styles.actionsButtonContainer}>
             <IconButton
-              icon="camera"
+              icon={(props) => <Camera fill={props.color} {...props} />}
               color="#ffffff"
               style={styles.actionButton}
               onPress={handleScan}
