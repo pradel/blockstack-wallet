@@ -25,7 +25,13 @@ import StacksBigMetaverse from '../../assets/StacksBigMetaverse.png';
 import StacksBigMetaverseLight from '../../assets/StacksBigMetaverseLight.png';
 import { config } from '../config';
 import { RootStackParamList } from '../types/router';
-import { ArrowNarrowUp, Camera } from '../icons';
+import {
+  ArrowNarrowUp,
+  Camera,
+  Code,
+  QuestionMarkCircle,
+  Upload,
+} from '../icons';
 
 interface BalanceResponse {
   stx: {
@@ -182,6 +188,15 @@ export const DashboardScreen = () => {
               item.tx_type === 'token_transfer' &&
               item.token_transfer.recipient_address === auth.address;
 
+            const LeftIcon =
+              item.tx_type === 'token_transfer'
+                ? ArrowNarrowUp
+                : item.tx_type === 'smart_contract'
+                ? Upload
+                : item.tx_type === 'contract_call'
+                ? Code
+                : QuestionMarkCircle;
+
             return (
               <List.Item
                 onPress={() =>
@@ -204,15 +219,9 @@ export const DashboardScreen = () => {
                 left={(props) => (
                   <List.Icon
                     {...props}
-                    icon={
-                      item.tx_type === 'token_transfer'
-                        ? 'arrow-top-right'
-                        : item.tx_type === 'smart_contract'
-                        ? 'file-upload'
-                        : item.tx_type === 'contract_call'
-                        ? 'code-tags'
-                        : 'help'
-                    }
+                    icon={({ size, color }) => (
+                      <LeftIcon size={size} fill={color} />
+                    )}
                     style={[
                       props.style,
                       {
@@ -220,7 +229,7 @@ export const DashboardScreen = () => {
                           item.tx_type === 'token_transfer'
                             ? [
                                 {
-                                  rotate: isIncomingTx ? '180deg' : '0deg',
+                                  rotate: isIncomingTx ? '-135deg' : '45deg',
                                 },
                               ]
                             : [],
