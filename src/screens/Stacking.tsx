@@ -46,12 +46,7 @@ export const StackingScreen = () => {
             source={
               theme === 'light' ? MetaverseBigBitcoin : MetaverseBigBitcoinLight
             }
-            style={{
-              height: 300,
-              width: 300,
-              marginTop: -50,
-              marginBottom: -50,
-            }}
+            style={styles.image}
           />
         </View>
 
@@ -95,6 +90,12 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
+  },
+  image: {
+    height: 300,
+    width: 300,
+    marginTop: -50,
+    marginBottom: -50,
   },
   listSection: {
     marginTop: 32,
