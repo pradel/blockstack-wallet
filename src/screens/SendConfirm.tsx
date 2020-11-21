@@ -42,9 +42,10 @@ export const SendConfirmScreen = () => {
   const { appConfig } = useAppConfig();
   const auth = useAuth();
   const { price } = usePrice();
-  const [unsignedTransaction, setUnsignedTransaction] = useState<
-    StacksTransaction
-  >();
+  const [
+    unsignedTransaction,
+    setUnsignedTransaction,
+  ] = useState<StacksTransaction>();
   const [loading, setLoading] = useState(false);
   // TODO pass down memo once it's ready
   const memo = undefined;
