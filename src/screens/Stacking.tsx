@@ -64,8 +64,11 @@ export const StackingScreen = () => {
       const response = deserializeCV(
         global.Buffer.from(stackingData.stackingInfo.result.slice(2), 'hex')
       );
-      // @ts-ignore
-      const data = response.value.data;
+
+      if (!('value' in response) || !('data' in response.value)) {
+        return;
+      }
+      const data: any = response.value.data;
 
       const amountInMicro = cvToString(data['amount-ustx']).substring(1);
       const numberOfCycles = parseInt(
