@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/pradel/blockstack-wallet/compare/v0.3.0...v0.3.1) (2020-11-21)
+
+### Bug Fixes
+
+- fix stacking screen crashing ([c647c1e](https://github.com/pradel/blockstack-wallet/commit/c647c1ea96d4be272705d85987ffad785f95fb13))
+
+### Miscellaneous Chores
+
+- upgrade dependencies ([e649e53](https://github.com/pradel/blockstack-wallet/commit/e649e53cf69242d4696b450cd9de02150f8efc77))
+
 ## [0.3.0](https://github.com/pradel/blockstack-wallet/compare/v0.2.4...v0.3.0) (2020-11-11)
 
 ### Features
