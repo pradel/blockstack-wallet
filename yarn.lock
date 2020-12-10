@@ -9818,10 +9818,10 @@ react-native-safe-area-view@^0.14.9:
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
-react-native-screens@2.16.0:
-  version "2.16.0"
-  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.16.0.tgz#b4efb52268ba9511ef16f327011f573d78d7318d"
-  integrity sha512-LPJbcV1XrrfuVPt/XiuqjAOTjXJm0NjHORWw1hSF9R7dpaVFutJ5d1g+aUWsX/bl3yzqZDZOIekF40YUudK24g==
+react-native-screens@2.15.0:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.15.0.tgz#9b97c1881c4fcdf304bf363f0013225901625f44"
+  integrity sha512-qTSQPy0WKHtlb8xt5gY0Gt6sdvfQUQAnFSqgsggW9UEvySbkHzpqOrOYNA79Ca8oXO0dCFwp6X8buIiDefa7+Q==
 
 react-native-svg@12.1.0:
   version "12.1.0"
