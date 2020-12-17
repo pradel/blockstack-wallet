@@ -30,7 +30,7 @@
     "@blockstack/stacks-blockchain-sidecar-types": "0.0.22",
     "@blockstack/stacks-transactions": "0.7.0",
     "@expo-google-fonts/inter": "0.1.0",
-    "@gorhom/bottom-sheet": "1.4.1",
+    "@gorhom/bottom-sheet": "2.0.0",
     "@react-native-community/async-storage": "1.12.1",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/masked-view": "0.1.10",
