@@ -3,8 +3,8 @@ import { StyleSheet, Share, Alert, View } from 'react-native';
 import { Surface, Text } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import BottomSheet, {
-  BottomSheetView,
   TouchableOpacity,
+  BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
@@ -38,7 +38,7 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
   };
 
   const handleSheetChanges = useCallback((index: number) => {
-    if (index === 0) {
+    if (index === -1 || index === 0) {
       onClose();
     }
   }, []);
@@ -65,42 +65,40 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
   };
 
   // TODO needs to be on top of bottom navigation
-  // TODO overlay behind and if click overlay then close the sheet
 
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      initialSnapIndex={-1}
-      snapPoints={[0, 430]}
+      index={-1}
+      snapPoints={[0, 400]}
       onChange={handleSheetChanges}
+      backdropComponent={BottomSheetBackdrop}
     >
-      <BottomSheetView>
-        <Surface style={styles.container}>
-          <View style={styles.qrCodeContainer}>
-            <QRCode value={auth.address} size={160} />
-          </View>
-          <Text style={styles.text} onPress={handleShare}>
-            {auth.address}
-          </Text>
+      <Surface style={styles.container}>
+        <View style={styles.qrCodeContainer}>
+          <QRCode value={auth.address} size={160} />
+        </View>
+        <Text style={styles.text} onPress={handleShare}>
+          {auth.address}
+        </Text>
 
-          <View style={styles.buttonsContainer}>
-            {appConfig.network === 'testnet' ? (
-              <TouchableOpacity
-                onPress={() => handleRequestStx()}
-                onLongPress={() => handleRequestStx(true)}
-                activeOpacity={0.7}
-              >
-                <Button mode="contained" style={styles.buttonFaucet}>
-                  Get STX from faucet
-                </Button>
-              </TouchableOpacity>
-            ) : null}
-            <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
-              <Button mode="contained">Share</Button>
+        <View style={styles.buttonsContainer}>
+          {appConfig.network === 'testnet' ? (
+            <TouchableOpacity
+              onPress={() => handleRequestStx()}
+              onLongPress={() => handleRequestStx(true)}
+              activeOpacity={0.7}
+            >
+              <Button mode="contained" style={styles.buttonFaucet}>
+                Get STX from faucet
+              </Button>
             </TouchableOpacity>
-          </View>
-        </Surface>
-      </BottomSheetView>
+          ) : null}
+          <TouchableOpacity onPress={handleShare} activeOpacity={0.7}>
+            <Button mode="contained">Share</Button>
+          </TouchableOpacity>
+        </View>
+      </Surface>
     </BottomSheet>
   );
 };
