@@ -4,11 +4,11 @@ import Constants from 'expo-constants';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
-import { ChainID } from '@blockstack/stacks-transactions';
+import { ChainID } from '@stacks/transactions';
 import {
   deriveStxAddressChain,
   deriveRootKeychainFromMnemonic,
-} from '@blockstack/keychain';
+} from '@stacks/keychain';
 import { getStorageKeyPk } from '../utils';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';

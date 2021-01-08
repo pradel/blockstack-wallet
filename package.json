@@ -26,9 +26,7 @@
     "*.{js,ts,tsx,json,md}": "prettier --write"
   },
   "dependencies": {
-    "@blockstack/keychain": "0.12.7",
     "@blockstack/stacks-blockchain-sidecar-types": "0.0.22",
-    "@blockstack/stacks-transactions": "0.7.0",
     "@expo-google-fonts/inter": "0.1.0",
     "@gorhom/bottom-sheet": "2.0.0",
     "@react-native-community/async-storage": "1.12.1",
@@ -39,6 +37,7 @@
     "@react-navigation/stack": "5.12.8",
     "@sentry/react-native": "2.1.0",
     "@stacks/blockchain-api-client": "0.38.1",
+    "@stacks/keychain": "1.0.0-beta.21",
     "@stacks/network": "1.0.0-beta.20",
     "@stacks/stacking": "1.0.0-beta.20",
     "@stacks/transactions": "1.0.0-beta.20",

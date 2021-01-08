@@ -8,17 +8,16 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   makeSTXTokenTransfer,
-  StacksTestnet,
   broadcastTransaction,
   StacksTransaction,
   ChainID,
   makeUnsignedSTXTokenTransfer,
-  StacksMainnet,
-} from '@blockstack/stacks-transactions';
+} from '@stacks/transactions';
+import { StacksMainnet, StacksTestnet } from '@stacks/network';
 import {
   deriveStxAddressChain,
   deriveRootKeychainFromMnemonic,
-} from '@blockstack/keychain';
+} from '@stacks/keychain';
 import Big from 'big.js';
 import BnJs from 'bn.js';
 import { RootStackParamList } from '../types/router';
