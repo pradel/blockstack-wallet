@@ -16,15 +16,14 @@ import {
   cvToString,
   deserializeCV,
   serializeCV,
-  StacksTestnet,
-  StacksMainnet,
   tupleCV,
   uintCV,
   makeContractCall,
   ChainID,
   StacksTransaction,
   broadcastTransaction,
-} from '@blockstack/stacks-transactions';
+} from '@stacks/transactions';
+import { StacksTestnet, StacksMainnet } from '@stacks/network';
 import {
   deriveRootKeychainFromMnemonic,
   deriveStxAddressChain,
