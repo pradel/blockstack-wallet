@@ -7,21 +7,13 @@ import * as SecureStore from 'expo-secure-store';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import {
-  CoreNodePoxResponse,
-  CoreNodeInfoResponse,
-  NetworkBlockTimesResponse,
-} from '@stacks/blockchain-api-client';
-import {
   bufferCV,
   cvToString,
   deserializeCV,
   serializeCV,
   tupleCV,
   uintCV,
-  makeContractCall,
   ChainID,
-  StacksTransaction,
-  broadcastTransaction,
 } from '@stacks/transactions';
 import { StacksTestnet, StacksMainnet } from '@stacks/network';
 import {
@@ -35,7 +27,7 @@ import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
 import { getStorageKeyPk, microToStacks } from '../utils';
-import { stacksClientInfo, stacksClientSmartContracts } from '../stacksClient';
+import { stacksClientSmartContracts } from '../stacksClient';
 import { RootStackParamList } from '../types/router';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
@@ -206,16 +198,6 @@ export const StackingConfirmScreen = () => {
       return;
     }
 
-    // const [
-    //   contractAddress,
-    //   contractName,
-    // ] = stacksInfo.poxInfo.contract_id.split('.');
-
-    // const network =
-    //   appConfig.network === 'mainnet'
-    //     ? new StacksMainnet()
-    //     : new StacksTestnet();
-
     const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
     const result = deriveStxAddressChain(
       appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
@@ -240,41 +222,6 @@ export const StackingConfirmScreen = () => {
       setConfirming(false);
       return;
     }
-
-    // let transaction: StacksTransaction;
-    // try {
-    //   transaction = await makeContractCall({
-    //     contractAddress,
-    //     contractName,
-    //     functionName: 'stack-stx',
-    //     functionArgs: [
-    //       uintCV(route.params.amountInMicro),
-    //       tupleCV({
-    //         hashbytes,
-    //         version,
-    //       }),
-    //       uintCV(stacksInfo.coreInfo.burn_block_height + 1),
-    //       uintCV(numberOfCycles),
-    //     ],
-    //     senderKey: result.privateKey,
-    //     validateWithAbi: true,
-    //     network,
-    //   });
-    // } catch (error) {
-    //   console.error(error);
-    //   Alert.alert(`Failed to create transaction. ${error.message}`);
-    //   setConfirming(false);
-    //   return;
-    // }
-
-    // try {
-    //   await broadcastTransaction(transaction, network);
-    // } catch (error) {
-    //   console.error(error);
-    //   Alert.alert(`Failed to broadcast transaction. ${error.message}`);
-    //   setConfirming(false);
-    //   return;
-    // }
 
     navigation.navigate('Stacking');
   };
