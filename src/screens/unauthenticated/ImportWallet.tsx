@@ -1,7 +1,9 @@
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
-import { StyleSheet, View } from 'react-native';
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
 import {
   Appbar,
   HelperText,
@@ -14,7 +16,13 @@ import * as yup from 'yup';
 import { validateMnemonic } from 'bip39';
 import { AppbarHeader } from '../../components/AppbarHeader';
 import { Button } from '../../components/Button';
-import { tr } from 'date-fns/locale';
+import { getStorageKeyPk } from '../../utils';
+import {
+  deriveRootKeychainFromMnemonic,
+  deriveStxAddressChain,
+} from '@blockstack/keychain';
+import { ChainID } from '@blockstack/stacks-transactions';
+import { useAuth } from '../../context/AuthContext';
 
 const importWalletSchema = yup
   .object({
@@ -30,17 +38,35 @@ const importWalletSchema = yup
 
 export const ImportWalletScreen = () => {
   const navigation = useNavigation();
+  const auth = useAuth();
 
   const formik = useFormik<yup.InferType<typeof importWalletSchema>>({
     initialValues: {
       plaintextMnemonic: '',
     },
     validationSchema: importWalletSchema,
-    onSubmit: (values, { setSubmitting }) => {
-      // TODO save in protected storage
-      // TODO login and go to dashboard
+    onSubmit: async (values, { setSubmitting }) => {
+      // setSubmitting(true);
+      const authenticateResult = await LocalAuthentication.authenticateAsync();
+      if (!authenticateResult.success) {
+        setSubmitting(false);
+        return;
+      }
 
-      setSubmitting(false);
+      await SecureStore.setItemAsync(
+        getStorageKeyPk(),
+        values.plaintextMnemonic
+      );
+
+      const rootNode = await deriveRootKeychainFromMnemonic(
+        values.plaintextMnemonic
+      );
+      // TODO dynamic get address based on chain
+      const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
+      auth.signIn({
+        address: result.address,
+        publicKey: result.childKey.publicKey.toString('hex'),
+      });
     },
   });
 
@@ -74,7 +100,11 @@ export const ImportWalletScreen = () => {
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button mode="contained" onPress={formik.handleSubmit}>
+          <Button
+            mode="contained"
+            onPress={formik.handleSubmit}
+            disabled={formik.isSubmitting}
+          >
             Import wallet
           </Button>
         </View>
