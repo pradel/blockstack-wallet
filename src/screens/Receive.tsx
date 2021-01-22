@@ -8,8 +8,8 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
-import { config } from '../config';
 import { Button } from '../components/Button';
+import { stacksClientFaucet } from '../stacksClient';
 
 interface ReceiveScreenProps {
   open: boolean;
@@ -46,21 +46,22 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
   // Request some stx from the faucet
   // Long press on the button add stacking param to the request
   const handleRequestStx = async (longPress?: true) => {
-    const data = await fetch(
-      `${config.stacksTestnetApiUrl}/extended/v1/faucets/stx?address=${
-        auth.address
-      }${longPress ? '&stacking=true' : ''}`,
-      {
-        method: 'POST',
-      }
-    );
-    if (data.ok) {
+    try {
+      const response = await stacksClientFaucet.runFaucetStx({
+        address: auth.address,
+        stacking: longPress,
+      });
+      console.log(response);
       Alert.alert(
         "You'll receive your testing Stacks Token (STX) momentarily."
       );
-    } else {
-      Alert.alert(`Request failed with status ${data.status}`);
-      console.error(await data.json());
+    } catch (error) {
+      console.error(error);
+      if (typeof error === 'object') {
+        // Status is the http code returned by the node
+        error = error.status;
+      }
+      Alert.alert(`Request failed: ${error}`);
     }
   };
 
