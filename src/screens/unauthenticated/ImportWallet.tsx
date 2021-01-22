@@ -2,13 +2,47 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import { StyleSheet, View } from 'react-native';
-import { Appbar, Paragraph, TextInput, Title } from 'react-native-paper';
+import {
+  Appbar,
+  HelperText,
+  Paragraph,
+  TextInput,
+  Title,
+} from 'react-native-paper';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { validateMnemonic } from 'bip39';
 import { AppbarHeader } from '../../components/AppbarHeader';
 import { Button } from '../../components/Button';
-import { AppbarContent } from '../../components/AppBarContent';
+import { tr } from 'date-fns/locale';
+
+const importWalletSchema = yup
+  .object({
+    plaintextMnemonic: yup
+      .string()
+      .defined()
+      .label('Seed phrase')
+      .test('is-valid', 'Invalid seed phrase', (value) => {
+        return value ? validateMnemonic(value) : false;
+      }),
+  })
+  .defined();
 
 export const ImportWalletScreen = () => {
   const navigation = useNavigation();
+
+  const formik = useFormik<yup.InferType<typeof importWalletSchema>>({
+    initialValues: {
+      plaintextMnemonic: '',
+    },
+    validationSchema: importWalletSchema,
+    onSubmit: (values, { setSubmitting }) => {
+      // TODO save in protected storage
+      // TODO login and go to dashboard
+
+      setSubmitting(false);
+    },
+  });
 
   return (
     <View style={styles.container}>
@@ -18,28 +52,29 @@ export const ImportWalletScreen = () => {
       <View style={styles.contentContainer}>
         <View>
           <Title style={styles.title}>Enter seed phrase</Title>
-          <Paragraph style={styles.paragraph}>
+          <Paragraph>
             Enter your seed phrase in order to restore your wallet.
           </Paragraph>
           <TextInput
             placeholder="Seed phrase"
             mode="outlined"
             autoFocus={true}
+            multiline={true}
+            numberOfLines={3}
             style={styles.textInput}
-            // value={formik.values.amountInStacks}
-            // onChangeText={(event) => {
-            //   formik.setFieldTouched('amountInStacks');
-            //   formik.handleChange('amountInStacks')(event);
-            // }}
+            value={formik.values.plaintextMnemonic}
+            onChangeText={formik.handleChange('plaintextMnemonic')}
           />
+          <HelperText
+            type="error"
+            visible={Boolean(formik.errors.plaintextMnemonic)}
+          >
+            {formik.errors.plaintextMnemonic}
+          </HelperText>
         </View>
 
         <View style={styles.buttonsContainer}>
-          <Button
-            mode="contained"
-            // onPress={handleCreateNewWallet}
-            // disabled={!mnemonic}
-          >
+          <Button mode="contained" onPress={formik.handleSubmit}>
             Import wallet
           </Button>
         </View>
@@ -56,20 +91,16 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
   title: {
     fontSize: 26,
     marginTop: 16,
-    paddingHorizontal: 16,
-  },
-  paragraph: {
-    paddingHorizontal: 16,
   },
   textInput: {
-    paddingHorizontal: 16,
     paddingTop: 32,
   },
   buttonsContainer: {
-    padding: 16,
+    paddingVertical: 16,
   },
 });
