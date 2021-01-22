@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Appbar, Paragraph, Surface } from 'react-native-paper';
+import { Appbar, Paragraph, Surface, Snackbar } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
+import Clipboard from '@react-native-community/clipboard';
 import { getStorageKeyPk } from '../utils';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
+import { Button } from '../components/Button';
 import { RootStackParamList } from '../types/router';
 
 type BackupPassphraseNavigationProp = StackNavigationProp<
@@ -19,6 +21,7 @@ type BackupPassphraseNavigationProp = StackNavigationProp<
 export const BackupPassphrase = () => {
   const navigation = useNavigation<BackupPassphraseNavigationProp>();
   const [mnemonic, setMnemonic] = useState<string>();
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   useEffect(() => {
     const loadMnemonic = async () => {
@@ -38,6 +41,13 @@ export const BackupPassphrase = () => {
     loadMnemonic();
   }, []);
 
+  const handleCopyClipboard = () => {
+    if (mnemonic) {
+      Clipboard.setString(mnemonic);
+      setSnackbarVisible(true);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <AppbarHeader>
@@ -54,12 +64,24 @@ export const BackupPassphrase = () => {
         ))}
       </Surface>
 
+      <Button style={styles.copyButton} onPress={handleCopyClipboard}>
+        Copy to clipboard
+      </Button>
+
       <View style={styles.textContainer}>
         <Paragraph>
           These words are the keys to access your blockstack wallet. Keep it in
           a safe place and do not share it with anyone.
         </Paragraph>
       </View>
+
+      <Snackbar
+        visible={snackbarVisible}
+        duration={3000}
+        onDismiss={() => setSnackbarVisible(false)}
+      >
+        Copied to clipboard
+      </Snackbar>
     </View>
   );
 };
@@ -81,6 +103,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     elevation: 0,
+  },
+  copyButton: {
+    marginHorizontal: 16,
   },
   text: {
     marginRight: 8,
