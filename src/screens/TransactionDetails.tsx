@@ -18,6 +18,7 @@ import { RootStackParamList } from '../types/router';
 import { microToStacks, getMemoString } from '../utils';
 import { config } from '../config';
 import { useAuth } from '../context/AuthContext';
+import { useAppConfig } from '../context/AppConfigContext';
 import { stacksClientTransactions } from '../stacksClient';
 
 type TransactionDetailsNavigationProp = StackNavigationProp<
@@ -33,6 +34,7 @@ export const TransactionDetails = () => {
   const navigation = useNavigation<TransactionDetailsNavigationProp>();
   const route = useRoute<TransactionDetailsRouteProp>();
   const auth = useAuth();
+  const { appConfig } = useAppConfig();
 
   const { data: transactionData, error: transactionError } = useSWR(
     `transaction-details-${route.params.txId}`,
@@ -51,11 +53,15 @@ export const TransactionDetails = () => {
   const handleTransactionIdPress = async () => {
     if (!transactionData) return;
 
-    const supported = await Linking.canOpenURL(config.githubUrl);
+    let explorerUrl = `${config.stacksExplorerUrl}/txid/${transactionData.tx_id}`;
+    // To make the explorer work with testnet we need to append '?chain=testnet' at the end
+    if (appConfig.network === 'testnet') {
+      explorerUrl += '?chain=testnet';
+    }
+
+    const supported = await Linking.canOpenURL(explorerUrl);
     if (supported) {
-      Linking.openURL(
-        `${config.stacksExplorerUrl}/txid/${transactionData.tx_id}`
-      );
+      Linking.openURL(explorerUrl);
     }
   };
 
