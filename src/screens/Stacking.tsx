@@ -42,8 +42,6 @@ export const StackingScreen = () => {
     () => stackingClient.getStatus()
   );
 
-  // console.log({ stackingStatus: JSON.stringify(stackingStatus, null, 2) });
-
   const { data: stackingData } = useSWR('stacking', async () => {
     // TODO do requests in parallel
     const poxInfo = await stackingClient.getPoxInfo();
