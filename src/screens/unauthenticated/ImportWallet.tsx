@@ -46,7 +46,6 @@ export const ImportWalletScreen = () => {
     },
     validationSchema: importWalletSchema,
     onSubmit: async (values, { setSubmitting }) => {
-      // setSubmitting(true);
       const authenticateResult = await LocalAuthentication.authenticateAsync();
       if (!authenticateResult.success) {
         setSubmitting(false);
