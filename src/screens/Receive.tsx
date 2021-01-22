@@ -47,7 +47,7 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
   // Long press on the button add stacking param to the request
   const handleRequestStx = async (longPress?: true) => {
     const data = await fetch(
-      `${config.blockstackApiUrl}/extended/v1/faucets/stx?address=${
+      `${config.stacksTestnetApiUrl}/extended/v1/faucets/stx?address=${
         auth.address
       }${longPress ? '&stacking=true' : ''}`,
       {
