@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -45,7 +45,7 @@ export const LoginScreen = () => {
   };
 
   const handleImportWallet = () => {
-    Alert.alert('Coming soon');
+    navigation.navigate('ImportWallet');
   };
 
   const handleAuthenticateWithBiometrics = async () => {
