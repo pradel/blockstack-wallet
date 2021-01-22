@@ -18,6 +18,7 @@ import * as Sentry from '@sentry/react-native';
 import { useNavigation } from '@react-navigation/native';
 import Clipboard from '@react-native-community/clipboard';
 import { useAuth } from '../context/AuthContext';
+import { useAppConfig } from '../context/AppConfigContext';
 import { getStorageKeyPk, generateMnemonicRootKeychain } from '../utils';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
@@ -25,6 +26,7 @@ import { AppbarHeader } from '../components/AppbarHeader';
 export const CreateWalletScreen = () => {
   const navigation = useNavigation();
   const auth = useAuth();
+  const { appConfig } = useAppConfig();
   const [mnemonic, setMnemonic] = useState<{
     rootNode: BIP32Interface;
     plaintextMnemonic: string;
@@ -62,9 +64,9 @@ export const CreateWalletScreen = () => {
           getStorageKeyPk(),
           mnemonic.plaintextMnemonic
         );
-        const result = deriveStxAddressChain(ChainID.Testnet)(
-          mnemonic.rootNode
-        );
+        const result = deriveStxAddressChain(
+          appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
+        )(mnemonic.rootNode);
         auth.signIn({
           address: result.address,
           publicKey: result.childKey.publicKey.toString('hex'),
