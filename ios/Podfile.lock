@@ -3,9 +3,10 @@ PODS:
   - CocoaAsyncSocket (7.6.4)
   - CocoaLibEvent (1.0.0)
   - DoubleConversion (1.1.6)
-  - EXApplication (2.4.1):
+  - EXApplication (3.0.0):
     - UMCore
-  - EXBarCodeScanner (9.1.0):
+  - EXBarCodeScanner (10.0.0):
+    - UMBarCodeScannerInterface
     - UMCore
     - UMImageLoaderInterface
     - UMPermissionsInterface
@@ -30,7 +31,7 @@ PODS:
     - UMCore
   - EXLinearGradient (8.4.0):
     - UMCore
-  - EXLocalAuthentication (9.5.0):
+  - EXLocalAuthentication (10.0.0):
     - UMConstantsInterface
     - UMCore
   - EXLocation (10.0.0):
@@ -40,11 +41,11 @@ PODS:
   - EXPermissions (10.0.0):
     - UMCore
     - UMPermissionsInterface
-  - EXRandom (10.0.0):
+  - EXRandom (11.0.0):
     - React-Core
-  - EXSecureStore (9.3.0):
+  - EXSecureStore (10.0.0):
     - UMCore
-  - EXSplashScreen (0.8.1):
+  - EXSplashScreen (0.9.0):
     - React-Core
     - UMCore
   - EXSQLite (8.5.0):
@@ -355,7 +356,7 @@ PODS:
     - React-Core
   - RNReanimated (1.13.2):
     - React-Core
-  - RNScreens (2.15.0):
+  - RNScreens (2.15.2):
     - React-Core
   - RNSentry (2.1.0):
     - React-Core
@@ -630,8 +631,8 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: cde416483dac037923206447da6e1454df403714
-  EXApplication: e3c201e7b913d081bbd37bd3c5d0e2cdc21733b4
-  EXBarCodeScanner: aa1eda7595b8258471ff733acdb18f62cfd85813
+  EXApplication: e3a06b6d81f94e526f029a57b2121d6cde044004
+  EXBarCodeScanner: 77f5461a382d3c65c974f2bbe00e7c2d46e25df6
   EXConstants: f3a9780ed1732b6772f8324d958733d56d0e5909
   EXErrorRecovery: b46af4b91e2b4ec598ab1fa51d2cf088aaf5511f
   EXFileSystem: 0e4974ab77bff04cda68d2886d070cbe64b93a6b
@@ -639,12 +640,12 @@ SPEC CHECKSUMS:
   EXImageLoader: f96ec9992733a4224418bbd9382e5485c8948944
   EXKeepAwake: 615c5a6fca5c2afedf611bb6f7f2ca323246de94
   EXLinearGradient: c803fbd1aa974be038177b1e45524bc35759fe9c
-  EXLocalAuthentication: acb740dcb15753d8f0ce90d93609322a2545cd41
+  EXLocalAuthentication: fee862d288cefd30480d2c0e8fa50a5721ce0dfd
   EXLocation: d55e2a37f61bcfb4eba9c813b3f4621d896c4c00
   EXPermissions: 17d4846ad1880f6891c74ae58ca1acb43e47ed47
-  EXRandom: d7e0f3dd64810aabd27d59f8ecffee359177e2c3
-  EXSecureStore: 1b571851e6068b30b8ec097be848a04603c03bae
-  EXSplashScreen: 8c7c1112ce7611a853486af4737fe2298eda7657
+  EXRandom: 4f71ea72eaeea674c4597e536e3014b4387af21a
+  EXSecureStore: 6ae3b88c67304ab64c63d44acc8fa31b1f5fb400
+  EXSplashScreen: ab5984afcca91e0af6b3138f01a8c47dc4955c51
   EXSQLite: bda6a286dded0637bb312ee781239dcca163ff4b
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
@@ -684,7 +685,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
+  RNScreens: 3d682bcaba69a4f8e55543d90818704f34338db1
   RNSentry: 51972e3fe50e2fb38ae459af8c87d61f63f364db
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   Sentry: 388c9dc093b2fd3a264466a5c5b21e25959610a9
