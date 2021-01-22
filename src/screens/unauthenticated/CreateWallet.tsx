@@ -17,11 +17,11 @@ import { BIP32Interface } from 'bitcoinjs-lib';
 import * as Sentry from '@sentry/react-native';
 import { useNavigation } from '@react-navigation/native';
 import Clipboard from '@react-native-community/clipboard';
-import { useAuth } from '../context/AuthContext';
-import { useAppConfig } from '../context/AppConfigContext';
-import { getStorageKeyPk, generateMnemonicRootKeychain } from '../utils';
-import { Button } from '../components/Button';
-import { AppbarHeader } from '../components/AppbarHeader';
+import { useAuth } from '../../context/AuthContext';
+import { useAppConfig } from '../../context/AppConfigContext';
+import { getStorageKeyPk, generateMnemonicRootKeychain } from '../../utils';
+import { Button } from '../../components/Button';
+import { AppbarHeader } from '../../components/AppbarHeader';
 
 export const CreateWalletScreen = () => {
   const navigation = useNavigation();
