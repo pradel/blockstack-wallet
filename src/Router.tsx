@@ -5,6 +5,7 @@ import color from 'color';
 import { useAuth } from './context/AuthContext';
 import { useTheme } from './context/ThemeContext';
 import { LoginScreen } from './screens/Login';
+import { ImportWalletScreen } from './screens/unauthenticated/ImportWallet';
 import { DashboardScreen } from './screens/Dashboard';
 import { SettingsScreen } from './screens/Settings';
 import { CreateWalletScreen } from './screens/CreateWallet';
@@ -85,6 +86,11 @@ export const Router = () => {
       <Stack.Screen
         name="CreateWallet"
         component={CreateWalletScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ImportWallet"
+        component={ImportWalletScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

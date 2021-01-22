@@ -1,16 +1,26 @@
 import React from 'react';
 import Constants from 'expo-constants';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Linking, ScrollView, StyleSheet, View } from 'react-native';
 import { List, Divider, Surface } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../context/ThemeContext';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { ChevronRight, Moon, Sun } from '../icons';
+import { config } from '../config';
 
 export const SettingsScreen = () => {
   const navigation = useNavigation();
   const theme = useTheme();
+
+  const handleOpenChangelog = () => {
+    const changelogUrl = `${config.githubUrl}/blob/master/CHANGELOG.md`;
+    Linking.canOpenURL(changelogUrl).then((supported) => {
+      if (supported) {
+        Linking.openURL(changelogUrl);
+      }
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -117,6 +127,7 @@ export const SettingsScreen = () => {
             <List.Item
               title="Version"
               description={Constants.nativeAppVersion}
+              onPress={handleOpenChangelog}
             />
           </Surface>
         </List.Section>
