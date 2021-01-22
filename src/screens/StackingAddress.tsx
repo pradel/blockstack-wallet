@@ -55,10 +55,28 @@ export const StackingAddressScreen = () => {
     });
   };
 
-  const isBitcoinAddressValid =
-    bitcoinAddress && validateBitcoinAddress(bitcoinAddress, appConfig.network);
+  let bitcoinAddressValidError: string | undefined;
+  if (bitcoinAddress) {
+    if (!validateBitcoinAddress(bitcoinAddress, appConfig.network)) {
+      bitcoinAddressValidError = 'Invalid BTC address';
+    }
+    // We check that the address format is supported
+    // The smart contract only supports p2sh and p2pkh
+    // See https://allprivatekeys.com/bitcoin-address-format for the full list
+    const isFormatValid =
+      appConfig.network === 'mainnet'
+        ? // On mainnet the address must start with 1 or 3
+          bitcoinAddress.startsWith('1') || bitcoinAddress.startsWith('3')
+        : // On testnet the address must start with m, n or 2
+          bitcoinAddress.startsWith('m') ||
+          bitcoinAddress.startsWith('n') ||
+          bitcoinAddress.startsWith('2');
+    if (!isFormatValid) {
+      bitcoinAddressValidError = 'Only p2sh and p2pkh address supported';
+    }
+  }
 
-  const canContinue = isBitcoinAddressValid;
+  const canContinue = bitcoinAddress && bitcoinAddressValidError === undefined;
 
   return (
     <View style={styles.container}>
@@ -93,9 +111,9 @@ export const StackingAddressScreen = () => {
           />
           <HelperText
             type="error"
-            visible={Boolean(bitcoinAddress && !isBitcoinAddressValid)}
+            visible={Boolean(bitcoinAddress && !!bitcoinAddressValidError)}
           >
-            Invalid BTC address
+            {bitcoinAddressValidError}
           </HelperText>
         </View>
 
