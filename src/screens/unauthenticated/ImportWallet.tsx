@@ -20,7 +20,7 @@ import { getStorageKeyPk } from '../../utils';
 import {
   deriveRootKeychainFromMnemonic,
   deriveStxAddressChain,
-} from '@blockstack/keychain';
+} from '@stacks/keychain';
 import { ChainID } from '@blockstack/stacks-transactions';
 import { useAuth } from '../../context/AuthContext';
 
