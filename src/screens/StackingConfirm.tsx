@@ -28,7 +28,9 @@ import {
   deriveRootKeychainFromMnemonic,
   deriveStxAddressChain,
 } from '@stacks/keychain';
+import { CoreInfo, PoxInfo, StackingClient } from '@stacks/stacking';
 import { format } from 'date-fns';
+import BnJs from 'bn.js';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
@@ -58,9 +60,9 @@ export const StackingConfirmScreen = () => {
     unlockingAt: Date;
   }>();
   const [stacksInfo, setStacksInfo] = useState<{
-    poxInfo: CoreNodePoxResponse;
-    coreInfo: CoreNodeInfoResponse;
-    blockTimeInfo: NetworkBlockTimesResponse;
+    poxInfo: PoxInfo;
+    coreInfo: CoreInfo;
+    blockTimeInfo: number;
   }>();
   const [confirming, setConfirming] = useState(false);
 
@@ -70,12 +72,18 @@ export const StackingConfirmScreen = () => {
   );
   const version = bufferCV(global.Buffer.from('01', 'hex'));
 
+  // TODO see if we need to memo this
+  const stackingClient = new StackingClient(
+    auth.address,
+    appConfig.network === 'mainnet' ? new StacksMainnet() : new StacksTestnet()
+  );
+
   useEffect(() => {
     const fetchPoxInfo = async () => {
       try {
-        const poxInfo = await stacksClientInfo.getPoxInfo();
-        const coreInfo = await stacksClientInfo.getCoreApiInfo();
-        const blockTimeInfo = await stacksClientInfo.getNetworkBlockTimes();
+        const poxInfo = await stackingClient.getPoxInfo();
+        const coreInfo = await stackingClient.getCoreInfo();
+        const blockTimeInfo = await stackingClient.getTargetBlockTime();
         setStacksInfo({
           poxInfo,
           coreInfo,
@@ -157,7 +165,7 @@ export const StackingConfirmScreen = () => {
           ((stacksInfo.coreInfo.burn_block_height -
             stacksInfo.poxInfo.first_burnchain_block_height) %
             stacksInfo.poxInfo.reward_cycle_length)) *
-        stacksInfo.blockTimeInfo.testnet.target_block_time;
+        stacksInfo.blockTimeInfo;
 
       // the actual datetime of the next cycle start
       const nextCycleStartingAt = new Date();
@@ -170,7 +178,7 @@ export const StackingConfirmScreen = () => {
         unlockingAt.getSeconds() +
           stacksInfo.poxInfo.reward_cycle_length *
             numberOfCycles *
-            stacksInfo.blockTimeInfo.testnet.target_block_time
+            stacksInfo.blockTimeInfo
       );
 
       setStackingInfos({ nextCycleStartingAt, unlockingAt });
@@ -198,55 +206,75 @@ export const StackingConfirmScreen = () => {
       return;
     }
 
-    const [
-      contractAddress,
-      contractName,
-    ] = stacksInfo.poxInfo.contract_id.split('.');
+    // const [
+    //   contractAddress,
+    //   contractName,
+    // ] = stacksInfo.poxInfo.contract_id.split('.');
 
-    const network =
-      appConfig.network === 'mainnet'
-        ? new StacksMainnet()
-        : new StacksTestnet();
+    // const network =
+    //   appConfig.network === 'mainnet'
+    //     ? new StacksMainnet()
+    //     : new StacksTestnet();
 
     const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
     const result = deriveStxAddressChain(
       appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
     )(rootNode);
 
-    let transaction: StacksTransaction;
     try {
-      transaction = await makeContractCall({
-        contractAddress,
-        contractName,
-        functionName: 'stack-stx',
-        functionArgs: [
-          uintCV(route.params.amountInMicro),
-          tupleCV({
-            hashbytes,
-            version,
-          }),
-          uintCV(stacksInfo.coreInfo.burn_block_height + 1),
-          uintCV(numberOfCycles),
-        ],
-        senderKey: result.privateKey,
-        validateWithAbi: true,
-        network,
+      const stackingResponse = await stackingClient.stack({
+        amountMicroStx: new BnJs(route.params.amountInMicro),
+        poxAddress: route.params.bitcoinAddress,
+        cycles: numberOfCycles,
+        privateKey: result.privateKey,
+        // Adding 3 blocks to provide a buffer for transaction to confirm
+        burnBlockHeight: stacksInfo.coreInfo.burn_block_height + 3,
       });
+      if (stackingResponse.hasOwnProperty('error')) {
+        console.error(stackingResponse);
+        throw new Error((stackingResponse as any).error);
+      }
     } catch (error) {
       console.error(error);
-      Alert.alert(`Failed to create transaction. ${error.message}`);
+      Alert.alert(`Stacking transaction failed. ${error.message}`);
       setConfirming(false);
       return;
     }
 
-    try {
-      await broadcastTransaction(transaction, network);
-    } catch (error) {
-      console.error(error);
-      Alert.alert(`Failed to broadcast transaction. ${error.message}`);
-      setConfirming(false);
-      return;
-    }
+    // let transaction: StacksTransaction;
+    // try {
+    //   transaction = await makeContractCall({
+    //     contractAddress,
+    //     contractName,
+    //     functionName: 'stack-stx',
+    //     functionArgs: [
+    //       uintCV(route.params.amountInMicro),
+    //       tupleCV({
+    //         hashbytes,
+    //         version,
+    //       }),
+    //       uintCV(stacksInfo.coreInfo.burn_block_height + 1),
+    //       uintCV(numberOfCycles),
+    //     ],
+    //     senderKey: result.privateKey,
+    //     validateWithAbi: true,
+    //     network,
+    //   });
+    // } catch (error) {
+    //   console.error(error);
+    //   Alert.alert(`Failed to create transaction. ${error.message}`);
+    //   setConfirming(false);
+    //   return;
+    // }
+
+    // try {
+    //   await broadcastTransaction(transaction, network);
+    // } catch (error) {
+    //   console.error(error);
+    //   Alert.alert(`Failed to broadcast transaction. ${error.message}`);
+    //   setConfirming(false);
+    //   return;
+    // }
 
     navigation.navigate('Stacking');
   };
