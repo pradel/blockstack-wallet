@@ -16,19 +16,18 @@ import {
   cvToString,
   deserializeCV,
   serializeCV,
-  StacksTestnet,
-  StacksMainnet,
   tupleCV,
   uintCV,
   makeContractCall,
   ChainID,
   StacksTransaction,
   broadcastTransaction,
-} from '@blockstack/stacks-transactions';
+} from '@stacks/transactions';
+import { StacksTestnet, StacksMainnet } from '@stacks/network';
 import {
   deriveRootKeychainFromMnemonic,
   deriveStxAddressChain,
-} from '@blockstack/keychain';
+} from '@stacks/keychain';
 import { format } from 'date-fns';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';

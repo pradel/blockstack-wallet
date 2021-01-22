@@ -10,7 +10,7 @@ import {
   deserializeCV,
   serializeCV,
   standardPrincipalCV,
-} from '@blockstack/stacks-transactions';
+} from '@stacks/transactions';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { AppbarHeader } from '../components/AppbarHeader';

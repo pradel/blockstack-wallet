@@ -1,6 +1,8 @@
 export const config = {
-  blockstackApiUrl: 'https://stacks-node-api.blockstack.org',
-  blockstackExplorerUrl: 'https://testnet-explorer.blockstack.org',
+  stacksTestnetApiUrl: 'https://stacks-node-api.testnet.stacks.co',
+  stacksMainnetApiUrl: 'https://stacks-node-api.mainnet.stacks.co',
+  // TODO see for testnet
+  stacksExplorerUrl: 'https://explorer.stacks.co',
   githubUrl: 'https://github.com/pradel/blockstack-wallet',
   colors: {
     primary: '#5546FF',

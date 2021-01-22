@@ -8,8 +8,8 @@ import {
   ActivityIndicator,
   Appbar,
 } from 'react-native-paper';
-import { ChainID } from '@blockstack/stacks-transactions';
-import { deriveStxAddressChain } from '@blockstack/keychain';
+import { ChainID } from '@stacks/transactions';
+import { deriveStxAddressChain } from '@stacks/keychain';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { BIP32Interface } from 'bitcoinjs-lib';

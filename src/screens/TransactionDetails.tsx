@@ -54,7 +54,7 @@ export const TransactionDetails = () => {
     const supported = await Linking.canOpenURL(config.githubUrl);
     if (supported) {
       Linking.openURL(
-        `${config.blockstackExplorerUrl}/txid/${transactionData.tx_id}`
+        `${config.stacksExplorerUrl}/txid/${transactionData.tx_id}`
       );
     }
   };

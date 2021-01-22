@@ -16,7 +16,7 @@ import useSWR from 'swr';
 import Big from 'big.js';
 import { format } from 'date-fns';
 import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-types';
-import { fetcher, microToStacks } from '../utils';
+import { microToStacks } from '../utils';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { usePrice } from '../context/PriceContext';
@@ -32,6 +32,7 @@ import {
   QuestionMarkCircle,
   Upload,
 } from '../icons';
+import { stacksClientAccounts } from '../stacksClient';
 
 interface BalanceResponse {
   stx: {
@@ -50,17 +51,15 @@ export const DashboardScreen = () => {
     data: balanceData,
     // error: balanceError,
     mutate: balanceMutate,
-  } = useSWR<BalanceResponse>(
-    `${config.blockstackApiUrl}/extended/v1/address/${auth.address}/balances`,
-    fetcher
+  } = useSWR(`balances-${auth.address}`, () =>
+    stacksClientAccounts.getAccountBalance({ principal: auth.address })
   );
   const {
     data: transactionsData,
     // error: transactionsError,
     mutate: transactionMutate,
-  } = useSWR<TransactionResults>(
-    `${config.blockstackApiUrl}/extended/v1/address/${auth.address}/transactions`,
-    fetcher
+  } = useSWR(`transactions-list-${auth.address}`, () =>
+    stacksClientAccounts.getAccountTransactions({ principal: auth.address })
   );
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -163,7 +162,7 @@ export const DashboardScreen = () => {
       <View style={styles.transactionsContainer}>
         <FlatList
           style={styles.transactionsList}
-          data={transactionsData?.results}
+          data={transactionsData?.results as TransactionResults['results']}
           keyExtractor={(item) => item.tx_id}
           ItemSeparatorComponent={Divider}
           ListEmptyComponent={() => (
