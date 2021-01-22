@@ -37,32 +37,37 @@ export const StackingScreen = () => {
     appConfig.network === 'mainnet' ? new StacksMainnet() : new StacksTestnet()
   );
 
-  const { data: stackingStatus } = useSWR(
-    `stacking-status-${auth.address}`,
-    () => stackingClient.getStatus()
+  const { data: stackingData } = useSWR(
+    `stacking-${auth.address}`,
+    async () => {
+      const [
+        stackingStatus,
+        poxInfo,
+        cycleDurationInSeconds,
+        secondsUntilNextCycle,
+        blockTimeInfo,
+      ] = await Promise.all([
+        stackingClient.getStatus(),
+        stackingClient.getPoxInfo(),
+        stackingClient.getCycleDuration(),
+        stackingClient.getSecondsUntilNextCycle(),
+        stackingClient.getTargetBlockTime(),
+      ]);
+
+      return {
+        stackingStatus,
+        poxInfo,
+        cycleDurationInSeconds,
+        secondsUntilNextCycle,
+        blockTimeInfo,
+      };
+    }
   );
 
-  const { data: stackingData } = useSWR('stacking', async () => {
-    // TODO do requests in parallel
-    const poxInfo = await stackingClient.getPoxInfo();
-    const coreInfo = await stackingClient.getCoreInfo();
-    const cycleDurationInSeconds = await stackingClient.getCycleDuration();
-    const secondsUntilNextCycle = await stackingClient.getSecondsUntilNextCycle();
-    const blockTimeInfo = await stackingClient.getTargetBlockTime();
-
-    return {
-      poxInfo,
-      coreInfo,
-      cycleDurationInSeconds,
-      secondsUntilNextCycle,
-      blockTimeInfo,
-    };
-  });
-
   useEffect(() => {
-    if (stackingStatus?.stacked && stackingData) {
+    if (stackingData && stackingData.stackingStatus.stacked) {
       // TODO remove check when https://github.com/blockstack/stacks.js/pull/926 is merged
-      const stackingStatusDetails = stackingStatus.details!;
+      const stackingStatusDetails = stackingData.stackingStatus.details!;
 
       const nextCycleStartingAt = new Date(
         new Date().getTime() + stackingData.secondsUntilNextCycle
@@ -86,7 +91,7 @@ export const StackingScreen = () => {
         amountInMicro: stackingStatusDetails.amount_microstx,
       });
     }
-  }, [stackingStatus, stackingData]);
+  }, [stackingData]);
 
   const handleStackingDashboard = () => {
     if (!stackingInfos) return;
@@ -160,12 +165,12 @@ export const StackingScreen = () => {
       </View>
 
       <View style={styles.buttonsContainer}>
-        {stackingStatus?.stacked ? (
+        {stackingData?.stackingStatus.stacked ? (
           <Button style={styles.button} onPress={handleStackingDashboard}>
             Stacking dashboard
           </Button>
         ) : null}
-        {!stackingStatus?.stacked ? (
+        {!stackingData?.stackingStatus.stacked ? (
           <Button style={styles.button} onPress={handleHowItWorks}>
             How it works
           </Button>
