@@ -25,10 +25,6 @@
   "lint-staged": {
     "*.{js,ts,tsx,json,md}": "prettier --write"
   },
-  "resolutions": {
-    "@types/react": "16.9.56",
-    "@types/react-native": "0.63.40"
-  },
   "dependencies": {
     "@blockstack/stacks-blockchain-sidecar-types": "0.0.22",
     "@expo-google-fonts/inter": "0.1.0",
