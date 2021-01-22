@@ -23,6 +23,7 @@ import {
 } from '@stacks/keychain';
 import { ChainID } from '@blockstack/stacks-transactions';
 import { useAuth } from '../../context/AuthContext';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const importWalletSchema = yup
   .object({
@@ -38,6 +39,7 @@ const importWalletSchema = yup
 
 export const ImportWalletScreen = () => {
   const navigation = useNavigation();
+  const { appConfig } = useAppConfig();
   const auth = useAuth();
 
   const formik = useFormik<yup.InferType<typeof importWalletSchema>>({
@@ -60,8 +62,9 @@ export const ImportWalletScreen = () => {
       const rootNode = await deriveRootKeychainFromMnemonic(
         values.plaintextMnemonic
       );
-      // TODO dynamic get address based on chain
-      const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
+      const result = deriveStxAddressChain(
+        appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
+      )(rootNode);
       auth.signIn({
         address: result.address,
         publicKey: result.childKey.publicKey.toString('hex'),

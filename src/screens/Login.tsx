@@ -21,7 +21,7 @@ export const LoginScreen = () => {
   const navigation = useNavigation();
   const { theme } = useTheme();
   const auth = useAuth();
-  const appConfig = useAppConfig();
+  const { appConfig } = useAppConfig();
   const [haveWallet, setHaveWallet] = useState<boolean>();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export const LoginScreen = () => {
   };
 
   const handleAuthenticateWithBiometrics = async () => {
-    if (appConfig.appConfig.requireBiometricOpenApp) {
+    if (appConfig.requireBiometricOpenApp) {
       const authenticateResult = await LocalAuthentication.authenticateAsync();
       if (!authenticateResult.success) {
         return;
@@ -59,7 +59,9 @@ export const LoginScreen = () => {
     const mnemonic = await SecureStore.getItemAsync(getStorageKeyPk());
     if (mnemonic) {
       const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
-      const result = deriveStxAddressChain(ChainID.Testnet)(rootNode);
+      const result = deriveStxAddressChain(
+        appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
+      )(rootNode);
       auth.signIn({
         address: result.address,
         publicKey: result.childKey.publicKey.toString('hex'),
