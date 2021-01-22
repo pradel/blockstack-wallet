@@ -2,7 +2,6 @@ import {
   Configuration,
   InfoApi,
   AccountsApi,
-  SmartContractsApi,
   TransactionsApi,
   FaucetsApi,
 } from '@stacks/blockchain-api-client';
@@ -16,8 +15,6 @@ const apiConfig = new Configuration({
 export const stacksClientInfo = new InfoApi(apiConfig);
 
 export const stacksClientAccounts = new AccountsApi(apiConfig);
-
-export const stacksClientSmartContracts = new SmartContractsApi(apiConfig);
 
 export const stacksClientTransactions = new TransactionsApi(apiConfig);
 

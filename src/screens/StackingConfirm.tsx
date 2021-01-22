@@ -49,7 +49,6 @@ export const StackingConfirmScreen = () => {
   }>();
   const [confirming, setConfirming] = useState(false);
 
-  // TODO see if we need to memo this
   const stackingClient = new StackingClient(
     auth.address,
     appConfig.network === 'mainnet' ? new StacksMainnet() : new StacksTestnet()
