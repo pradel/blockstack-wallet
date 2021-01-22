@@ -9,13 +9,13 @@ import {
   deriveStxAddressChain,
   deriveRootKeychainFromMnemonic,
 } from '@stacks/keychain';
-import { getStorageKeyPk } from '../utils';
-import { useTheme } from '../context/ThemeContext';
-import { useAuth } from '../context/AuthContext';
-import { useAppConfig } from '../context/AppConfigContext';
-import { Button } from '../components/Button';
-import StacksInMetaverse from '../../assets/StacksInMetaverse.png';
-import StacksInMetaverseLight from '../../assets/StacksInMetaverseLight.png';
+import { getStorageKeyPk } from '../../utils';
+import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
+import { useAppConfig } from '../../context/AppConfigContext';
+import { Button } from '../../components/Button';
+import StacksInMetaverse from '../../../assets/StacksInMetaverse.png';
+import StacksInMetaverseLight from '../../../assets/StacksInMetaverseLight.png';
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
