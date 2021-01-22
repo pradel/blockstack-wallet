@@ -6,15 +6,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import {
-  bufferCV,
-  cvToString,
-  deserializeCV,
-  serializeCV,
-  tupleCV,
-  uintCV,
-  ChainID,
-} from '@stacks/transactions';
+import { ChainID } from '@stacks/transactions';
 import { StacksTestnet, StacksMainnet } from '@stacks/network';
 import {
   deriveRootKeychainFromMnemonic,
@@ -27,7 +19,6 @@ import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
 import { getStorageKeyPk, microToStacks } from '../utils';
-import { stacksClientSmartContracts } from '../stacksClient';
 import { RootStackParamList } from '../types/router';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
@@ -57,12 +48,6 @@ export const StackingConfirmScreen = () => {
     blockTimeInfo: number;
   }>();
   const [confirming, setConfirming] = useState(false);
-
-  // derive bitcoin address from Stacks account and convert into required format
-  const hashbytes = bufferCV(
-    global.Buffer.from(route.params.bitcoinAddress, 'hex')
-  );
-  const version = bufferCV(global.Buffer.from('01', 'hex'));
 
   // TODO see if we need to memo this
   const stackingClient = new StackingClient(
@@ -97,58 +82,22 @@ export const StackingConfirmScreen = () => {
     const fetchIsUserEligible = async () => {
       if (!stacksInfo) return;
 
-      const [
-        contractAddress,
-        contractName,
-      ] = stacksInfo.poxInfo.contract_id.split('.');
-
       try {
-        // read-only contract call
-        const isEligible = await stacksClientSmartContracts.callReadOnlyFunction(
-          {
-            contractAddress,
-            contractName,
-            functionName: 'can-stack-stx',
-            readOnlyFunctionArgs: {
-              sender: auth.address,
-              arguments: [
-                `0x${serializeCV(
-                  tupleCV({
-                    hashbytes,
-                    version,
-                  })
-                ).toString('hex')}`,
-                `0x${serializeCV(uintCV(route.params.amountInMicro)).toString(
-                  'hex'
-                )}`,
-                // explicilty check eligibility for next cycle
-                `0x${serializeCV(
-                  uintCV(stacksInfo.poxInfo.reward_cycle_id)
-                ).toString('hex')}`,
-                `0x${serializeCV(uintCV(numberOfCycles)).toString('hex')}`,
-              ],
-            },
-          }
-        );
-        // error codes: https://github.com/blockstack/stacks-blockchain/blob/master/src/chainstate/stacks/boot/pox.clar#L2
-        const response = cvToString(
-          deserializeCV(
-            global.Buffer.from(
-              isEligible.result ? isEligible.result.slice(2) : '',
-              'hex'
-            )
-          )
-        );
+        const stackingEligibility = await stackingClient.canStack({
+          poxAddress: route.params.bitcoinAddress,
+          cycles: numberOfCycles,
+        });
 
-        if (response.startsWith(`(err `)) {
-          setIsEligible(response);
+        if (!stackingEligibility.eligible) {
+          setIsEligible(stackingEligibility.reason);
           return;
         }
 
         setIsEligible(true);
       } catch (error) {
-        // TODO show error to the user
         console.error(error);
+        Alert.alert(`Verify stacking eligibility failed. ${error.message}`);
+        return;
       }
 
       // how much time is left (in seconds) until the next cycle begins?
