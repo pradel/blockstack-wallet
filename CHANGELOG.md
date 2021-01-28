@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/pradel/blockstack-wallet/compare/v0.3.1...v0.4.0) (2021-01-28)
+
+### Features
+
+- add copy to clipboard button to save the seed ([#72](https://github.com/pradel/blockstack-wallet/issues/72)) ([35442db](https://github.com/pradel/blockstack-wallet/commit/35442dbc9bb1dfc0f8f79679bb0c4865efecc31f))
+- import an existing wallet ([#67](https://github.com/pradel/blockstack-wallet/issues/67)) ([8259288](https://github.com/pradel/blockstack-wallet/commit/8259288c59fd7d7dac1a212eb905f9f3bde74a6c))
+- open changelog when pressing the version number ([#68](https://github.com/pradel/blockstack-wallet/issues/68)) ([9e8e203](https://github.com/pradel/blockstack-wallet/commit/9e8e2034df9502c9f8e07b472f6c992277599ed5))
+- overlay for receive bottom sheet ([#63](https://github.com/pradel/blockstack-wallet/issues/63)) ([16418b3](https://github.com/pradel/blockstack-wallet/commit/16418b34d5fd088df6ddecf450d9bc8bda151dab))
+- prepare app config to work with mainnet ([#75](https://github.com/pradel/blockstack-wallet/issues/75)) ([fa69e6a](https://github.com/pradel/blockstack-wallet/commit/fa69e6a757acf18f6e27d3b87fffbee5c10be480))
+- show pending transactions in the transaction list ([#80](https://github.com/pradel/blockstack-wallet/issues/80)) ([6840586](https://github.com/pradel/blockstack-wallet/commit/684058637a2c983b2ed66907058fc8cb18c108eb))
+
+### Bug Fixes
+
+- fix bug when opening pending transaction ([c50d387](https://github.com/pradel/blockstack-wallet/commit/c50d387e1a254cc45fd41c43c3b701a45e4348fb))
+- fix STX faucet request on testnet ([#70](https://github.com/pradel/blockstack-wallet/issues/70)) ([3548621](https://github.com/pradel/blockstack-wallet/commit/35486214b3ec84019630dd1a9b9a806bb4fc8dfe))
+- fix transaction details testnet explorer url ([#73](https://github.com/pradel/blockstack-wallet/issues/73)) ([4324dea](https://github.com/pradel/blockstack-wallet/commit/4324dea6a92d2382b9cf3fd4281b7414283b4dbc))
+
+### Miscellaneous Chores
+
+- move unauthenticated screens to their own folder ([#78](https://github.com/pradel/blockstack-wallet/issues/78)) ([d8ee1a5](https://github.com/pradel/blockstack-wallet/commit/d8ee1a5ce25fbe1e1a01a82a66f8b1a5e17263a6))
+- upgrade dependencies ([#77](https://github.com/pradel/blockstack-wallet/issues/77)) ([12c3f88](https://github.com/pradel/blockstack-wallet/commit/12c3f88ec80679d2c50117a4f51f859627d27a9a))
+- upgrade expo SDK 40 ([#62](https://github.com/pradel/blockstack-wallet/issues/62)) ([6a9d92b](https://github.com/pradel/blockstack-wallet/commit/6a9d92ba650f9a8ac913676b725b490bfdfc3001))
+- use the new stacks.js SDK ([#65](https://github.com/pradel/blockstack-wallet/issues/65)) ([026e76b](https://github.com/pradel/blockstack-wallet/commit/026e76b45e9f635bde39c5b01776cef1b8c46237))
+
 ### [0.3.1](https://github.com/pradel/blockstack-wallet/compare/v0.3.0...v0.3.1) (2020-11-21)
 
 ### Bug Fixes
