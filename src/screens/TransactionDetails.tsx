@@ -11,7 +11,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import useSWR from 'swr';
 import { format } from 'date-fns';
-import type { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import type {
+  MempoolTransaction,
+  Transaction,
+} from '@blockstack/stacks-blockchain-sidecar-types';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { RootStackParamList } from '../types/router';
@@ -41,7 +44,7 @@ export const TransactionDetails = () => {
     () => {
       return stacksClientTransactions.getTransactionById({
         txId: route.params.txId,
-      }) as Promise<Transaction>;
+      }) as Promise<MempoolTransaction | Transaction>;
     }
   );
 
@@ -107,14 +110,20 @@ export const TransactionDetails = () => {
             <List.Item
               title="Timestamp"
               description={format(
-                transactionData.burn_block_time * 1000,
+                'burn_block_time' in transactionData
+                  ? // Transaction
+                    transactionData.burn_block_time * 1000
+                  : // Mempool transaction
+                    transactionData.receipt_time * 1000,
                 'HH:mm, MMMM dd yyyy'
               )}
             />
-            <List.Item
-              title="Block height"
-              description={`#${transactionData.block_height}`}
-            />
+            {'block_height' in transactionData ? (
+              <List.Item
+                title="Block height"
+                description={`#${transactionData.block_height}`}
+              />
+            ) : null}
             <List.Item title="Status" description={transactionData.tx_status} />
             {transactionData.tx_type === 'token_transfer' && !isIncomingTx ? (
               <List.Item
