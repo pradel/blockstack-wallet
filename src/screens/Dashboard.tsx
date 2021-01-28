@@ -76,8 +76,6 @@ export const DashboardScreen = () => {
       ...mempoolTransactions.results,
       ...accountTransactions.results,
     ];
-    // TODO remove
-    console.log(mempoolTransactions.results);
     return result;
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
