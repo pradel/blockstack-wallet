@@ -15,7 +15,10 @@ import { useNavigation } from '@react-navigation/native';
 import useSWR from 'swr';
 import Big from 'big.js';
 import { format } from 'date-fns';
-import type { TransactionResults } from '@blockstack/stacks-blockchain-sidecar-types';
+import type {
+  Transaction,
+  MempoolTransaction,
+} from '@blockstack/stacks-blockchain-sidecar-types';
 import { microToStacks } from '../utils';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
@@ -32,13 +35,10 @@ import {
   QuestionMarkCircle,
   Upload,
 } from '../icons';
-import { stacksClientAccounts } from '../stacksClient';
-
-interface BalanceResponse {
-  stx: {
-    balance: string;
-  };
-}
+import {
+  stacksClientAccounts,
+  stacksClientTransactions,
+} from '../stacksClient';
 
 type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -58,9 +58,25 @@ export const DashboardScreen = () => {
     data: transactionsData,
     // error: transactionsError,
     mutate: transactionMutate,
-  } = useSWR(`transactions-list-${auth.address}`, () =>
-    stacksClientAccounts.getAccountTransactions({ principal: auth.address })
-  );
+  } = useSWR(`transactions-list-${auth.address}`, async () => {
+    const [mempoolTransactions, accountTransactions] = await Promise.all([
+      // Get the pending transactions
+      stacksClientTransactions.getMempoolTransactionList({
+        address: auth.address,
+      }),
+      // Get confirmed transactions
+      stacksClientAccounts.getAccountTransactions({
+        principal: auth.address,
+      }),
+    ]);
+    // Merge the pending transactions at the beginning of the transaction list
+    const result = accountTransactions;
+    result.results = [
+      ...mempoolTransactions.results,
+      ...accountTransactions.results,
+    ];
+    return result;
+  });
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   // Get the fiat price corresponding to the current balance
@@ -162,7 +178,9 @@ export const DashboardScreen = () => {
       <View style={styles.transactionsContainer}>
         <FlatList
           style={styles.transactionsList}
-          data={transactionsData?.results as TransactionResults['results']}
+          data={
+            transactionsData?.results as (Transaction | MempoolTransaction)[]
+          }
           keyExtractor={(item) => item.tx_id}
           ItemSeparatorComponent={Divider}
           ListEmptyComponent={() => (
@@ -196,6 +214,35 @@ export const DashboardScreen = () => {
                 ? Code
                 : QuestionMarkCircle;
 
+            let title = (
+              <>
+                {item.tx_status === 'pending' ? (
+                  <View style={styles.pendingBadge} />
+                ) : null}
+                {item.tx_type === 'token_transfer'
+                  ? isIncomingTx
+                    ? 'Received STX'
+                    : 'Sent STX'
+                  : item.tx_type === 'smart_contract'
+                  ? item.smart_contract.contract_id.split('.')[1]
+                  : item.tx_type === 'contract_call'
+                  ? item.contract_call.contract_id.split('.')[1]
+                  : 'Unknown'}
+              </>
+            );
+
+            let readableDate = format(
+              'burn_block_time' in item
+                ? // Transaction
+                  item.burn_block_time * 1000
+                : // Mempool transaction
+                  item.receipt_time * 1000,
+              'dd MMMM '
+            );
+            if (item.tx_status === 'pending') {
+              readableDate = `Pending - ${readableDate}`;
+            }
+
             return (
               <List.Item
                 onPress={() =>
@@ -203,18 +250,11 @@ export const DashboardScreen = () => {
                     txId: item.tx_id,
                   })
                 }
-                title={
-                  item.tx_type === 'token_transfer'
-                    ? isIncomingTx
-                      ? 'Received STX'
-                      : 'Sent STX'
-                    : item.tx_type === 'smart_contract'
-                    ? item.smart_contract.contract_id.split('.')[1]
-                    : item.tx_type === 'contract_call'
-                    ? item.contract_call.contract_id.split('.')[1]
-                    : 'Unknown'
-                }
-                description={format(item.burn_block_time * 1000, 'dd MMMM ')}
+                title={title}
+                titleStyle={{
+                  paddingHorizontal: item.tx_status === 'pending' ? 4 : 0,
+                }}
+                description={readableDate}
                 left={(props) => (
                   <List.Icon
                     {...props}
@@ -325,5 +365,11 @@ const styles = StyleSheet.create({
   listItemRightText: {
     marginRight: 8,
     fontSize: 16,
+  },
+  pendingBadge: {
+    height: 8,
+    width: 8,
+    borderRadius: 4,
+    backgroundColor: '#FE9000',
   },
 });
