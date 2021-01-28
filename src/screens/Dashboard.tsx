@@ -9,7 +9,6 @@ import {
   Text,
   Divider,
   List,
-  Badge,
 } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
