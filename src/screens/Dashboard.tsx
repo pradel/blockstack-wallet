@@ -252,7 +252,6 @@ export const DashboardScreen = () => {
                 }
                 title={title}
                 titleStyle={{
-                  textAlignVertical: 'center',
                   paddingHorizontal: item.tx_status === 'pending' ? 4 : 0,
                 }}
                 description={readableDate}
