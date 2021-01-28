@@ -12,7 +12,7 @@ PODS:
     - UMPermissionsInterface
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
-  - EXConstants (9.3.4):
+  - EXConstants (9.3.5):
     - UMConstantsInterface
     - UMCore
   - EXErrorRecovery (1.4.0):
@@ -633,7 +633,7 @@ SPEC CHECKSUMS:
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   EXApplication: e3a06b6d81f94e526f029a57b2121d6cde044004
   EXBarCodeScanner: 77f5461a382d3c65c974f2bbe00e7c2d46e25df6
-  EXConstants: f3a9780ed1732b6772f8324d958733d56d0e5909
+  EXConstants: 54d0bf04319d1692c6c7bc03ca151ef7a71705a4
   EXErrorRecovery: b46af4b91e2b4ec598ab1fa51d2cf088aaf5511f
   EXFileSystem: 0e4974ab77bff04cda68d2886d070cbe64b93a6b
   EXFont: 30c64ed8735a180e3f20046e4fdac4ea074d71d3
