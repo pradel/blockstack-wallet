@@ -5,15 +5,11 @@ import { List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from 'react-query';
-import {
-  cvToString,
-  deserializeCV,
-  serializeCV,
-  standardPrincipalCV,
-} from '@stacks/transactions';
+import { StackingClient } from '@stacks/stacking';
+import { StacksMainnet, StacksTestnet } from '@stacks/network';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
-import { useStacksClient } from '../context/StacksClientContext';
+import { useAppConfig } from '../context/AppConfigContext';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
@@ -27,7 +23,7 @@ type StackingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 export const StackingScreen = () => {
   const { theme } = useTheme();
   const auth = useAuth();
-  const { stacksClientInfo, stacksClientSmartContracts } = useStacksClient();
+  const { appConfig } = useAppConfig();
   const navigation = useNavigation<StackingScreenNavigationProp>();
   const [stackingInfos, setStackingInfos] = useState<{
     lockingAt: string;
@@ -36,97 +32,63 @@ export const StackingScreen = () => {
     amountInMicro: string;
   }>();
 
-  const { data: stackingData } = useQuery('stacking', async () => {
-    // TODO do requests in parallel
-    const poxInfo = await stacksClientInfo.getPoxInfo();
-    const coreInfo = await stacksClientInfo.getCoreApiInfo();
-    const blocktimeInfo = await stacksClientInfo.getNetworkBlockTimes();
+  const stackingClient = new StackingClient(
+    auth.address,
+    appConfig.network === 'mainnet' ? new StacksMainnet() : new StacksTestnet()
+  );
 
-    const [contractAddress, contractName] = poxInfo.contract_id.split('.');
-    const functionName = 'get-stacker-info';
+  const { data: stackingData } = useQuery(
+    ['stacking', auth.address],
+    async () => {
+      const [
+        stackingStatus,
+        poxInfo,
+        cycleDurationInSeconds,
+        secondsUntilNextCycle,
+        blockTimeInfo,
+      ] = await Promise.all([
+        stackingClient.getStatus(),
+        stackingClient.getPoxInfo(),
+        stackingClient.getCycleDuration(),
+        stackingClient.getSecondsUntilNextCycle(),
+        stackingClient.getTargetBlockTime(),
+      ]);
 
-    const stackingInfo = await stacksClientSmartContracts.callReadOnlyFunction({
-      contractAddress,
-      contractName,
-      functionName,
-      readOnlyFunctionArgs: {
-        sender: auth.address,
-        arguments: [
-          `0x${serializeCV(standardPrincipalCV(auth.address)).toString('hex')}`,
-        ],
-      },
-    });
-
-    return { poxInfo, coreInfo, stackingInfo, blocktimeInfo };
-  });
+      return {
+        stackingStatus,
+        poxInfo,
+        cycleDurationInSeconds,
+        secondsUntilNextCycle,
+        blockTimeInfo,
+      };
+    }
+  );
 
   useEffect(() => {
-    if (stackingData?.stackingInfo?.result) {
-      const response = deserializeCV(
-        global.Buffer.from(stackingData.stackingInfo.result.slice(2), 'hex')
+    if (stackingData && stackingData.stackingStatus.stacked) {
+      // TODO remove check when https://github.com/blockstack/stacks.js/pull/926 is merged
+      const stackingStatusDetails = stackingData.stackingStatus.details!;
+
+      const nextCycleStartingAt = new Date(
+        new Date().getTime() + stackingData.secondsUntilNextCycle
       );
 
-      if (!('value' in response) || !('data' in response.value)) {
-        return;
-      }
-      const data: any = response.value.data;
-
-      const amountInMicro = cvToString(data['amount-ustx']).substring(1);
-      const numberOfCycles = parseInt(
-        cvToString(data['lock-period']).substring(1),
-        10
-      );
-      const startRewardCycleId = parseInt(
-        cvToString(data['first-reward-cycle']).substring(1),
-        10
-      );
-
-      // how much time is left (in seconds) until the next cycle begins?
-      const secondsToNextCycle =
-        (stackingData.poxInfo.reward_cycle_length -
-          ((stackingData.coreInfo.burn_block_height -
-            stackingData.poxInfo.first_burnchain_block_height) %
-            stackingData.poxInfo.reward_cycle_length)) *
-        stackingData.blocktimeInfo.testnet.target_block_time;
-
-      // the actual datetime of the next cycle start
-      const nextCycleStartingAt = new Date();
-      nextCycleStartingAt.setSeconds(
-        nextCycleStartingAt.getSeconds() + secondsToNextCycle
-      );
-
-      // The projected datetime for the locking of tokens
-      // the date can be in the past if the cycle already started
+      // TODO real lockingAt
       const lockingAt = new Date(nextCycleStartingAt);
-      // Cycle will start soon
-      if (startRewardCycleId > stackingData.poxInfo.reward_cycle_id) {
-        const diffCycles =
-          startRewardCycleId - 1 - stackingData.poxInfo.reward_cycle_id;
-        lockingAt.setSeconds(
-          lockingAt.getSeconds() +
-            stackingData.poxInfo.reward_cycle_length *
-              diffCycles *
-              stackingData.blocktimeInfo.testnet.target_block_time
-        );
-      } else {
-        // Cycle already started
-        // TODO
-      }
 
-      // The projected datetime for the unlocking of tokens
+      // TODO what if already started?
       const unlockingAt = new Date(nextCycleStartingAt);
       unlockingAt.setSeconds(
         unlockingAt.getSeconds() +
-          stackingData.poxInfo.reward_cycle_length *
-            numberOfCycles *
-            stackingData.blocktimeInfo.testnet.target_block_time
+          stackingData.cycleDurationInSeconds *
+            stackingStatusDetails.lock_period
       );
 
       setStackingInfos({
         lockingAt: lockingAt.toString(),
         unlockingAt: unlockingAt.toString(),
-        numberOfCycles,
-        amountInMicro: amountInMicro,
+        numberOfCycles: stackingStatusDetails.lock_period,
+        amountInMicro: stackingStatusDetails.amount_microstx,
       });
     }
   }, [stackingData]);
@@ -203,12 +165,12 @@ export const StackingScreen = () => {
       </View>
 
       <View style={styles.buttonsContainer}>
-        {stackingInfos ? (
+        {stackingData?.stackingStatus.stacked ? (
           <Button style={styles.button} onPress={handleStackingDashboard}>
             Stacking dashboard
           </Button>
         ) : null}
-        {!stackingInfos ? (
+        {!stackingData?.stackingStatus.stacked ? (
           <Button style={styles.button} onPress={handleHowItWorks}>
             How it works
           </Button>

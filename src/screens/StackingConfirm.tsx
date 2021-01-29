@@ -6,29 +6,15 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import {
-  CoreNodePoxResponse,
-  CoreNodeInfoResponse,
-  NetworkBlockTimesResponse,
-} from '@stacks/blockchain-api-client';
-import {
-  bufferCV,
-  cvToString,
-  deserializeCV,
-  serializeCV,
-  tupleCV,
-  uintCV,
-  makeContractCall,
-  ChainID,
-  StacksTransaction,
-  broadcastTransaction,
-} from '@stacks/transactions';
+import { ChainID } from '@stacks/transactions';
 import { StacksTestnet, StacksMainnet } from '@stacks/network';
 import {
   deriveRootKeychainFromMnemonic,
   deriveStxAddressChain,
 } from '@stacks/keychain';
+import { CoreInfo, PoxInfo, StackingClient } from '@stacks/stacking';
 import { format } from 'date-fns';
+import BnJs from 'bn.js';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
@@ -36,7 +22,6 @@ import { getStorageKeyPk, microToStacks } from '../utils';
 import { RootStackParamList } from '../types/router';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
-import { useStacksClient } from '../context/StacksClientContext';
 
 type StackingConfirmScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -52,31 +37,29 @@ export const StackingConfirmScreen = () => {
   const route = useRoute<StackingConfirmScreenRouteProp>();
   const auth = useAuth();
   const { appConfig } = useAppConfig();
-  const { stacksClientInfo, stacksClientSmartContracts } = useStacksClient();
   const [isEligible, setIsEligible] = useState<true | string>();
   const [stackingInfos, setStackingInfos] = useState<{
     nextCycleStartingAt: Date;
     unlockingAt: Date;
   }>();
   const [stacksInfo, setStacksInfo] = useState<{
-    poxInfo: CoreNodePoxResponse;
-    coreInfo: CoreNodeInfoResponse;
-    blockTimeInfo: NetworkBlockTimesResponse;
+    poxInfo: PoxInfo;
+    coreInfo: CoreInfo;
+    blockTimeInfo: number;
   }>();
   const [confirming, setConfirming] = useState(false);
 
-  // derive bitcoin address from Stacks account and convert into required format
-  const hashbytes = bufferCV(
-    global.Buffer.from(route.params.bitcoinAddress, 'hex')
+  const stackingClient = new StackingClient(
+    auth.address,
+    appConfig.network === 'mainnet' ? new StacksMainnet() : new StacksTestnet()
   );
-  const version = bufferCV(global.Buffer.from('01', 'hex'));
 
   useEffect(() => {
     const fetchPoxInfo = async () => {
       try {
-        const poxInfo = await stacksClientInfo.getPoxInfo();
-        const coreInfo = await stacksClientInfo.getCoreApiInfo();
-        const blockTimeInfo = await stacksClientInfo.getNetworkBlockTimes();
+        const poxInfo = await stackingClient.getPoxInfo();
+        const coreInfo = await stackingClient.getCoreInfo();
+        const blockTimeInfo = await stackingClient.getTargetBlockTime();
         setStacksInfo({
           poxInfo,
           coreInfo,
@@ -98,58 +81,22 @@ export const StackingConfirmScreen = () => {
     const fetchIsUserEligible = async () => {
       if (!stacksInfo) return;
 
-      const [
-        contractAddress,
-        contractName,
-      ] = stacksInfo.poxInfo.contract_id.split('.');
-
       try {
-        // read-only contract call
-        const isEligible = await stacksClientSmartContracts.callReadOnlyFunction(
-          {
-            contractAddress,
-            contractName,
-            functionName: 'can-stack-stx',
-            readOnlyFunctionArgs: {
-              sender: auth.address,
-              arguments: [
-                `0x${serializeCV(
-                  tupleCV({
-                    hashbytes,
-                    version,
-                  })
-                ).toString('hex')}`,
-                `0x${serializeCV(uintCV(route.params.amountInMicro)).toString(
-                  'hex'
-                )}`,
-                // explicilty check eligibility for next cycle
-                `0x${serializeCV(
-                  uintCV(stacksInfo.poxInfo.reward_cycle_id)
-                ).toString('hex')}`,
-                `0x${serializeCV(uintCV(numberOfCycles)).toString('hex')}`,
-              ],
-            },
-          }
-        );
-        // error codes: https://github.com/blockstack/stacks-blockchain/blob/master/src/chainstate/stacks/boot/pox.clar#L2
-        const response = cvToString(
-          deserializeCV(
-            global.Buffer.from(
-              isEligible.result ? isEligible.result.slice(2) : '',
-              'hex'
-            )
-          )
-        );
+        const stackingEligibility = await stackingClient.canStack({
+          poxAddress: route.params.bitcoinAddress,
+          cycles: numberOfCycles,
+        });
 
-        if (response.startsWith(`(err `)) {
-          setIsEligible(response);
+        if (!stackingEligibility.eligible) {
+          setIsEligible(stackingEligibility.reason);
           return;
         }
 
         setIsEligible(true);
       } catch (error) {
-        // TODO show error to the user
         console.error(error);
+        Alert.alert(`Verify stacking eligibility failed. ${error.message}`);
+        return;
       }
 
       // how much time is left (in seconds) until the next cycle begins?
@@ -158,7 +105,7 @@ export const StackingConfirmScreen = () => {
           ((stacksInfo.coreInfo.burn_block_height -
             stacksInfo.poxInfo.first_burnchain_block_height) %
             stacksInfo.poxInfo.reward_cycle_length)) *
-        stacksInfo.blockTimeInfo.testnet.target_block_time;
+        stacksInfo.blockTimeInfo;
 
       // the actual datetime of the next cycle start
       const nextCycleStartingAt = new Date();
@@ -171,7 +118,7 @@ export const StackingConfirmScreen = () => {
         unlockingAt.getSeconds() +
           stacksInfo.poxInfo.reward_cycle_length *
             numberOfCycles *
-            stacksInfo.blockTimeInfo.testnet.target_block_time
+            stacksInfo.blockTimeInfo
       );
 
       setStackingInfos({ nextCycleStartingAt, unlockingAt });
@@ -199,52 +146,27 @@ export const StackingConfirmScreen = () => {
       return;
     }
 
-    const [
-      contractAddress,
-      contractName,
-    ] = stacksInfo.poxInfo.contract_id.split('.');
-
-    const network =
-      appConfig.network === 'mainnet'
-        ? new StacksMainnet()
-        : new StacksTestnet();
-
     const rootNode = await deriveRootKeychainFromMnemonic(mnemonic);
     const result = deriveStxAddressChain(
       appConfig.network === 'mainnet' ? ChainID.Mainnet : ChainID.Testnet
     )(rootNode);
 
-    let transaction: StacksTransaction;
     try {
-      transaction = await makeContractCall({
-        contractAddress,
-        contractName,
-        functionName: 'stack-stx',
-        functionArgs: [
-          uintCV(route.params.amountInMicro),
-          tupleCV({
-            hashbytes,
-            version,
-          }),
-          uintCV(stacksInfo.coreInfo.burn_block_height + 1),
-          uintCV(numberOfCycles),
-        ],
-        senderKey: result.privateKey,
-        validateWithAbi: true,
-        network,
+      const stackingResponse = await stackingClient.stack({
+        amountMicroStx: new BnJs(route.params.amountInMicro),
+        poxAddress: route.params.bitcoinAddress,
+        cycles: numberOfCycles,
+        privateKey: result.privateKey,
+        // Adding 3 blocks to provide a buffer for transaction to confirm
+        burnBlockHeight: stacksInfo.coreInfo.burn_block_height + 3,
       });
+      if (stackingResponse.hasOwnProperty('error')) {
+        console.error(stackingResponse);
+        throw new Error((stackingResponse as any).error);
+      }
     } catch (error) {
       console.error(error);
-      Alert.alert(`Failed to create transaction. ${error.message}`);
-      setConfirming(false);
-      return;
-    }
-
-    try {
-      await broadcastTransaction(transaction, network);
-    } catch (error) {
-      console.error(error);
-      Alert.alert(`Failed to broadcast transaction. ${error.message}`);
+      Alert.alert(`Stacking transaction failed. ${error.message}`);
       setConfirming(false);
       return;
     }

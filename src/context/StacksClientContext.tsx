@@ -3,7 +3,6 @@ import {
   Configuration,
   InfoApi,
   AccountsApi,
-  SmartContractsApi,
   TransactionsApi,
   FaucetsApi,
 } from '@stacks/blockchain-api-client';
@@ -13,7 +12,6 @@ import { config } from '../config';
 const StacksClientContext = createContext<{
   stacksClientInfo: InfoApi;
   stacksClientAccounts: AccountsApi;
-  stacksClientSmartContracts: SmartContractsApi;
   stacksClientTransactions: TransactionsApi;
   stacksClientFaucet: FaucetsApi;
 }>({} as any);
@@ -39,8 +37,6 @@ export const StacksClientProvider = ({
 
     const stacksClientAccounts = new AccountsApi(apiConfig);
 
-    const stacksClientSmartContracts = new SmartContractsApi(apiConfig);
-
     const stacksClientTransactions = new TransactionsApi(apiConfig);
 
     const stacksClientFaucet = new FaucetsApi(
@@ -51,7 +47,6 @@ export const StacksClientProvider = ({
     return {
       stacksClientInfo,
       stacksClientAccounts,
-      stacksClientSmartContracts,
       stacksClientTransactions,
       stacksClientFaucet,
     };
@@ -62,8 +57,6 @@ export const StacksClientProvider = ({
       value={{
         stacksClientInfo: stacksClientContext.stacksClientInfo,
         stacksClientAccounts: stacksClientContext.stacksClientAccounts,
-        stacksClientSmartContracts:
-          stacksClientContext.stacksClientSmartContracts,
         stacksClientTransactions: stacksClientContext.stacksClientTransactions,
         stacksClientFaucet: stacksClientContext.stacksClientFaucet,
       }}
