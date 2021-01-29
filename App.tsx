@@ -12,6 +12,7 @@ import { QueryClientProvider } from 'react-query';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { ConfigProvider } from './src/context/AppConfigContext';
 import { AuthProvider } from './src/context/AuthContext';
+import { StacksClientProvider } from './src/context/StacksClientContext';
 import { Router } from './src/Router';
 import { StatusBar } from './src/components/StatusBar';
 import { queryClient } from './src/queryClient';
@@ -36,8 +37,10 @@ export default () => {
       <ThemeProvider>
         <ConfigProvider>
           <AuthProvider>
-            <Router />
-            <StatusBar />
+            <StacksClientProvider>
+              <Router />
+              <StatusBar />
+            </StacksClientProvider>
           </AuthProvider>
         </ConfigProvider>
       </ThemeProvider>

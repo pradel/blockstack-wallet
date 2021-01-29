@@ -13,6 +13,7 @@ import {
 } from '@stacks/transactions';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useStacksClient } from '../context/StacksClientContext';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
@@ -20,13 +21,13 @@ import { RootStackParamList } from '../types/router';
 import MetaverseBigBitcoin from '../../assets/MetaverseBigBitcoin.png';
 import MetaverseBigBitcoinLight from '../../assets/MetaverseBigBitcoinLight.png';
 import { Check } from '../icons';
-import { stacksClientSmartContracts, stacksClientInfo } from '../stacksClient';
 
 type StackingScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 export const StackingScreen = () => {
   const { theme } = useTheme();
   const auth = useAuth();
+  const { stacksClientInfo, stacksClientSmartContracts } = useStacksClient();
   const navigation = useNavigation<StackingScreenNavigationProp>();
   const [stackingInfos, setStackingInfos] = useState<{
     lockingAt: string;

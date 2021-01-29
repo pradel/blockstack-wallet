@@ -35,11 +35,8 @@ import {
   QuestionMarkCircle,
   Upload,
 } from '../icons';
-import {
-  stacksClientAccounts,
-  stacksClientTransactions,
-} from '../stacksClient';
 import { queryClient } from '../queryClient';
+import { useStacksClient } from '../context/StacksClientContext';
 
 type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -48,6 +45,7 @@ export const DashboardScreen = () => {
   const { theme } = useTheme();
   const auth = useAuth();
   const { price } = usePrice();
+  const { stacksClientAccounts, stacksClientTransactions } = useStacksClient();
   const {
     data: balanceData,
     // error: balanceError,
