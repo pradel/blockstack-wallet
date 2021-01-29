@@ -51,7 +51,10 @@ export const SendConfirmScreen = () => {
 
   useEffect(() => {
     // We create an unsigned transaction to estimate the network fees and show them to the user
-    const network = new StacksTestnet();
+    const network =
+      appConfig.network === 'mainnet'
+        ? new StacksMainnet()
+        : new StacksTestnet();
 
     // TODO catch in case of failure
     makeUnsignedSTXTokenTransfer({
@@ -63,7 +66,7 @@ export const SendConfirmScreen = () => {
     }).then((transaction) => {
       setUnsignedTransaction(transaction);
     });
-  }, [setUnsignedTransaction, auth.publicKey, route.params]);
+  }, [setUnsignedTransaction, auth.publicKey, route.params, appConfig.network]);
 
   const handleConfirm = async () => {
     setLoading(false);
