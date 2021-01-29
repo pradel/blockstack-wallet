@@ -4,7 +4,7 @@ import { Linking, StyleSheet, View, Image } from 'react-native';
 import { List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import useSWR from 'swr';
+import { useQuery } from 'react-query';
 import { StackingClient } from '@stacks/stacking';
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
 import { useTheme } from '../context/ThemeContext';
@@ -37,8 +37,8 @@ export const StackingScreen = () => {
     appConfig.network === 'mainnet' ? new StacksMainnet() : new StacksTestnet()
   );
 
-  const { data: stackingData } = useSWR(
-    `stacking-${auth.address}`,
+  const { data: stackingData } = useQuery(
+    ['stacking', auth.address],
     async () => {
       const [
         stackingStatus,

@@ -7,15 +7,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Big from 'big.js';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import useSWR from 'swr';
+import { useQuery } from 'react-query';
 import { RootStackParamList } from '../types/router';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { microToStacks, stacksToMicro } from '../utils';
-import { stacksClientAccounts } from '../stacksClient';
 import { useAuth } from '../context/AuthContext';
 import { usePrice } from '../context/PriceContext';
+import { useStacksClient } from '../context/StacksClientContext';
 import { validateSTXAmount } from '../utils/validation';
 
 type SendAmountNavigationProp = StackNavigationProp<
@@ -29,11 +29,14 @@ export const SendAmountScreen = () => {
   const route = useRoute<SendAmountScreenRouteProp>();
   const auth = useAuth();
   const { price } = usePrice();
-  const { data: accountBalanceData } = useSWR('user-balance', () => {
-    return stacksClientAccounts.getAccountBalance({
-      principal: auth.address,
-    });
-  });
+  const { stacksClientAccounts } = useStacksClient();
+  const { data: accountBalanceData } = useQuery(
+    ['user-balance', auth.address],
+    () =>
+      stacksClientAccounts.getAccountBalance({
+        principal: auth.address,
+      })
+  );
 
   const sendAmountSchema = yup
     .object({

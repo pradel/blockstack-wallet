@@ -12,7 +12,7 @@ import {
 } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import useSWR from 'swr';
+import { useQuery } from 'react-query';
 import Big from 'big.js';
 import { format } from 'date-fns';
 import type {
@@ -35,10 +35,8 @@ import {
   QuestionMarkCircle,
   Upload,
 } from '../icons';
-import {
-  stacksClientAccounts,
-  stacksClientTransactions,
-} from '../stacksClient';
+import { queryClient } from '../queryClient';
+import { useStacksClient } from '../context/StacksClientContext';
 
 type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -47,18 +45,17 @@ export const DashboardScreen = () => {
   const { theme } = useTheme();
   const auth = useAuth();
   const { price } = usePrice();
+  const { stacksClientAccounts, stacksClientTransactions } = useStacksClient();
   const {
     data: balanceData,
     // error: balanceError,
-    mutate: balanceMutate,
-  } = useSWR(`balances-${auth.address}`, () =>
+  } = useQuery(['user-balance', auth.address], () =>
     stacksClientAccounts.getAccountBalance({ principal: auth.address })
   );
   const {
     data: transactionsData,
     // error: transactionsError,
-    mutate: transactionMutate,
-  } = useSWR(`transactions-list-${auth.address}`, async () => {
+  } = useQuery(['transactions-list', auth.address], async () => {
     const [mempoolTransactions, accountTransactions] = await Promise.all([
       // Get the pending transactions
       stacksClientTransactions.getMempoolTransactionList({
@@ -91,7 +88,10 @@ export const DashboardScreen = () => {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await Promise.all([balanceMutate(), transactionMutate()]);
+    await Promise.all([
+      queryClient.invalidateQueries(['user-balance', auth.address]),
+      queryClient.invalidateQueries(['transactions-list', auth.address]),
+    ]);
     setIsRefreshing(false);
   };
 
@@ -105,13 +105,9 @@ export const DashboardScreen = () => {
 
   // TODO handle error (display snackbar?)
 
-  // TODO infinite scrolling
-
   const balanceString = balanceData
     ? microToStacks(balanceData.stx.balance)
     : '...';
-
-  // TODO change style of IconButton to be black background
 
   return (
     <View style={styles.container}>
