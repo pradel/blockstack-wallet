@@ -28,7 +28,7 @@ const appConfigKey = '@appConfig';
 const defaultConfig: AppConfig = {
   requireBiometricOpenApp: true,
   requireBiometricTransaction: true,
-  network: 'testnet',
+  network: 'mainnet',
 };
 
 export const ConfigProvider = ({ children }: AppConfigProviderProps) => {
