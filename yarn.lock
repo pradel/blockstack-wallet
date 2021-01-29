@@ -961,7 +961,7 @@
     pirates "^4.0.0"
     source-map-support "^0.5.16"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.5", "@babel/runtime@^7.12.5", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4":
   version "7.12.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
   integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
@@ -4645,11 +4645,6 @@ depd@~1.1.2:
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
-dequal@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.2.tgz#85ca22025e3a87e65ef75a7a437b35284a7e319d"
-  integrity sha512-q9K8BlJVxK7hQYqa6XISGmBZbtQQWVXSrRrWreHC94rMt1QL/Impruc+7p2CYSYuVIUr+YCt6hjrs1kkdJRTug==
-
 des.js@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/des.js/-/des.js-1.0.1.tgz#5382142e1bdc53f85d86d53e5f4aa7deb91e0843"
@@ -8055,6 +8050,14 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+match-sorter@^6.0.2:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/match-sorter/-/match-sorter-6.1.0.tgz#7fec6808d94311a35fef7fd842a11634f2361bd7"
+  integrity sha512-sKPMf4kbF7Dm5Crx0bbfLpokK68PUJ/0STUIOPa1ZmTZEA3lCaPK3gapQR573oLmvdkTfGojzySkIwuq6Z6xRQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    remove-accents "0.4.2"
+
 md5-file@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/md5-file/-/md5-file-3.2.3.tgz#f9bceb941eca2214a4c0727f5e700314e770f06f"
@@ -9841,6 +9844,14 @@ react-native@0.63.4:
     use-subscription "^1.0.0"
     whatwg-fetch "^3.0.0"
 
+react-query@3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.6.0.tgz#3da307a4a4cb6ea95f9c95b7e50b5281d5244e4d"
+  integrity sha512-39ptLt4qaKO1DE+ta6SpPutweEgDvUQj/KlebC+okJ9Nxbs5ExxKV8RYlLeop6vdDFyiMmwYrt1POiF8oWGh1A==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    match-sorter "^6.0.2"
+
 react-refresh@^0.4.0:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.4.3.tgz#966f1750c191672e76e16c2efa569150cc73ab53"
@@ -10061,6 +10072,11 @@ regjsparser@^0.6.4:
   integrity sha512-jjyuCp+IEMIm3N1H1LLTJW1EISEJV9+5oHdEyrt43Pg9cDSb6rrLZei2cVWpl0xTjmmlpec/lEQGYgM7xfpGCQ==
   dependencies:
     jsesc "~0.5.0"
+
+remove-accents@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/remove-accents/-/remove-accents-0.4.2.tgz#0a43d3aaae1e80db919e07ae254b285d9e1c7bb5"
+  integrity sha1-CkPTqq4egNuRngeuJUsoXZ4ce7U=
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
@@ -11059,13 +11075,6 @@ svg-arc-to-cubic-bezier@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/svg-arc-to-cubic-bezier/-/svg-arc-to-cubic-bezier-3.2.0.tgz#390c450035ae1c4a0104d90650304c3bc814abe6"
   integrity sha512-djbJ/vZKZO+gPoSDThGNpKDO+o+bAeA4XQKovvkNCqnIS2t+S4qnLAGQhyyrulhCFRl1WWzAp0wUDV8PpTVU3g==
-
-swr@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/swr/-/swr-0.4.0.tgz#e76da9f981fe6dee0e133289e9b582fc80d9c41d"
-  integrity sha512-70qd1FHYHwIdYXW0jTpm5ktitzvPBCtyKz8ZzynWlY/rMqe4drYPgcl/H9Ipuh+Xv6ZW5viNx13ro8EKIWZcoQ==
-  dependencies:
-    dequal "2.0.2"
 
 symbol-observable@1.0.1:
   version "1.0.1"

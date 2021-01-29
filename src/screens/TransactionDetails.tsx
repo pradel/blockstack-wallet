@@ -9,7 +9,7 @@ import {
 } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import useSWR from 'swr';
+import { useQuery } from 'react-query';
 import { format } from 'date-fns';
 import type {
   MempoolTransaction,
@@ -39,13 +39,15 @@ export const TransactionDetails = () => {
   const auth = useAuth();
   const { appConfig } = useAppConfig();
 
-  const { data: transactionData, error: transactionError } = useSWR(
-    `transaction-details-${route.params.txId}`,
-    () => {
-      return stacksClientTransactions.getTransactionById({
+  const { data: transactionData, error: transactionError } = useQuery<
+    MempoolTransaction | Transaction,
+    Error
+  >(
+    ['transaction-details', route.params.txId],
+    () =>
+      stacksClientTransactions.getTransactionById({
         txId: route.params.txId,
-      }) as Promise<MempoolTransaction | Transaction>;
-    }
+      }) as Promise<MempoolTransaction | Transaction>
   );
 
   const isIncomingTx =

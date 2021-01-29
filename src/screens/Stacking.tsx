@@ -4,7 +4,7 @@ import { Linking, StyleSheet, View, Image } from 'react-native';
 import { List } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import useSWR from 'swr';
+import { useQuery } from 'react-query';
 import {
   cvToString,
   deserializeCV,
@@ -35,7 +35,7 @@ export const StackingScreen = () => {
     amountInMicro: string;
   }>();
 
-  const { data: stackingData } = useSWR('stacking', async () => {
+  const { data: stackingData } = useQuery('stacking', async () => {
     // TODO do requests in parallel
     const poxInfo = await stacksClientInfo.getPoxInfo();
     const coreInfo = await stacksClientInfo.getCoreApiInfo();

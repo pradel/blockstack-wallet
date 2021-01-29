@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import Big from 'big.js';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import useSWR from 'swr';
+import { useQuery } from 'react-query';
 import { RootStackParamList } from '../types/router';
 import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
@@ -29,11 +29,13 @@ export const SendAmountScreen = () => {
   const route = useRoute<SendAmountScreenRouteProp>();
   const auth = useAuth();
   const { price } = usePrice();
-  const { data: accountBalanceData } = useSWR('user-balance', () => {
-    return stacksClientAccounts.getAccountBalance({
-      principal: auth.address,
-    });
-  });
+  const { data: accountBalanceData } = useQuery(
+    ['user-balance', auth.address],
+    () =>
+      stacksClientAccounts.getAccountBalance({
+        principal: auth.address,
+      })
+  );
 
   const sendAmountSchema = yup
     .object({

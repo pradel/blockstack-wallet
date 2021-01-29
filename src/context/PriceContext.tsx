@@ -1,6 +1,5 @@
 import React, { createContext } from 'react';
-import useSWR from 'swr';
-import { fetcher } from '../utils';
+import { useQuery } from 'react-query';
 
 const PriceContext = createContext<{
   price?: number;
@@ -15,11 +14,19 @@ interface CoingeckoPrice {
 }
 
 export const PriceProvider = ({ children }: PriceProviderProps) => {
-  const { data: priceData } = useSWR<CoingeckoPrice[]>(
-    `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=blockstack`,
-    fetcher,
-    // Refetch price every 1 min
-    { refreshInterval: 60000 }
+  const { data: priceData } = useQuery<CoingeckoPrice[]>(
+    'price',
+    () =>
+      fetch(
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=blockstack',
+        {
+          method: 'get',
+        }
+      ).then((res) => res.json()),
+    {
+      // Refetch price every 1 min
+      refetchInterval: 60000,
+    }
   );
 
   return (
