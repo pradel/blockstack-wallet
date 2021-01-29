@@ -1,6 +1,6 @@
 # blockstack-wallet
 
-> 🚧 Beta - The project is still in beta, use it at your own risk 🚧
+> 🚧 The project is still in beta, use it at your own risk 🚧
 
 The open source mobile wallet that enables STX holders to send, receive and stack their tokens.
 
