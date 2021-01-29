@@ -21,9 +21,9 @@ import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { Button } from '../components/Button';
 import { microToStacks, stacksToMicro } from '../utils';
-import { stacksClientInfo, stacksClientAccounts } from '../stacksClient';
 import { RootStackParamList } from '../types/router';
 import { useAuth } from '../context/AuthContext';
+import { useStacksClient } from '../context/StacksClientContext';
 import { validateSTXAmount } from '../utils/validation';
 
 type StackingAmountScreenNavigationProp = StackNavigationProp<
@@ -34,6 +34,7 @@ type StackingAmountScreenNavigationProp = StackNavigationProp<
 export const StackingAmountScreen = () => {
   const navigation = useNavigation<StackingAmountScreenNavigationProp>();
   const auth = useAuth();
+  const { stacksClientInfo, stacksClientAccounts } = useStacksClient();
   const [stacksInfo, setStacksInfo] = useState<{
     poxInfo: CoreNodePoxResponse;
     accountBalance: AddressBalanceResponse;
@@ -71,7 +72,6 @@ export const StackingAmountScreen = () => {
     validationSchema: stackingAmountSchema,
     validateOnMount: true,
     onSubmit: (values, { setSubmitting }) => {
-      // TODO allow user to select number of cycles first
       navigation.navigate('StackingAddress', {
         amountInMicro: stacksToMicro(values.amountInStacks).toString(),
       });

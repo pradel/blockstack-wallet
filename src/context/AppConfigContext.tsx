@@ -10,10 +10,13 @@ interface AppConfig {
 
 const AppConfigContext = createContext<{
   appConfig: AppConfig;
-  setRequireBiometricOpenApp: (requireBiometricOpenApp: boolean) => void;
+  setRequireBiometricOpenApp: (
+    requireBiometricOpenApp: boolean
+  ) => Promise<void>;
   setRequireBiometricTransaction: (
     requireBiometricTransaction: boolean
-  ) => void;
+  ) => Promise<void>;
+  setNetwork: (network: 'mainnet' | 'testnet') => Promise<void>;
 }>({} as any);
 
 interface AppConfigProviderProps {
@@ -25,7 +28,7 @@ const appConfigKey = '@appConfig';
 const defaultConfig: AppConfig = {
   requireBiometricOpenApp: true,
   requireBiometricTransaction: true,
-  network: 'testnet',
+  network: 'mainnet',
 };
 
 export const ConfigProvider = ({ children }: AppConfigProviderProps) => {
@@ -69,7 +72,7 @@ export const ConfigProvider = ({ children }: AppConfigProviderProps) => {
         if (!appConfig) {
           return;
         }
-        setNewConfig({ ...appConfig, requireBiometricOpenApp });
+        return setNewConfig({ ...appConfig, requireBiometricOpenApp });
       },
       setRequireBiometricTransaction: async (
         requireBiometricTransaction: boolean
@@ -77,7 +80,13 @@ export const ConfigProvider = ({ children }: AppConfigProviderProps) => {
         if (!appConfig) {
           return;
         }
-        setNewConfig({ ...appConfig, requireBiometricTransaction });
+        return setNewConfig({ ...appConfig, requireBiometricTransaction });
+      },
+      setNetwork: async (network: 'mainnet' | 'testnet') => {
+        if (!appConfig) {
+          return;
+        }
+        return setNewConfig({ ...appConfig, network });
       },
     }),
     [appConfig]
@@ -94,6 +103,7 @@ export const ConfigProvider = ({ children }: AppConfigProviderProps) => {
         setRequireBiometricOpenApp: appConfigContext.setRequireBiometricOpenApp,
         setRequireBiometricTransaction:
           appConfigContext.setRequireBiometricTransaction,
+        setNetwork: appConfigContext.setNetwork,
       }}
     >
       {children}

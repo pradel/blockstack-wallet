@@ -22,7 +22,7 @@ import { microToStacks, getMemoString } from '../utils';
 import { config } from '../config';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
-import { stacksClientTransactions } from '../stacksClient';
+import { useStacksClient } from '../context/StacksClientContext';
 
 type TransactionDetailsNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -38,6 +38,7 @@ export const TransactionDetails = () => {
   const route = useRoute<TransactionDetailsRouteProp>();
   const auth = useAuth();
   const { appConfig } = useAppConfig();
+  const { stacksClientTransactions } = useStacksClient();
 
   const { data: transactionData, error: transactionError } = useQuery<
     MempoolTransaction | Transaction,

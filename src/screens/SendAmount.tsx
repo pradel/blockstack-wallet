@@ -13,9 +13,9 @@ import { Button } from '../components/Button';
 import { AppbarHeader } from '../components/AppbarHeader';
 import { AppbarContent } from '../components/AppBarContent';
 import { microToStacks, stacksToMicro } from '../utils';
-import { stacksClientAccounts } from '../stacksClient';
 import { useAuth } from '../context/AuthContext';
 import { usePrice } from '../context/PriceContext';
+import { useStacksClient } from '../context/StacksClientContext';
 import { validateSTXAmount } from '../utils/validation';
 
 type SendAmountNavigationProp = StackNavigationProp<
@@ -29,6 +29,7 @@ export const SendAmountScreen = () => {
   const route = useRoute<SendAmountScreenRouteProp>();
   const auth = useAuth();
   const { price } = usePrice();
+  const { stacksClientAccounts } = useStacksClient();
   const { data: accountBalanceData } = useQuery(
     ['user-balance', auth.address],
     () =>

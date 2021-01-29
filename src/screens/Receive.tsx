@@ -8,8 +8,8 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
+import { useStacksClient } from '../context/StacksClientContext';
 import { Button } from '../components/Button';
-import { stacksClientFaucet } from '../stacksClient';
 
 interface ReceiveScreenProps {
   open: boolean;
@@ -19,6 +19,7 @@ interface ReceiveScreenProps {
 export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
   const auth = useAuth();
   const { appConfig } = useAppConfig();
+  const { stacksClientFaucet } = useStacksClient();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   useEffect(() => {
