@@ -31,11 +31,10 @@ export const SendAmountScreen = () => {
   const { price } = usePrice();
   const { data: accountBalanceData } = useQuery(
     ['user-balance', auth.address],
-    () => {
-      return stacksClientAccounts.getAccountBalance({
+    () =>
+      stacksClientAccounts.getAccountBalance({
         principal: auth.address,
-      });
-    }
+      })
   );
 
   const sendAmountSchema = yup
