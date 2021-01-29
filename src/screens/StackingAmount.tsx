@@ -71,7 +71,6 @@ export const StackingAmountScreen = () => {
     validationSchema: stackingAmountSchema,
     validateOnMount: true,
     onSubmit: (values, { setSubmitting }) => {
-      // TODO allow user to select number of cycles first
       navigation.navigate('StackingAddress', {
         amountInMicro: stacksToMicro(values.amountInStacks).toString(),
       });

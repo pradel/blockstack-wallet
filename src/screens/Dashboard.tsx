@@ -107,13 +107,9 @@ export const DashboardScreen = () => {
 
   // TODO handle error (display snackbar?)
 
-  // TODO infinite scrolling
-
   const balanceString = balanceData
     ? microToStacks(balanceData.stx.balance)
     : '...';
-
-  // TODO change style of IconButton to be black background
 
   return (
     <View style={styles.container}>
