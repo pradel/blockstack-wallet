@@ -22,7 +22,6 @@ import { getStorageKeyPk, microToStacks } from '../utils';
 import { RootStackParamList } from '../types/router';
 import { useAuth } from '../context/AuthContext';
 import { useAppConfig } from '../context/AppConfigContext';
-import { useStacksClient } from '../context/StacksClientContext';
 
 type StackingConfirmScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -38,7 +37,6 @@ export const StackingConfirmScreen = () => {
   const route = useRoute<StackingConfirmScreenRouteProp>();
   const auth = useAuth();
   const { appConfig } = useAppConfig();
-  const { stacksClientInfo, stacksClientSmartContracts } = useStacksClient();
   const [isEligible, setIsEligible] = useState<true | string>();
   const [stackingInfos, setStackingInfos] = useState<{
     nextCycleStartingAt: Date;
