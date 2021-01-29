@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 import { StyleSheet, Share, Alert, View } from 'react-native';
-import { Surface, Text } from 'react-native-paper';
+import { Caption, Surface, Text } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 import BottomSheet, {
   TouchableOpacity,
@@ -72,7 +72,7 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
     <BottomSheet
       ref={bottomSheetRef}
       index={-1}
-      snapPoints={[0, 400]}
+      snapPoints={[0, 410]}
       onChange={handleSheetChanges}
       backdropComponent={BottomSheetBackdrop}
     >
@@ -83,6 +83,11 @@ export const ReceiveScreen = ({ open, onClose }: ReceiveScreenProps) => {
         <Text style={styles.text} onPress={handleShare}>
           {auth.address}
         </Text>
+        {appConfig.network === 'testnet' ? (
+          <Caption style={styles.testnetWarning}>
+            Be careful, you are currently in testnet mode
+          </Caption>
+        ) : null}
 
         <View style={styles.buttonsContainer}>
           {appConfig.network === 'testnet' ? (
@@ -121,8 +126,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '700',
   },
+  testnetWarning: {
+    textAlign: 'center',
+    color: '#FE9000',
+  },
   buttonsContainer: {
-    paddingTop: 32,
+    paddingTop: 16,
     paddingBottom: 16,
   },
   buttonFaucet: {
