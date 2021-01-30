@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/pradel/blockstack-wallet/compare/v0.4.0...v0.5.0) (2021-01-30)
+
+### Features
+
+- add warning in testnet mode in the release modal ([57873cf](https://github.com/pradel/blockstack-wallet/commit/57873cf77be66203f38a96f63f87dc71908cc83c))
+- mainnet support ([#88](https://github.com/pradel/blockstack-wallet/issues/88)) ([5647d37](https://github.com/pradel/blockstack-wallet/commit/5647d37110f1029d092bba0f119673fc31dee90b))
+
+### Bug Fixes
+
+- fee estimation for outgoing transfer ([f0d1f8d](https://github.com/pradel/blockstack-wallet/commit/f0d1f8d2d21015918327092ab127dad70851eacd))
+
+### Miscellaneous Chores
+
+- update fastlane ([71d151f](https://github.com/pradel/blockstack-wallet/commit/71d151f4566e73793474c5dc06e19a54c3f14204))
+- use react-query instead of swr ([#84](https://github.com/pradel/blockstack-wallet/issues/84)) ([5aa46f5](https://github.com/pradel/blockstack-wallet/commit/5aa46f5635bbe6a33adf4174a15731bed31386af))
+
 ## [0.4.0](https://github.com/pradel/blockstack-wallet/compare/v0.3.1...v0.4.0) (2021-01-28)
 
 ### Features
