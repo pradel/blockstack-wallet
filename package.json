@@ -60,7 +60,7 @@
     "expo-status-bar": "1.0.3",
     "formik": "2.2.6",
     "react": "16.13.1",
-    "react-native": "0.63.4",
+    "react-native": "0.64.1",
     "react-native-gesture-handler": "1.9.0",
     "react-native-paper": "4.7.1",
     "react-native-qrcode-svg": "6.0.6",
